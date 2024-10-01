@@ -12,3 +12,14 @@ export type PageProps<
         user: User;
     };
 };
+
+export interface ArtStyle {
+    identifier: number;
+    displayName: string;
+}
+
+export interface ArtType {
+    identifier: number;
+    displayName: string;
+    description: string;
+}

@@ -34,6 +34,8 @@ export default function ResetPassword({
 
             <div className="bg-gray-900 py-24 text-white">
                 <div className="mx-auto w-full max-w-xl">
+                    <h1 className={"text-2xl mb-6"}>Reset password</h1>
+
                     <form onSubmit={submit}>
                         <div>
                             <InputLabel htmlFor="email" value="Email"/>
@@ -100,5 +102,5 @@ export default function ResetPassword({
                 </div>
             </div>
         </GuestLayout>
-);
+    );
 }

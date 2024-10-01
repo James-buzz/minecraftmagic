@@ -1,0 +1,70 @@
+{
+    "types": [
+        {
+            "identifier": "server_logo",
+            "displayName": "Server Logo",
+            "styles": [
+                {
+                    "identifier": "artic-expedition",
+                    "name": "Arctic Expedition",
+                    "description": "A chilly adventure in the frozen north"
+                },
+                {
+                    "identifier": "dragons-lair",
+                    "name": "Dragon's Lair",
+                    "description": "Face fearsome dragons in their den"
+                },
+                {
+                    "identifier": "end-explorer",
+                    "name": "End Explorer",
+                    "description": "Journey through the mysterious End dimension"
+                },
+                {
+                    "identifier": "haunted-hallows",
+                    "name": "Haunted Hallows",
+                    "description": "Spooky adventures in a ghostly realm"
+                },
+                {
+                    "identifier": "magical-chest",
+                    "name": "Magical Chest",
+                    "description": "Discover enchanted treasures and artifacts"
+                },
+                {
+                    "identifier": "redstone-engineers",
+                    "name": "Redstone Engineers",
+                    "description": "Build complex machines with redstone"
+                },
+                {
+                    "identifier": "battle-factions",
+                    "name": "Battle Factions",
+                    "description": "Join epic battles between rival groups"
+                },
+                {
+                    "identifier": "dwarven-kingdom",
+                    "name": "Dwarven Kingdom",
+                    "description": "Explore vast underground cities and mines"
+                },
+                {
+                    "identifier": "frozen-peaks",
+                    "name": "Frozen Peaks",
+                    "description": "Climb treacherous icy mountains"
+                },
+                {
+                    "identifier": "jungle-expedition",
+                    "name": "Jungle Expedition",
+                    "description": "Traverse dense, mysterious jungles"
+                },
+                {
+                    "identifier": "pirate-cove",
+                    "name": "Pirate Cove",
+                    "description": "Set sail for swashbuckling adventures"
+                },
+                {
+                    "identifier": "vanilla-survival",
+                    "name": "Vanilla Survival",
+                    "description": "Classic Minecraft survival experience"
+                }
+            ]
+        }
+    ]
+}

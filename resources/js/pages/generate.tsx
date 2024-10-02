@@ -23,7 +23,7 @@ interface PageProps {
 const imageSizes = ['1024x1024', '1024x1792', '1792x1024'];
 const imageQualities = ['standard', 'hd'];
 
-export default function Dashboard({ art_types }: PageProps) {
+export default function Generate({ art_types }: PageProps) {
     const [selectedType, setSelectedType] = useState<string | null>(null);
     const [selectedStyle, setSelectedStyle] = useState<string | null>(null);
     const [selectedQuality, setSelectedQuality] = useState('');
@@ -40,7 +40,9 @@ export default function Dashboard({ art_types }: PageProps) {
             metadata: {
                 image_quality: selectedQuality,
                 image_size: selectedRatio,
-                serverName,
+                fields: {
+                    server_name: serverName,
+                },
             }
         })
     };

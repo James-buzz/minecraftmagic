@@ -15,11 +15,13 @@ export default function Welcome() {
                 </p>
                 <div className="mx-auto grid w-full max-w-2xl grid-cols-3 gap-4">
                     {Object.values(MinecraftStyle).map((style) => (
-                        <ImageStyle key={style} style={style}/>
+                        <Link className={'flex'} href={route('dashboard')}>
+                            <ImageStyle key={style} style={style}/>
+                        </Link>
                     ))}
                 </div>
                 <div className="pt-12 text-center">
-                    <Link href="/dashboard">
+                    <Link href={route('dashboard')}>
                         <PrimaryButton className={'px-8 py-4 text-xl'}>Generate your own Magic!</PrimaryButton>
                     </Link>
                 </div>

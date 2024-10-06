@@ -131,13 +131,18 @@ export default function Status({ auth, status }: PageProps&StatusProps) {
                                     Your image is ready!
                                 </p>
                                 <PrimaryButton className={'bg-green-600 hover:bg-green-700'} onClick={()=> {
-                                    // todo
-                                }}>View Your Minecraft Art</PrimaryButton>
+                                    router.visit('/dashboard')
+                                }}>View your art</PrimaryButton>
                             </>
                         ) : status.status === 'failed' ? (
-                            <p className="text-lg text-red-500 font-semibold">
-                            We encountered an error while creating your image. Please try again.
-                            </p>
+                            <>
+                                <p className="text-lg text-red-500 font-semibold">
+                                    We encountered an error while creating your image. Please try again.
+                                </p>
+                                <PrimaryButton className={'bg-red-600 hover:bg-red-700 mt-4'} onClick={()=> {
+                                    router.visit('/dashboard')
+                                }}>Go Back</PrimaryButton>
+                            </>
                         ) : (
                             <>
                                 <p className="text-lg font-semibold">

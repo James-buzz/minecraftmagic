@@ -24,10 +24,10 @@ const imageSizes = ['1024x1024', '1024x1792', '1792x1024'];
 const imageQualities = ['standard', 'hd'];
 
 export default function Generate({ art_types }: PageProps) {
-    const [selectedType, setSelectedType] = useState<string | null>(null);
+    const [selectedType, setSelectedType] = useState<string | null>();
     const [selectedStyle, setSelectedStyle] = useState<string | null>(null);
-    const [selectedQuality, setSelectedQuality] = useState('');
-    const [selectedRatio, setSelectedRatio] = useState('');
+    const [selectedQuality, setSelectedQuality] = useState('standard');
+    const [selectedRatio, setSelectedRatio] = useState('1024x1024');
     const [serverName, setServerName] = useState('');
 
     const isDisabled = !selectedType || !selectedStyle || !selectedQuality || !selectedRatio;

@@ -4,6 +4,7 @@ import { Head } from '@inertiajs/react';
 import DeleteUserForm from '@/pages/profile/partials/delete-user-form';
 import UpdatePasswordForm from '@/pages/profile/partials/update-password-form';
 import UpdateProfileInformationForm from '@/pages/profile/partials/update-profile-information-form';
+import React from "react";
 
 export default function Edit({
     mustVerifyEmail,
@@ -11,33 +12,34 @@ export default function Edit({
 }: PageProps<{ mustVerifyEmail: boolean; status?: string }>) {
     return (
         <AuthenticatedLayout
-            header={
-                <h2 className="text-xl font-semibold leading-tight text-gray-800">
-                    Profile
-                </h2>
-            }
         >
-            <Head title="Profile" />
+            <Head title="Profile"/>
 
-            <div className="py-12">
-                <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
-                    <div className="bg-white p-4 shadow sm:rounded-lg sm:p-8">
-                        <UpdateProfileInformationForm
-                            mustVerifyEmail={mustVerifyEmail}
-                            status={status}
-                            className="max-w-xl"
-                        />
-                    </div>
+            <div className="bg-gray-900 p-8 text-white">
+                <h1 className="text-center text-4xl font-bold">
+                   Edit Profile
+                </h1>
 
-                    <div className="bg-white p-4 shadow sm:rounded-lg sm:p-8">
-                        <UpdatePasswordForm className="max-w-xl" />
-                    </div>
+                <div className="pb-12">
+                    <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
+                        <div className="p-4 sm:p-8">
+                            <UpdateProfileInformationForm
+                                mustVerifyEmail={mustVerifyEmail}
+                                status={status}
+                                className="max-w-xl"
+                            />
+                        </div>
 
-                    <div className="bg-white p-4 shadow sm:rounded-lg sm:p-8">
-                        <DeleteUserForm className="max-w-xl" />
+                        <div className="pt-8 pb-4 border-t border-gray-800 sm:p-8">
+                            <UpdatePasswordForm className="max-w-xl"/>
+                        </div>
+
+                        <div className="pt-8 pb-4 border-t border-gray-800 sm:p-8">
+                            <DeleteUserForm className="max-w-xl"/>
+                        </div>
                     </div>
                 </div>
             </div>
         </AuthenticatedLayout>
-    );
+);
 }

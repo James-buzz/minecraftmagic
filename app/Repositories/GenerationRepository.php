@@ -7,6 +7,29 @@ use App\Models\Generation;
 
 class GenerationRepository implements GenerationRepositoryInterface
 {
+    public function paginateCompleted(int $userId, int $page, int $perPage): array
+    {
+        $offset = ($page - 1) * $perPage;
+
+        return Generation::select(['id', 'art_type', 'art_style', 'thumbnail_file_path'])
+            ->where('user_id', $userId)
+            ->where('status', 'completed')
+            ->whereNotNull('file_path')
+            ->offset($offset)
+            ->limit($perPage)
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->toArray();
+    }
+
+    public function countCompleted(int $userId): int
+    {
+        return Generation::where('user_id', $userId)
+            ->where('status', 'completed')
+            ->whereNotNull('file_path')
+            ->count();
+    }
+
     public function find(string $generationId): array
     {
         return Generation::findOrFail($generationId)->toArray();

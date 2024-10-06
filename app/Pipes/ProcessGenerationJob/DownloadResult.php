@@ -1,28 +1,32 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Pipes\ProcessGenerationJob;
 
-use App\Contracts\GenerationServiceInterface;
+use App\Services\GenerationCreationService;
 use Closure;
 use Illuminate\Support\Facades\Storage;
 
 readonly class DownloadResult
 {
-    public function __construct(protected GenerationServiceInterface $generationService) {}
+    public function __construct(protected readonly GenerationCreationService $creationService)
+    {
+    }
 
-    public function handle(mixed $data, Closure $next) {
-        $generationID = $data['generation']['id'];
+    public function handle(mixed $data, Closure $next)
+    {
+        $contextUserId = $data['user'];
+        $contextGenerationId = $data['generation']['id'];
+        $contextUrl = $data['url'];
 
-        $url = $data['url'];
+        $filePath = $this->creationService->getGenerationFilePath($contextUserId, $contextGenerationId);
 
-        $filePath = $this->generationService->getGenerationFilePath($generationID);
-
-        $imageContent = file_get_contents($url);
-
+        $imageContent = file_get_contents($contextUrl);
         Storage::put($filePath, $imageContent);
 
-        $this->generationService->updateFilePath($generationID, $filePath);
+        $data['result'] = [];
+        $data['result']['file_path'] = $filePath;
 
         return $next($data);
     }

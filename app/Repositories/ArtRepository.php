@@ -5,7 +5,7 @@ namespace App\Repositories;
 use App\Contracts\ArtRepositoryInterface;
 use Illuminate\Support\Facades\File;
 
-class JsonArtRepository implements ArtRepositoryInterface
+class ArtRepository implements ArtRepositoryInterface
 {
     private array $data;
 
@@ -16,27 +16,27 @@ class JsonArtRepository implements ArtRepositoryInterface
         $this->data = json_decode($jsonContent, true);
     }
 
-    public function getTypes(): array
+    public function getArtTypes(): array
     {
         return array_map(function ($type) {
             return [
                 'identifier' => $type['identifier'],
-                'displayName' => $type['name']
+                'displayName' => $type['name'],
             ];
         }, $this->data['types']);
     }
 
-    public function getStylesForType(string $typeIdentifier): array
+    public function getArtStylesForArtType(string $typeIdentifier): array
     {
-        $type = $this->getTypeByIdentifier($typeIdentifier);
-        if (!$type) {
+        $type = $this->getArtTypeByIdentifier($typeIdentifier);
+        if (! $type) {
             return [];
         }
 
         return array_values($type['styles']);
     }
 
-    public function getTypeByIdentifier(string $typeIdentifier): ?array
+    public function getArtTypeByIdentifier(string $typeIdentifier): ?array
     {
         foreach ($this->data['types'] as $type) {
             if ($type['identifier'] === $typeIdentifier) {
@@ -47,10 +47,10 @@ class JsonArtRepository implements ArtRepositoryInterface
         return null;
     }
 
-    public function getStyleForType(string $typeIdentifier, string $styleIdentifier): ?array
+    public function getArtStyleForArtType(string $typeIdentifier, string $styleIdentifier): ?array
     {
-        $type = $this->getTypeByIdentifier($typeIdentifier);
-        if (!$type) {
+        $type = $this->getArtTypeByIdentifier($typeIdentifier);
+        if (! $type) {
             return null;
         }
 

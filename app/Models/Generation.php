@@ -10,10 +10,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * @method static create(array $data)
  * @method static findOrFail(string $id)
+ * @method static select(string[] $array)
+ * @method static where(string $string, mixed $mixed)
  */
 class Generation extends Model
 {
-    use HasFactory, SoftDeletes, HasUlids;
+    use HasFactory;
+    use HasUlids;
+    use SoftDeletes;
 
     protected $fillable = [
         'user_id',

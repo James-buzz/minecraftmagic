@@ -15,7 +15,7 @@ Route::get('/', function () {
 });
 
 // (protected)
-Route::middleware(['auth', 'verified'])->group(function() {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', \App\Http\Controllers\DashboardController::class)->name('dashboard');
 
     Route::resource('generate', \App\Http\Controllers\GenerateController::class)
@@ -27,16 +27,10 @@ Route::middleware(['auth', 'verified'])->group(function() {
 
     Route::get('/status/{id}', [\App\Http\Controllers\StatusController::class, 'show'])
         ->name('status');
+
+    Route::get('/download/{id}', \App\Http\Controllers\DownloadController::class)
+        ->name('download');
 });
-
-Route::group(['middleware' => 'auth'], function () {
-});
-
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
-
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

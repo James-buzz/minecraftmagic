@@ -11,6 +11,7 @@
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
         "openai-php/laravel": "^0.10.1",
+        "spatie/image": "^3.7",
         "tightenco/ziggy": "^2.0"
     },
     "require-dev": {

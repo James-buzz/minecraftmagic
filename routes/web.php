@@ -1,18 +1,12 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+Route::get('/', [\App\Http\Controllers\WelcomeController::class, 'index'])->name('welcome');
+Route::get('/privacy', [\App\Http\Controllers\Legal\PrivacyController::class, 'index'])->name('privacy');
+Route::get('/terms', [\App\Http\Controllers\Legal\TermsController::class, 'index'])->name('terms');
+Route::get('/about', [\App\Http\Controllers\AboutController::class, 'index'])->name('about');
 
 // (protected)
 Route::middleware(['auth', 'verified'])->group(function () {

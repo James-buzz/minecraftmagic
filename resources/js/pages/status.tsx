@@ -23,7 +23,7 @@ export default function Status({ auth, status }: PageProps&StatusProps) {
     const getStatusEffect = (status: string) => {
         switch (status) {
             case 'pending':
-                return 'bg-purple-500';
+                return 'bg-purple-500 animate-pulse';
             case 'processing':
                 return 'bg-blue-500 animate-pulse';
             case 'completed':
@@ -122,7 +122,7 @@ export default function Status({ auth, status }: PageProps&StatusProps) {
                     <div className="text-center text-white">
                         {status.status === 'pending' && (
                             <p className="mb-6 text-lg">
-                                Your position in queue: 1
+                                You are currently in the queue.
                             </p>
                         )}
                         {status.status === 'completed' ? (

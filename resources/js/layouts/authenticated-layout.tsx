@@ -17,14 +17,14 @@ export default function Authenticated({ children }: PropsWithChildren) {
                     &copy; 2024 Minecraftmagic.com. All rights reserved.
                 </p>
                 <div className="mt-4 flex justify-center space-x-4">
-                    <Link href="/about" className="hover:underline">
+                    <Link href={route('about')} className="hover:underline">
                         About
                     </Link>
-                    <Link href="/contact" className="hover:underline">
-                        Contact
-                    </Link>
-                    <Link href="/privacy" className="hover:underline">
+                    <Link href={route('privacy')} className="hover:underline">
                         Privacy Policy
+                    </Link>
+                    <Link href={route('terms')} className="hover:underline">
+                        Terms and Conditions
                     </Link>
                 </div>
             </footer>

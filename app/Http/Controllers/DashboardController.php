@@ -14,10 +14,14 @@ class DashboardController extends Controller
 
     public function __invoke(): \Inertia\Response
     {
-        $currentPage = request()->query('page', 1);
+        /** @var int $currentPage */
+        $currentPage = request()->query('page', '1');
+
+        /** @var int $userId */
+        $userId = auth()->id();
 
         $paginatedGenerations = $this->generationService->getPaginatedGenerations(
-            auth()->id(),
+            $userId,
             $currentPage
         );
 

@@ -31,11 +31,21 @@ class GenerateController extends Controller
     {
         $validated = $request->validated();
 
+        /** @var int $userId */
+        $userId = auth()->id();
+
+        /** @var string $artType */
+        $artType = $validated['art_type'];
+        /** @var string $artStyle */
+        $artStyle = $validated['art_style'];
+        /** @var array<string, string> $metadata */
+        $metadata = $validated['metadata'];
+
         $recordId = $this->generationService->createGeneration(
-            auth()->id(),
-            $validated['art_type'],
-            $validated['art_style'],
-            $validated['metadata']
+            $userId,
+            $artType,
+            $artStyle,
+            $metadata
         );
 
         return redirect()->route('status', ['id' => $recordId]);

@@ -10,9 +10,6 @@ use Spatie\Image\Exceptions\CouldNotLoadImage;
 
 readonly class CleanupLocal
 {
-    /**
-     * @throws CouldNotLoadImage
-     */
     public function handle(mixed $data, Closure $next)
     {
         $contextFilePath = $data['result']['file_path'];

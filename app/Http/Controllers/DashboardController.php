@@ -12,7 +12,10 @@ class DashboardController extends Controller
     ) {
     }
 
-    public function __invoke(): \Inertia\Response
+    /**
+     * Display the dashboard.
+     */
+    public function index(): \Inertia\Response
     {
         /** @var int $currentPage */
         $currentPage = request()->query('page', '1');

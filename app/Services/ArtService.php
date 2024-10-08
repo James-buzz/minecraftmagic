@@ -13,7 +13,7 @@ readonly class ArtService implements ArtServiceInterface
 
     public function getArtStyle(string $artTypeId, string $artStyleId): array
     {
-        return $this->artRepository->getArtStyleForArtType($artTypeIdentifier, $artStyleIdentifier);
+        return $this->artRepository->getArtStyleForArtType($artTypeId, $artStyleId);
     }
 
     public function getAllArtTypesWithStyles(): array

@@ -15,6 +15,9 @@ class GenerateController extends Controller
     ) {
     }
 
+    /**
+     * Show the generation form.
+     */
     public function index(): \Inertia\Response
     {
         return Inertia::render('generate', [
@@ -24,9 +27,13 @@ class GenerateController extends Controller
 
     public function show(string $generationId): void
     {
-        // TODO: download the generated art
+        // TODO: page to preview the generated art
+        // comment, like, share, etc.
     }
 
+    /**
+     * Store a new generation.
+     */
     public function store(GenerateStoreRequest $request): \Illuminate\Http\RedirectResponse
     {
         $validated = $request->validated();

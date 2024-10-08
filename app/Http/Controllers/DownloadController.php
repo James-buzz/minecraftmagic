@@ -10,7 +10,10 @@ class DownloadController extends Controller
     {
     }
 
-    public function __invoke(string $generationId): \Illuminate\Http\JsonResponse
+    /**
+     * Retrieve the download URL for a generation.
+     */
+    public function show(string $generationId): \Illuminate\Http\JsonResponse
     {
         return response()->json([
             'url' => $this->retrievalService->getGenerationFileUrl($generationId)

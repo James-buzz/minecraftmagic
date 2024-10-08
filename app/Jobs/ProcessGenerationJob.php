@@ -18,6 +18,7 @@ use Illuminate\Pipeline\Pipeline;
 class ProcessGenerationJob implements ShouldQueue
 {
     use Queueable;
+
     public int $tries = 2;
 
     /**

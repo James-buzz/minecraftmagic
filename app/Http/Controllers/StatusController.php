@@ -11,6 +11,12 @@ class StatusController extends Controller
     {
     }
 
+    /**
+     * Display the status page.
+     *
+     * @param string $id
+     * @return \Inertia\Response
+     */
     public function show(string $id): \Inertia\Response
     {
         $status = $this->retrievalService->getGeneration($id);

@@ -27,7 +27,7 @@ readonly class GenerationRetrievalService implements GenerationRetrievalServiceI
         $totalCount = $this->generationRepository->countCompleted($userId);
 
         $generations = array_map(function ($generation) {
-            $generation['thumbnail_url'] = Storage::temporaryUrl(
+            $generation['thumbnail_url'] = Storage::disk('s3')->temporaryUrl(
                 $generation['thumbnail_file_path'],
                 now()->addMinutes(5)
             );
@@ -56,7 +56,7 @@ readonly class GenerationRetrievalService implements GenerationRetrievalServiceI
 
     public function getGenerationFileUrl(string $generationId): string
     {
-        return Storage::temporaryUrl(
+        return Storage::disk('s3')->temporaryUrl(
             $this->generationRepository->find($generationId)['file_path'],
             now()->addMinutes(5)
         );

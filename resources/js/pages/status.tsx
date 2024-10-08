@@ -63,7 +63,7 @@ export default function Status({ auth, status }: PageProps&StatusProps) {
         const initialDelay = setTimeout(() => {
             checkStatus();
             timeoutId = setInterval(checkStatus, pollInterval);
-        }, 5000);
+        }, 3000);
 
         const handleVisibilityChange = () => {
             setIsTabVisible(!document.hidden);

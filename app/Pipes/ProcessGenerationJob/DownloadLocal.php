@@ -8,7 +8,7 @@ use App\Services\GenerationCreationService;
 use Closure;
 use Illuminate\Support\Facades\Storage;
 
-readonly class DownloadResult
+readonly class DownloadLocal
 {
     public function __construct(protected readonly GenerationCreationService $creationService)
     {
@@ -22,11 +22,13 @@ readonly class DownloadResult
 
         $filePath = $this->creationService->getGenerationFilePath($contextUserId, $contextGenerationId);
 
-        $imageContent = file_get_contents($contextUrl);
-        Storage::put($filePath, $imageContent);
-
         $data['result'] = [];
         $data['result']['file_path'] = $filePath;
+
+        $imageContent = file_get_contents($contextUrl);
+
+        Storage::disk('local')
+            ->put($filePath, $imageContent);
 
         return $next($data);
     }

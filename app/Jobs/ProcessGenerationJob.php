@@ -4,9 +4,11 @@ namespace App\Jobs;
 
 use App\Contracts\ArtServiceInterface;
 use App\Models\Generation;
-use App\Pipes\ProcessGenerationJob\DownloadResult;
+use App\Pipes\ProcessGenerationJob\CleanupLocal;
+use App\Pipes\ProcessGenerationJob\DownloadLocal;
 use App\Pipes\ProcessGenerationJob\RequestGeneration;
-use App\Pipes\ProcessGenerationJob\ThumbnailResult;
+use App\Pipes\ProcessGenerationJob\ThumbnailGeneration;
+use App\Pipes\ProcessGenerationJob\UploadToS3;
 use App\Services\GenerationCreationService;
 use App\Services\GenerationRetrievalService;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -48,8 +50,10 @@ class ProcessGenerationJob implements ShouldQueue
             ->send($context)
             ->through([
                 RequestGeneration::class,
-                DownloadResult::class,
-                ThumbnailResult::class,
+                DownloadLocal::class,
+                ThumbnailGeneration::class,
+                UploadToS3::class,
+                CleanupLocal::class,
             ])
             ->then(function ($context) use ($generationCreationService) {
                 $contextGenerationId = $context['generation']['id'];

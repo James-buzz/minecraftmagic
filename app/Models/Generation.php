@@ -29,10 +29,6 @@ class Generation extends Model
         'thumbnail_file_path',
     ];
 
-    protected $casts = [
-        'metadata' => 'array',
-    ];
-
     protected $hidden = [
         'user_id',
     ];
@@ -40,5 +36,11 @@ class Generation extends Model
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+    protected function casts(): array
+    {
+        return [
+            'metadata' => 'array',
+        ];
     }
 }

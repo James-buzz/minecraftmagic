@@ -17,7 +17,9 @@
         "tightenco/ziggy": "^2.0"
     },
     "require-dev": {
+        "driftingly/rector-laravel": "^1.2",
         "fakerphp/faker": "^1.23",
+        "larastan/larastan": "^2.0",
         "laravel/breeze": "^2.2",
         "laravel/pint": "^1.13",
         "laravel/sail": "^1.33",

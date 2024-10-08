@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace App\Pipes\ProcessGenerationJob;
 
-use App\Services\GenerationCreationService;
 use Closure;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Image\Exceptions\CouldNotLoadImage;
-use Spatie\Image\Image;
 
 readonly class UploadToS3
 {

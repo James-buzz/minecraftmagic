@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static findOrFail(string $id)
  * @method static select(string[] $array)
  * @method static where(string $string, mixed $mixed)
+ * @method static find(string $generationId)
  */
 class Generation extends Model
 {

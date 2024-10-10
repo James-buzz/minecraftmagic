@@ -1,77 +1,77 @@
 {
     "types": [
         {
-            "identifier": "server_logo",
+            "id": "server_logo",
             "name": "Server Logo",
             "styles": [
                 {
-                    "identifier": "artic-expedition",
+                    "id": "artic-expedition",
                     "name": "Arctic Expedition",
                     "description": "A chilly adventure in the frozen north",
                     "prompt": "Design a Minecraft Server Logo.\nThe server is named: <server_name>.\nThe logo should feature icy, blue letters with a polar bear and igloo in the background.\nUse stark whites and icy blues, creating a cold arctic scene."
                 },
                 {
-                    "identifier": "dragons-lair",
+                    "id": "dragons-lair",
                     "name": "Dragon's Lair",
                     "description": "Face fearsome dragons in their den",
                     "prompt": "Design a Minecraft Server Logo.\nThe server is named: <server_name>.\nThe logo should feature fiery letters with a dragon's claw and flames in the background.\nUse fiery reds and oranges, set against a cave-like dark background."
                 },
                 {
-                    "identifier": "end-explorer",
+                    "id": "end-explorer",
                     "name": "End Explorer",
                     "description": "Journey through the mysterious End dimension",
                     "prompt": "Design a Minecraft Server Logo.\nThe server is named: <server_name>.\nThe logo should have surreal, purple-tinged letters with an Ender Dragon silhouette in the background.\nUse dark purples and blacks to evoke the mysterious End dimension."
                 },
                 {
-                    "identifier": "haunted-hallows",
+                    "id": "haunted-hallows",
                     "name": "Haunted Hallows",
                     "description": "Spooky adventures in a ghostly realm",
                     "prompt": "Design a Minecraft Server Logo.\nThe server is named: <server_name>.\nThe logo should have eerie, ghostly letters with a haunted mansion and bare trees in the background.\nUse muted grays and blues to convey a spooky, atmospheric environment."
                 },
                 {
-                    "identifier": "magical-chest",
+                    "id": "magical-chest",
                     "name": "Magical Chest",
                     "description": "Discover enchanted treasures and artifacts",
                     "prompt": "Design a Minecraft Server Logo.\nThe server is named: <server_name>.\nThe logo should have enchanting, sparkling letters with an open, glowing treasure chest in the background.\nUse vibrant colors and mystical glows to emphasize a sense of wonder."
                 },
                 {
-                    "identifier": "redstone-engineers",
+                    "id": "redstone-engineers",
                     "name": "Redstone Engineers",
                     "description": "Build complex machines with redstone",
                     "prompt": "Design a Minecraft Server Logo.\nThe server is named: <server_name>.\nThe logo should feature mechanical, circuit-like letters with a redstone torch and gears in the background.\nUse bold reds and metallic greys, emphasizing technical and innovative themes."
                 },
                 {
-                    "identifier": "battle-factions",
+                    "id": "battle-factions",
                     "name": "Battle Factions",
                     "description": "Join epic battles between rival groups",
                     "prompt": "Design a Minecraft Server Logo.\nThe server is named: <server_name>.\nThe logo should feature bold, warlike letters with crossed axes and a war banner behind the text.\nUse dark, foreboding colors and a backdrop of a stormy battlefield."
                 },
                 {
-                    "identifier": "dwarven-kingdom",
+                    "id": "dwarven-kingdom",
                     "name": "Dwarven Kingdom",
                     "description": "Explore vast underground cities and mines",
                     "prompt": "\nDesign a Minecraft Server Logo.\nThe server is named: <server_name>.\nThe logo should have stout, stone-like letters with a dwarf helmet and crossed pickaxes in the background.\nUse earthy tones like browns and grays, set against a backdrop of underground tunnels and caverns."
                 },
                 {
-                    "identifier": "frozen-peaks",
+                    "id": "frozen-peaks",
                     "name": "Frozen Peaks",
                     "description": "Climb treacherous icy mountains",
                     "prompt": "Design a Minecraft Server Logo.\nThe server is named: <server_name>.\nThe logo should feature icy, crystal-like letters with a snowy mountain and ski tracks in the background.\nUse cool blues and whites, creating a chilly, wintry scene."
                 },
                 {
-                    "identifier": "jungle-expedition",
+                    "id": "jungle-expedition",
                     "name": "Jungle Expedition",
                     "description": "Traverse dense, mysterious jungles",
                     "prompt": "Design a Minecraft Server Logo.\nThe server is named: <server_name>.\nThe logo should have lush, green letters with a jungle vine and parrot in the background.\nUse vibrant greens and a backdrop of dense, tropical foliage."
                 },
                 {
-                    "identifier": "pirate-cove",
+                    "id": "pirate-cove",
                     "name": "Pirate Cove",
                     "description": "Set sail for swashbuckling adventures",
                     "prompt": "Design a Minecraft Server Logo.\nThe server is named: <server_name>.\nThe logo should have adventurous, pirate-themed letters with a ship's wheel and anchor in the background.\nUse ocean blues and sandy browns, with a backdrop of a tropical island."
                 },
                 {
-                    "identifier": "vanilla-survival",
+                    "id": "vanilla-survival",
                     "name": "Vanilla Survival",
                     "description": "Classic Minecraft survival experience",
                     "prompt": "Design a Minecraft Server Logo.\nThe server is named: <server_name>\nThe logo should feature rugged, earth-toned letters with a simple wooden pickaxe and torch behind the text.\nUse natural colors and a backdrop of an untamed wilderness."

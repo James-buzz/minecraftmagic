@@ -31,8 +31,8 @@ readonly class GenerationRetrievalService implements GenerationRetrievalServiceI
                 $generation['thumbnail_file_path'],
                 now()->addMinutes(5)
             );
-            $generation['art_style'] = $this->artRepository->getArtStyleForArtType($generation['art_type'], $generation['art_style'])['name'];
-            $generation['art_type'] = $this->artRepository->getArtTypeByIdentifier($generation['art_type'])['name'];
+            $generation['art_style'] = $this->artRepository->getStyle($generation['art_type'], $generation['art_style'])['name'];
+            $generation['art_type'] = $this->artRepository->getType($generation['art_type'])['name'];
             unset($generation['thumbnail_file_path']);
 
             return $generation;

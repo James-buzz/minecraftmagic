@@ -10,9 +10,9 @@ interface GenerationRepositoryInterface
      * Find a generation by ID.
      *
      * @param string $generationId
-     * @return array{id: string, status: string, art_type: string, art_style: string, file_path: string, thumbnail_file_path: string}
+     * @return array{id: string, status: string, art_type: string, art_style: string, file_path: string, thumbnail_file_path: string}|null
      */
-    public function find(string $generationId): array;
+    public function find(string $generationId): ?array;
 
     /**
      * Update a generation by ID with data.
@@ -45,7 +45,7 @@ interface GenerationRepositoryInterface
      * @param int $userId
      * @param int $page
      * @param int $perPage
-     * @return array<mixed>
+     * @return array<array{id: string, art_type: string, art_style: string, thumbnail_file_path: string}>
      */
     public function paginateCompleted(int $userId, int $page, int $perPage): array;
 

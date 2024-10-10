@@ -5,14 +5,14 @@ import PrimaryButton from "@/components/primary-button";
 import { router } from '@inertiajs/react'
 
 interface ArtStyle {
-    identifier: string;
+    id: string;
     name: string;
     description: string;
 }
 
 interface ArtType {
-    identifier: string;
-    displayName: string;
+    id: string;
+    name: string;
     styles: ArtStyle[];
 }
 
@@ -72,19 +72,19 @@ export default function Generate({ art_types }: PageProps) {
                         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
                             {art_types.map((type) => (
                                 <div
-                                    key={type.identifier}
+                                    key={type.id}
                                     className={`relative cursor-pointer transition-all duration-300 ${
-                                        selectedType === type.identifier
+                                        selectedType === type.id
                                             ? 'ring-4 ring-primary'
                                             : 'hover:scale-105'
                                     }`}
                                     onClick={() => {
-                                        setSelectedType(type.identifier);
+                                        setSelectedType(type.id);
                                         setSelectedStyle(null);
                                     }}
                                 >
                                     <div className="h-40 rounded-lg bg-gray-700 flex items-center justify-center">
-                                        <span className="text-center">{type.displayName}</span>
+                                        <span className="text-center">{type.name}</span>
                                     </div>
                                 </div>
                             ))}
@@ -95,18 +95,18 @@ export default function Generate({ art_types }: PageProps) {
                         <div>
                             <h3 className="mb-4 text-xl font-semibold">Select Style</h3>
                             <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
-                                {art_types.find(type => type.identifier === selectedType)?.styles.map((style) => (
+                                {art_types.find(type => type.id === selectedType)?.styles.map((style) => (
                                     <div
-                                        key={style.identifier}
+                                        key={style.id}
                                         className={`relative cursor-pointer transition-all duration-300 ${
-                                            selectedStyle === style.identifier
+                                            selectedStyle === style.id
                                                 ? 'ring-4 ring-primary'
                                                 : 'hover:scale-105'
                                         }`}
-                                        onClick={() => setSelectedStyle(style.identifier)}
+                                        onClick={() => setSelectedStyle(style.id)}
                                     >
                                         <img
-                                            src={`/assets/art/${selectedType}/${style.identifier}.png`}
+                                            src={`/assets/art/${selectedType}/${style.id}.png`}
                                             alt={style.name}
                                             className="rounded-lg w-full h-40 object-cover"
                                         />

@@ -5,8 +5,36 @@ namespace App\Repositories;
 use App\Contracts\GenerationRepositoryInterface;
 use App\Models\Generation;
 
-class GenerationRepository implements GenerationRepositoryInterface
+readonly class GenerationRepository implements GenerationRepositoryInterface
 {
+    public function find(string $generationId): ?array
+    {
+        $generation = Generation::find($generationId);
+
+        if ($generation === null) {
+            return null;
+        }
+
+        return $generation->toArray();
+    }
+
+    public function create(int $userId, string $artType, string $artStyle, array $metadata): string
+    {
+        $record = Generation::create([
+            'user_id' => $userId,
+            'art_type' => $artType,
+            'art_style' => $artStyle,
+            'metadata' => $metadata,
+        ]);
+
+        return $record->id;
+    }
+
+    public function update(string $generationId, array $data): void
+    {
+        Generation::findOrFail($generationId)->update($data);
+    }
+
     public function paginateCompleted(int $userId, int $page, int $perPage): array
     {
         $offset = ($page - 1) * $perPage;
@@ -28,27 +56,5 @@ class GenerationRepository implements GenerationRepositoryInterface
             ->where('status', 'completed')
             ->whereNotNull('file_path')
             ->count();
-    }
-
-    public function find(string $generationId): array
-    {
-        return Generation::findOrFail($generationId)->toArray();
-    }
-
-    public function create(int $userId, string $artType, string $artStyle, array $metadata): string
-    {
-        $record = Generation::create([
-            'user_id' => $userId,
-            'art_type' => $artType,
-            'art_style' => $artStyle,
-            'metadata' => $metadata,
-        ]);
-
-        return $record->id;
-    }
-
-    public function update(string $generationId, array $data): void
-    {
-        Generation::findOrFail($generationId)->update($data);
     }
 }

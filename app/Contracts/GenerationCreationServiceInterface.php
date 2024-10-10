@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace App\Contracts;
 
+use App\Exceptions\ArtStyleNotFoundException;
+use App\Exceptions\GenerationNotFoundException;
+use App\Exceptions\UserNotFoundException;
+
 interface GenerationCreationServiceInterface
 {
     /**
@@ -12,6 +16,8 @@ interface GenerationCreationServiceInterface
      * @param string $userId
      * @param string $generationId
      * @return string
+     * @throws GenerationNotFoundException
+     * @throws UserNotFoundException
      */
     public function getGenerationFilePath(string $userId, string $generationId): string;
 
@@ -21,6 +27,9 @@ interface GenerationCreationServiceInterface
      * @param string $userId
      * @param string $generationId
      * @return string
+     *
+     * @throws GenerationNotFoundException
+     * @throws UserNotFoundException
      */
     public function getGenerationThumbnailFilePath(string $userId, string $generationId): string;
 
@@ -29,15 +38,18 @@ interface GenerationCreationServiceInterface
      * Return the generation ID.
      *
      * @param int $userId
-     * @param string $artType
-     * @param string $artStyle
+     * @param string $artTypeId
+     * @param string $artStyleId
      * @param array<mixed> $metadata
      * @return string
+     *
+     * @throws UserNotFoundException
+     * @throws ArtStyleNotFoundException
      */
     public function createGeneration(
         int $userId,
-        string $artType,
-        string $artStyle,
+        string $artTypeId,
+        string $artStyleId,
         array $metadata
     ): string;
 
@@ -46,6 +58,8 @@ interface GenerationCreationServiceInterface
      *
      * @param string $generationId
      * @return void
+     *
+     * @throws GenerationNotFoundException
      */
     public function setGenerationAsProcessing(string $generationId): void;
 
@@ -57,6 +71,8 @@ interface GenerationCreationServiceInterface
      * @param string $filePath
      * @param string $thumbnailFilePath
      * @return void
+     *
+     * @throws GenerationNotFoundException
      */
     public function setGenerationAsCompleted(
         string $generationId,
@@ -69,6 +85,8 @@ interface GenerationCreationServiceInterface
      *
      * @param string $generationId
      * @return void
+     *
+     * @throws GenerationNotFoundException
      */
     public function setGenerationAsFailed(string $generationId): void;
 }

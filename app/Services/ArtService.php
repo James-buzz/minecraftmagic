@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Contracts\ArtRepositoryInterface;
 use App\Contracts\ArtServiceInterface;
+use App\Exceptions\ArtStyleNotFoundException;
 
 readonly class ArtService implements ArtServiceInterface
 {
@@ -13,15 +14,21 @@ readonly class ArtService implements ArtServiceInterface
 
     public function getArtStyle(string $artTypeId, string $artStyleId): array
     {
-        return $this->artRepository->getArtStyleForArtType($artTypeId, $artStyleId);
+        $style = $this->artRepository->getStyle($artTypeId, $artStyleId);
+
+        if ($style === null) {
+            throw new ArtStyleNotFoundException($artTypeId, $artStyleId);
+        }
+
+        return $style;
     }
 
     public function getAllArtTypesWithStyles(): array
     {
-        $types = $this->artRepository->getArtTypes();
+        $types = $this->artRepository->getTypes();
         $result = [];
         foreach ($types as $type) {
-            $type['styles'] = $this->artRepository->getArtStylesForArtType($type['identifier']);
+            $type['styles'] = $this->artRepository->getStyles($type['id']);
             $result[] = $type;
         }
 
@@ -30,6 +37,6 @@ readonly class ArtService implements ArtServiceInterface
 
     public function getAllArtTypes(): array
     {
-        return $this->artRepository->getArtTypes();
+        return $this->artRepository->getTypes();
     }
 }

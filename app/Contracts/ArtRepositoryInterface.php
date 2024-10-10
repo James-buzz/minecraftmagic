@@ -5,34 +5,42 @@ namespace App\Contracts;
 interface ArtRepositoryInterface
 {
     /**
-     * Get all art types
+     * Get all art types (without styles)
      *
-     * @return array<array{identifier: string, displayName: string}>
+     * @return array<array{id: string, name: string}>
      */
-    public function getArtTypes(): array;
+    public function getTypes(): array;
+
+    /**
+     * Get an art type by its identifier (without styles)
+     *
+     * @param string $typeId
+     * @return array{id: string, name: string}|null
+     */
+    public function getType(string $typeId): ?array;
+
+    /**
+     * Get an art type by its identifier (including styles)
+     *
+     * @param string $typeId
+     * @return array{id: string, name: string, styles: array<array{id: string, name: string, description: string}>}|null
+     */
+    public function getTypeWithStyles(string $typeId): ?array;
 
     /**
      * Get all art styles for a given art type
      *
-     * @param string $typeIdentifier
-     * @return array<array{identifier: string, displayName: string}>
+     * @param string $typeId
+     * @return array<array{id: string, name: string, description: string}>
      */
-    public function getArtStylesForArtType(string $typeIdentifier): array;
-
-    /**
-     * Get an art type by its identifier
-     *
-     * @param string $typeIdentifier
-     * @return array{identifier: string, displayName: string}|null
-     */
-    public function getArtTypeByIdentifier(string $typeIdentifier): ?array;
+    public function getStyles(string $typeId): array;
 
     /**
      * Get an art style for a given art type
      *
-     * @param string $typeIdentifier
-     * @param string $styleIdentifier
-     * @return array{identifier: string, displayName: string}|null
+     * @param string $typeId
+     * @param string $styleId
+     * @return array{id: string, name: string, description: string, prompt: string}|null
      */
-    public function getArtStyleForArtType(string $typeIdentifier, string $styleIdentifier): ?array;
+    public function getStyle(string $typeId, string $styleId): ?array;
 }

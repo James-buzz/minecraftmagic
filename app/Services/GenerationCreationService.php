@@ -19,14 +19,14 @@ readonly class GenerationCreationService implements GenerationCreationServiceInt
 
     public function createGeneration(
         int $userId,
-        string $artType,
-        string $artStyle,
+        string $artTypeId,
+        string $artStyleId,
         array $metadata
     ): string {
-        $generationId = $this->generationRepository->create($userId, $artType, $artStyle, $metadata);
+        $generationId = $this->generationRepository->create($userId, $artTypeId, $artStyleId, $metadata);
 
         ProcessGenerationJob::dispatch(
-            $userId,
+            (string) $userId,
             $generationId
         );
 

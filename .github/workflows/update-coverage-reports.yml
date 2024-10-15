@@ -36,8 +36,6 @@ jobs:
 
       - name: Install dependencies
         run: composer install --prefer-dist --no-interaction --no-suggest
-        env:
-          COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ secrets.COMPOSER_MT_ACCESS_TOKEN }}"} }'
 
       - name: Execute tests
         run: XDEBUG_MODE=coverage vendor/bin/phpunit --log-junit report.xml --coverage-cobertura coverage.xml --coverage-html docs/coverage

@@ -46,8 +46,11 @@ jobs:
       - name: Install npm dependencies
         run: npm install
 
+      - name: Build Vite assets
+        run: npm run build
+
       - name: Start dev server in background
-        run: npm run dev &
+        run: php artisan serve &
 
       - name: Execute tests
         run: XDEBUG_MODE=coverage vendor/bin/phpunit --log-junit report.xml --coverage-cobertura coverage.xml --coverage-html docs/coverage

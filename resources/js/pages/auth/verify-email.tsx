@@ -14,24 +14,23 @@ export default function VerifyEmail({ status }: { status?: string }) {
 
     return (
         <GuestLayout>
-            <Head title="Email Verification"/>
+            <Head title="Email Verification" />
 
             <div className="bg-gray-900 py-24 text-white">
                 <div className="mx-auto w-full max-w-xl">
-
-                    <h1 className={"text-2xl mb-6"}>Verify email address</h1>
+                    <h1 className={'mb-6 text-2xl'}>Verify email address</h1>
 
                     <div className="mb-6 text-sm text-gray-200">
-                        Thanks for signing up! Before getting started, could you verify
-                        your email address by clicking on the link we just emailed to
-                        you? If you didn't receive the email, we will gladly send you
-                        another.
+                        Thanks for signing up! Before getting started, could you
+                        verify your email address by clicking on the link we
+                        just emailed to you? If you didn't receive the email, we
+                        will gladly send you another.
                     </div>
 
                     {status === 'verification-link-sent' && (
                         <div className="mb-4 text-sm font-medium text-green-600">
-                            A new verification link has been sent to the email address
-                            you provided during registration.
+                            A new verification link has been sent to the email
+                            address you provided during registration.
                         </div>
                     )}
 
@@ -54,5 +53,5 @@ export default function VerifyEmail({ status }: { status?: string }) {
                 </div>
             </div>
         </GuestLayout>
-);
+    );
 }

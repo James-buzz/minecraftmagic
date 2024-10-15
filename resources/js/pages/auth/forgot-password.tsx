@@ -18,15 +18,15 @@ export default function ForgotPassword({ status }: { status?: string }) {
 
     return (
         <GuestLayout>
-            <Head title="Forgot Password"/>
+            <Head title="Forgot Password" />
 
             <div className="bg-gray-900 py-24 text-white">
                 <div className="mx-auto w-full max-w-xl">
-                    <h1 className={"text-2xl mb-6"}>Forgot your password?</h1>
+                    <h1 className={'mb-6 text-2xl'}>Forgot your password?</h1>
                     <div className="mb-4 text-sm text-gray-200">
-                        Forgot your password? No problem. Just let us know your email
-                        address and we will email you a password reset link that will
-                        allow you to choose a new one.
+                        Forgot your password? No problem. Just let us know your
+                        email address and we will email you a password reset
+                        link that will allow you to choose a new one.
                     </div>
 
                     {status && (
@@ -46,10 +46,13 @@ export default function ForgotPassword({ status }: { status?: string }) {
                             onChange={(e) => setData('email', e.target.value)}
                         />
 
-                        <InputError message={errors.email} className="mt-2"/>
+                        <InputError message={errors.email} className="mt-2" />
 
                         <div className="mt-4 flex items-center justify-end">
-                            <PrimaryButton className="ms-4" disabled={processing}>
+                            <PrimaryButton
+                                className="ms-4"
+                                disabled={processing}
+                            >
                                 Email Password Reset Link
                             </PrimaryButton>
                         </div>
@@ -57,5 +60,5 @@ export default function ForgotPassword({ status }: { status?: string }) {
                 </div>
             </div>
         </GuestLayout>
-);
+    );
 }

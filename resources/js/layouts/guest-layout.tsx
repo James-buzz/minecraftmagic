@@ -4,8 +4,7 @@ import { PropsWithChildren } from 'react';
 
 export default function Guest({ children }: PropsWithChildren) {
     return (
-        <div
-            className="mx-auto flex min-h-screen max-w-4xl flex-col bg-[#1A1A2E] p-8 font-[family-name:var(--font-geist-sans)] text-white">
+        <div className="mx-auto flex min-h-screen max-w-4xl flex-col bg-[#1A1A2E] p-8 font-[family-name:var(--font-geist-sans)] text-white">
             <header className="mb-8">
                 <div className="mb-4 flex justify-center">
                     <ApplicationLogo />

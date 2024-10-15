@@ -1,9 +1,8 @@
-import React, {useEffect, useState} from 'react';
-import { Head } from '@inertiajs/react';
+import PrimaryButton from '@/components/primary-button';
 import AuthenticatedLayout from '@/layouts/authenticated-layout';
-import { PageProps } from "@/types";
-import { router } from '@inertiajs/react'
-import PrimaryButton from "@/components/primary-button";
+import { PageProps } from '@/types';
+import { Head, router } from '@inertiajs/react';
+import { useEffect, useState } from 'react';
 
 interface StatusProps {
     status: {
@@ -12,12 +11,12 @@ interface StatusProps {
         status: string;
         metadata: {
             image_size?: string;
-            image_quality?: string
-        }
-    }
+            image_quality?: string;
+        };
+    };
 }
 
-export default function Status({ auth, status }: PageProps&StatusProps) {
+export default function Status({ auth, status }: PageProps & StatusProps) {
     const [isTabVisible, setIsTabVisible] = useState(true);
 
     const getStatusEffect = (status: string) => {
@@ -55,7 +54,10 @@ export default function Status({ auth, status }: PageProps&StatusProps) {
         let timeoutId: NodeJS.Timeout;
 
         const checkStatus = () => {
-            if (isTabVisible && ['pending', 'processing'].includes(status.status)) {
+            if (
+                isTabVisible &&
+                ['pending', 'processing'].includes(status.status)
+            ) {
                 router.reload({ only: ['status'] });
             }
         };
@@ -73,7 +75,10 @@ export default function Status({ auth, status }: PageProps&StatusProps) {
         return () => {
             clearTimeout(initialDelay);
             clearInterval(timeoutId);
-            document.removeEventListener('visibilitychange', handleVisibilityChange);
+            document.removeEventListener(
+                'visibilitychange',
+                handleVisibilityChange,
+            );
         };
     }, [status.status, isTabVisible]);
 
@@ -81,14 +86,16 @@ export default function Status({ auth, status }: PageProps&StatusProps) {
         <AuthenticatedLayout>
             <Head title="Status" />
 
-            <div className="bg-gray-900 pt-12 pb-20">
-                <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="bg-gray-900 pb-20 pt-12">
+                <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8">
                     <h1 className="mb-8 text-center text-4xl font-bold text-white">
                         Status
                     </h1>
 
-                    <div className="mb-8 w-full rounded-lg bg-gray-800 p-6 shadow-lg text-white">
-                        <h2 className="mb-4 text-2xl font-semibold">Your Input</h2>
+                    <div className="mb-8 w-full rounded-lg bg-gray-800 p-6 text-white shadow-lg">
+                        <h2 className="mb-4 text-2xl font-semibold">
+                            Your Input
+                        </h2>
                         <div className="grid grid-cols-2 gap-4">
                             <div>
                                 <p className="font-medium">Type:</p>
@@ -113,9 +120,10 @@ export default function Status({ auth, status }: PageProps&StatusProps) {
                         <div className="flex flex-col items-center">
                             <div
                                 className={`mb-4 flex h-20 w-20 items-center justify-center rounded-full ${getStatusEffect(status.status)}`}
-                            >
-                            </div>
-                            <span className="text-center text-xl font-semibold text-white">{getStatusText(status.status)}</span>
+                            ></div>
+                            <span className="text-center text-xl font-semibold text-white">
+                                {getStatusText(status.status)}
+                            </span>
                         </div>
                     </div>
 
@@ -127,26 +135,42 @@ export default function Status({ auth, status }: PageProps&StatusProps) {
                         )}
                         {status.status === 'completed' ? (
                             <>
-                                <p className="text-lg text-green-500 font-semibold mb-6">
+                                <p className="mb-6 text-lg font-semibold text-green-500">
                                     Your image is ready!
                                 </p>
-                                <PrimaryButton className={'bg-green-600 hover:bg-green-700'} onClick={()=> {
-                                    router.visit('/dashboard')
-                                }}>View your art</PrimaryButton>
+                                <PrimaryButton
+                                    className={
+                                        'bg-green-600 hover:bg-green-700'
+                                    }
+                                    onClick={() => {
+                                        router.visit('/dashboard');
+                                    }}
+                                >
+                                    View your art
+                                </PrimaryButton>
                             </>
                         ) : status.status === 'failed' ? (
                             <>
-                                <p className="text-lg text-red-500 font-semibold">
-                                    We encountered an error while creating your image. Please try again.
+                                <p className="text-lg font-semibold text-red-500">
+                                    We encountered an error while creating your
+                                    image. Please try again.
                                 </p>
-                                <PrimaryButton className={'bg-red-600 hover:bg-red-700 mt-4'} onClick={()=> {
-                                    router.visit('/dashboard')
-                                }}>Go Back</PrimaryButton>
+                                <PrimaryButton
+                                    className={
+                                        'mt-4 bg-red-600 hover:bg-red-700'
+                                    }
+                                    onClick={() => {
+                                        router.visit('/dashboard');
+                                    }}
+                                >
+                                    Go Back
+                                </PrimaryButton>
                             </>
                         ) : (
                             <>
                                 <p className="text-lg font-semibold">
-                                    Please wait while we create your unique Minecraft art.
+                                    Please wait while we create your unique
+                                    Minecraft art.
                                 </p>
                                 <p className="mt-2 text-sm text-gray-400">
                                     This process usually takes a few minutes.

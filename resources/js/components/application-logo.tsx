@@ -1,5 +1,4 @@
-import { SVGAttributes } from 'react';
-import {Link} from "@inertiajs/react";
+import { Link } from '@inertiajs/react';
 
 export default function ApplicationLogo() {
     return (

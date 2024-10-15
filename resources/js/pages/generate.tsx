@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
-import { Head } from '@inertiajs/react';
+import PrimaryButton from '@/components/primary-button';
 import AuthenticatedLayout from '@/layouts/authenticated-layout';
-import PrimaryButton from "@/components/primary-button";
-import { router } from '@inertiajs/react'
+import { Head, router } from '@inertiajs/react';
+import React, { useState } from 'react';
 
 interface ArtStyle {
     id: string;
@@ -30,7 +29,8 @@ export default function Generate({ art_types }: PageProps) {
     const [selectedRatio, setSelectedRatio] = useState('1024x1024');
     const [serverName, setServerName] = useState('');
 
-    const isDisabled = !selectedType || !selectedStyle || !selectedQuality || !selectedRatio;
+    const isDisabled =
+        !selectedType || !selectedStyle || !selectedQuality || !selectedRatio;
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -43,8 +43,8 @@ export default function Generate({ art_types }: PageProps) {
                 fields: {
                     server_name: serverName,
                 },
-            }
-        })
+            },
+        });
     };
 
     return (
@@ -57,18 +57,33 @@ export default function Generate({ art_types }: PageProps) {
                 </h1>
 
                 <div className="mx-auto mb-8 max-w-2xl rounded-lg bg-gray-800 p-6 shadow-lg">
-                    <h2 className="mb-4 text-2xl font-semibold">How it works</h2>
+                    <h2 className="mb-4 text-2xl font-semibold">
+                        How it works
+                    </h2>
                     <ol className="list-inside list-decimal space-y-2">
-                        <li>Choose an art type and style from the options below.</li>
+                        <li>
+                            Choose an art type and style from the options below.
+                        </li>
                         <li>Select your preferred image quality and size.</li>
-                        <li>Enter your Minecraft server name for a personalised touch.</li>
-                        <li>Click "Generate Image" to create your custom artwork!</li>
+                        <li>
+                            Enter your Minecraft server name for a personalised
+                            touch.
+                        </li>
+                        <li>
+                            Click "Generate Image" to create your custom
+                            artwork!
+                        </li>
                     </ol>
                 </div>
 
-                <form onSubmit={handleSubmit} className="mx-auto max-w-4xl space-y-8">
+                <form
+                    onSubmit={handleSubmit}
+                    className="mx-auto max-w-4xl space-y-8"
+                >
                     <div>
-                        <h3 className="mb-4 text-xl font-semibold">Select Art Type</h3>
+                        <h3 className="mb-4 text-xl font-semibold">
+                            Select Art Type
+                        </h3>
                         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
                             {art_types.map((type) => (
                                 <div
@@ -83,8 +98,10 @@ export default function Generate({ art_types }: PageProps) {
                                         setSelectedStyle(null);
                                     }}
                                 >
-                                    <div className="h-40 rounded-lg bg-gray-700 flex items-center justify-center">
-                                        <span className="text-center">{type.name}</span>
+                                    <div className="flex h-40 items-center justify-center rounded-lg bg-gray-700">
+                                        <span className="text-center">
+                                            {type.name}
+                                        </span>
                                     </div>
                                 </div>
                             ))}
@@ -93,41 +110,52 @@ export default function Generate({ art_types }: PageProps) {
 
                     {selectedType && (
                         <div>
-                            <h3 className="mb-4 text-xl font-semibold">Select Style</h3>
+                            <h3 className="mb-4 text-xl font-semibold">
+                                Select Style
+                            </h3>
                             <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
-                                {art_types.find(type => type.id === selectedType)?.styles.map((style) => (
-                                    <div
-                                        key={style.id}
-                                        className={`relative cursor-pointer transition-all duration-300 ${
-                                            selectedStyle === style.id
-                                                ? 'ring-4 ring-primary'
-                                                : 'hover:scale-105'
-                                        }`}
-                                        onClick={() => setSelectedStyle(style.id)}
-                                    >
-                                        <img
-                                            src={`/assets/art/${selectedType}/${style.id}.png`}
-                                            alt={style.name}
-                                            className="rounded-lg w-full h-40 object-cover"
-                                        />
-                                        <div className="absolute bottom-0 left-0 right-0 rounded-b-lg bg-black bg-opacity-50 p-2 text-sm text-white">
-                                            {style.name}
+                                {art_types
+                                    .find((type) => type.id === selectedType)
+                                    ?.styles.map((style) => (
+                                        <div
+                                            key={style.id}
+                                            className={`relative cursor-pointer transition-all duration-300 ${
+                                                selectedStyle === style.id
+                                                    ? 'ring-4 ring-primary'
+                                                    : 'hover:scale-105'
+                                            }`}
+                                            onClick={() =>
+                                                setSelectedStyle(style.id)
+                                            }
+                                        >
+                                            <img
+                                                src={`/assets/art/${selectedType}/${style.id}.png`}
+                                                alt={style.name}
+                                                className="h-40 w-full rounded-lg object-cover"
+                                            />
+                                            <div className="absolute bottom-0 left-0 right-0 rounded-b-lg bg-black bg-opacity-50 p-2 text-sm text-white">
+                                                {style.name}
+                                            </div>
                                         </div>
-                                    </div>
-                                ))}
+                                    ))}
                             </div>
                         </div>
                     )}
 
                     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                         <div>
-                            <label htmlFor="quality" className="mb-2 block text-sm font-medium">
+                            <label
+                                htmlFor="quality"
+                                className="mb-2 block text-sm font-medium"
+                            >
                                 Image Quality*
                             </label>
                             <select
                                 id="quality"
                                 value={selectedQuality}
-                                onChange={(e) => setSelectedQuality(e.target.value)}
+                                onChange={(e) =>
+                                    setSelectedQuality(e.target.value)
+                                }
                                 className="w-full rounded-md border border-gray-600 bg-gray-700 p-2 text-white"
                                 required
                             >
@@ -141,13 +169,18 @@ export default function Generate({ art_types }: PageProps) {
                         </div>
 
                         <div>
-                            <label htmlFor="ratio" className="mb-2 block text-sm font-medium">
+                            <label
+                                htmlFor="ratio"
+                                className="mb-2 block text-sm font-medium"
+                            >
                                 Image Size*
                             </label>
                             <select
                                 id="ratio"
                                 value={selectedRatio}
-                                onChange={(e) => setSelectedRatio(e.target.value)}
+                                onChange={(e) =>
+                                    setSelectedRatio(e.target.value)
+                                }
                                 className="w-full rounded-md border border-gray-600 bg-gray-700 p-2 text-white"
                                 required
                             >
@@ -165,7 +198,10 @@ export default function Generate({ art_types }: PageProps) {
                                 htmlFor="serverName"
                                 className="mb-2 block text-sm font-medium"
                             >
-                                Minecraft Server Name <span className={'text-xs text-gray-500'}>(Optional)</span>
+                                Minecraft Server Name{' '}
+                                <span className={'text-xs text-gray-500'}>
+                                    (Optional)
+                                </span>
                             </label>
                             <input
                                 type="text"

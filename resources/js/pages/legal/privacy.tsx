@@ -1,18 +1,18 @@
-import { Head, Link } from '@inertiajs/react';
-import Guest from "@/layouts/guest-layout";
+import Guest from '@/layouts/guest-layout';
+import { Head } from '@inertiajs/react';
 
 export default function Privacy() {
     return (
         <>
             <Head title="Privacy Policy" />
             <Guest>
-                <h1 className="text-2xl text-gray-100 tracking-tight font-black mx-auto">
+                <h1 className="mx-auto text-2xl font-black tracking-tight text-gray-100">
                     Privacy Policy
                 </h1>
-                <p className="mt-2 text-md tracking-wide text-gray-100">
+                <p className="text-md mt-2 tracking-wide text-gray-100">
                     Last updated on June 23rd, 2024
                 </p>
-                <div className="pr-4 text-gray-200 text-sm">
+                <div className="pr-4 text-sm text-gray-200">
                     <div className="mt-2">
                         <p className="mt-4">
                             This privacy notice for MinecraftMagic ('we', 'us',
@@ -54,7 +54,7 @@ export default function Privacy() {
                             features you use. The personal information we
                             collect may include the following:
                         </p>
-                        <ul className="mt-4 list-disc ml-4 font-semibold">
+                        <ul className="ml-4 mt-4 list-disc font-semibold">
                             <li>names</li>
                             <li>email addresses</li>
                             <li>usernames</li>
@@ -102,13 +102,13 @@ export default function Privacy() {
                             of reasons, depending on how you interact with our
                             Services, including:
                         </p>
-                        <ul className="mt-4 list-disc space-y-3 ml-4">
+                        <ul className="ml-4 mt-4 list-disc space-y-3">
                             <li>
                                 <b>
                                     To facilitate account creation and
                                     authentication and otherwise manage user
                                     accounts.
-                                </b>{" "}
+                                </b>{' '}
                                 We may process your information so you can
                                 create and log in to your account, as well as
                                 keep your account in working order.
@@ -123,7 +123,7 @@ export default function Privacy() {
                                 <b>
                                     To send you marketing and promotional
                                     communications.
-                                </b>{" "}
+                                </b>{' '}
                                 We may process the personal information you send
                                 to us for our marketing purposes, if this is in
                                 accordance with your marketing preferences. You
@@ -145,7 +145,7 @@ export default function Privacy() {
                                 <b>
                                     To save or protect an individual's vital
                                     interest.
-                                </b>{" "}
+                                </b>{' '}
                                 We may process your information when necessary
                                 to save or protect an individual’s vital
                                 interest, such as to prevent harm.
@@ -182,7 +182,7 @@ export default function Privacy() {
                             We may need to share your personal information in
                             the following situations:
                         </p>
-                        <ul className="mt-4 list-disc space-y-3 ml-4">
+                        <ul className="ml-4 mt-4 list-disc space-y-3">
                             <li>
                                 <b>Business Transfers.</b> We may share or
                                 transfer your information in connection with, or

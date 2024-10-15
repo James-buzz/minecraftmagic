@@ -30,15 +30,15 @@ export default function ResetPassword({
 
     return (
         <GuestLayout>
-            <Head title="Reset Password"/>
+            <Head title="Reset Password" />
 
             <div className="bg-gray-900 py-24 text-white">
                 <div className="mx-auto w-full max-w-xl">
-                    <h1 className={"text-2xl mb-6"}>Reset password</h1>
+                    <h1 className={'mb-6 text-2xl'}>Reset password</h1>
 
                     <form onSubmit={submit}>
                         <div>
-                            <InputLabel htmlFor="email" value="Email"/>
+                            <InputLabel htmlFor="email" value="Email" />
 
                             <TextInput
                                 id="email"
@@ -47,14 +47,19 @@ export default function ResetPassword({
                                 value={data.email}
                                 className="mt-1 block w-full"
                                 autoComplete="username"
-                                onChange={(e) => setData('email', e.target.value)}
+                                onChange={(e) =>
+                                    setData('email', e.target.value)
+                                }
                             />
 
-                            <InputError message={errors.email} className="mt-2"/>
+                            <InputError
+                                message={errors.email}
+                                className="mt-2"
+                            />
                         </div>
 
                         <div className="mt-4">
-                            <InputLabel htmlFor="password" value="Password"/>
+                            <InputLabel htmlFor="password" value="Password" />
 
                             <TextInput
                                 id="password"
@@ -64,10 +69,15 @@ export default function ResetPassword({
                                 className="mt-1 block w-full"
                                 autoComplete="new-password"
                                 isFocused={true}
-                                onChange={(e) => setData('password', e.target.value)}
+                                onChange={(e) =>
+                                    setData('password', e.target.value)
+                                }
                             />
 
-                            <InputError message={errors.password} className="mt-2"/>
+                            <InputError
+                                message={errors.password}
+                                className="mt-2"
+                            />
                         </div>
 
                         <div className="mt-4">
@@ -83,7 +93,10 @@ export default function ResetPassword({
                                 className="mt-1 block w-full"
                                 autoComplete="new-password"
                                 onChange={(e) =>
-                                    setData('password_confirmation', e.target.value)
+                                    setData(
+                                        'password_confirmation',
+                                        e.target.value,
+                                    )
                                 }
                             />
 
@@ -94,7 +107,10 @@ export default function ResetPassword({
                         </div>
 
                         <div className="mt-4 flex items-center justify-end">
-                            <PrimaryButton className="ms-4" disabled={processing}>
+                            <PrimaryButton
+                                className="ms-4"
+                                disabled={processing}
+                            >
                                 Reset Password
                             </PrimaryButton>
                         </div>

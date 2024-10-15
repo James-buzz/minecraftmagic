@@ -1,5 +1,5 @@
-import React from 'react';
 import { MinecraftStyle } from '@/types/styles';
+import React from 'react';
 
 interface ImageStyleProps {
     style: MinecraftStyle;

@@ -1,9 +1,9 @@
-import React, { Fragment } from 'react';
+import PrimaryButton from '@/components/primary-button';
 import AuthenticatedLayout from '@/layouts/authenticated-layout';
-import { Head, Link } from '@inertiajs/react';
-import PrimaryButton from "@/components/primary-button";
 import { Menu, Transition } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
+import { Head, Link } from '@inertiajs/react';
+import { Fragment } from 'react';
 
 interface Generation {
     id: string;
@@ -35,17 +35,23 @@ const Pagination = ({ meta }: { meta: PaginationMeta }) => {
     const { current_page, last_page } = meta;
 
     return (
-        <div className="flex justify-center mt-8 space-x-4">
+        <div className="mt-8 flex justify-center space-x-4">
             {current_page > 1 && (
-                <Link href={`?page=${current_page - 1}`} className="px-4 py-2 bg-gray-700 rounded-md hover:bg-gray-600">
+                <Link
+                    href={`?page=${current_page - 1}`}
+                    className="rounded-md bg-gray-700 px-4 py-2 hover:bg-gray-600"
+                >
                     Previous
                 </Link>
             )}
-            <span className="px-4 py-2 bg-gray-800 rounded-md">
+            <span className="rounded-md bg-gray-800 px-4 py-2">
                 Page {current_page} of {last_page}
             </span>
             {current_page < last_page && (
-                <Link href={`?page=${current_page + 1}`} className="px-4 py-2 bg-gray-700 rounded-md hover:bg-gray-600">
+                <Link
+                    href={`?page=${current_page + 1}`}
+                    className="rounded-md bg-gray-700 px-4 py-2 hover:bg-gray-600"
+                >
                     Next
                 </Link>
             )}
@@ -54,9 +60,13 @@ const Pagination = ({ meta }: { meta: PaginationMeta }) => {
 };
 
 const Avatar = ({ name }: { name: string }) => {
-    const initials = name.split(' ').map(n => n[0]).join('').toUpperCase();
+    const initials = name
+        .split(' ')
+        .map((n) => n[0])
+        .join('')
+        .toUpperCase();
     return (
-        <div className="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold">
+        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-600 font-bold text-white">
             {initials}
         </div>
     );
@@ -66,9 +76,12 @@ const ProfileMenu = ({ name }: { name: string }) => {
     return (
         <Menu as="div" className="relative inline-block text-left">
             <div>
-                <Menu.Button className="inline-flex w-full justify-center items-center">
+                <Menu.Button className="inline-flex w-full items-center justify-center">
                     <Avatar name={name} />
-                    <ChevronDownIcon className="-mr-1 ml-2 h-5 w-5" aria-hidden="true" />
+                    <ChevronDownIcon
+                        className="-mr-1 ml-2 h-5 w-5"
+                        aria-hidden="true"
+                    />
                 </Menu.Button>
             </div>
 
@@ -88,7 +101,9 @@ const ProfileMenu = ({ name }: { name: string }) => {
                                 <Link
                                     href={route('profile.edit')}
                                     className={`${
-                                        active ? 'bg-gray-700 text-gray-100' : 'text-gray-100'
+                                        active
+                                            ? 'bg-gray-700 text-gray-100'
+                                            : 'text-gray-100'
                                     } block px-4 py-2 text-sm`}
                                 >
                                     Edit Profile
@@ -102,7 +117,9 @@ const ProfileMenu = ({ name }: { name: string }) => {
                                     method="post"
                                     as="button"
                                     className={`${
-                                        active ? 'bg-gray-700 text-gray-100' : 'text-gray-100'
+                                        active
+                                            ? 'bg-gray-700 text-gray-100'
+                                            : 'text-gray-100'
                                     } block w-full px-4 py-2 text-left text-sm`}
                                 >
                                     Logout
@@ -116,14 +133,17 @@ const ProfileMenu = ({ name }: { name: string }) => {
     );
 };
 
-export default function Dashboard({ auth, paginatedGenerations }: DashboardProps) {
+export default function Dashboard({
+    auth,
+    paginatedGenerations,
+}: DashboardProps) {
     const generations = paginatedGenerations.data;
     const isNewUser = generations.length === 0;
 
     const handleDownload = (id: string) => {
         fetch(`/download/${id}`)
-            .then(response => response.json())
-            .then(data => {
+            .then((response) => response.json())
+            .then((data) => {
                 if (data.url) {
                     const link = document.createElement('a');
                     link.href = data.url;
@@ -135,7 +155,7 @@ export default function Dashboard({ auth, paginatedGenerations }: DashboardProps
                     console.error('Download URL not found in the response');
                 }
             })
-            .catch(error => {
+            .catch((error) => {
                 console.error('Error downloading file:', error);
             });
     };
@@ -145,18 +165,26 @@ export default function Dashboard({ auth, paginatedGenerations }: DashboardProps
             <Head title="Dashboard" />
 
             <div className="min-h-screen bg-gray-900 text-white">
-                <nav className="bg-gray-800 p-4 sticky top-0 z-10">
+                <nav className="sticky top-0 z-10 bg-gray-800 p-4">
                     <div className="mx-auto flex max-w-7xl items-center justify-between">
-                        <h1 className="text-2xl font-bold">Welcome, {auth.user.name}</h1>
+                        <h1 className="text-2xl font-bold">
+                            Welcome, {auth.user.name}
+                        </h1>
                         <ProfileMenu name={auth.user.name} />
                     </div>
                 </nav>
 
                 <main className="mx-auto max-w-7xl p-8">
                     {isNewUser ? (
-                        <div className="mb-8 bg-gray-800 rounded-lg p-6">
-                            <h2 className="mb-4 text-3xl font-bold">Get Started with your first generation</h2>
-                            <p className="mb-6 text-lg">Welcome to your dashboard! <br/>Start by creating your first generation to unlock the full potential of our platform.</p>
+                        <div className="mb-8 rounded-lg bg-gray-800 p-6">
+                            <h2 className="mb-4 text-3xl font-bold">
+                                Get Started with your first generation
+                            </h2>
+                            <p className="mb-6 text-lg">
+                                Welcome to your dashboard! <br />
+                                Start by creating your first generation to
+                                unlock the full potential of our platform.
+                            </p>
                             <Link href={route('generate.index')}>
                                 <PrimaryButton className="px-6 py-3 text-lg">
                                     Create your generation →
@@ -165,7 +193,9 @@ export default function Dashboard({ auth, paginatedGenerations }: DashboardProps
                         </div>
                     ) : (
                         <div className="mb-8 flex items-center justify-between">
-                            <h2 className="text-4xl font-bold">Your Dashboard</h2>
+                            <h2 className="text-4xl font-bold">
+                                Your Dashboard
+                            </h2>
                             <Link href={route('generate.index')}>
                                 <PrimaryButton className="px-6 py-3">
                                     Generate new art
@@ -176,12 +206,28 @@ export default function Dashboard({ auth, paginatedGenerations }: DashboardProps
 
                     <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
                         {generations.map((generation: Generation) => (
-                            <div key={generation.id} className="bg-gray-800 p-4 rounded-lg flex flex-col">
-                                <img src={generation.thumbnail_url} alt={generation.art_type} className="w-full h-48 object-cover rounded-md mb-4"/>
-                                <h4 className="font-bold text-xl mb-2">{generation.art_type}</h4>
-                                <p className="text-gray-300 mb-4">{generation.art_style}</p>
-                                <div className="mt-auto flex justify-between items-center">
-                                    <PrimaryButton onClick={() => handleDownload(generation.id)} className="px-4 py-2">
+                            <div
+                                key={generation.id}
+                                className="flex flex-col rounded-lg bg-gray-800 p-4"
+                            >
+                                <img
+                                    src={generation.thumbnail_url}
+                                    alt={generation.art_type}
+                                    className="mb-4 h-48 w-full rounded-md object-cover"
+                                />
+                                <h4 className="mb-2 text-xl font-bold">
+                                    {generation.art_type}
+                                </h4>
+                                <p className="mb-4 text-gray-300">
+                                    {generation.art_style}
+                                </p>
+                                <div className="mt-auto flex items-center justify-between">
+                                    <PrimaryButton
+                                        onClick={() =>
+                                            handleDownload(generation.id)
+                                        }
+                                        className="px-4 py-2"
+                                    >
                                         Download HD
                                     </PrimaryButton>
                                 </div>
@@ -190,8 +236,10 @@ export default function Dashboard({ auth, paginatedGenerations }: DashboardProps
                     </div>
 
                     {generations.length === 0 && (
-                        <div className="bg-gray-800 p-6 rounded-lg text-center">
-                            <p className="text-lg">You haven't created any generations yet.</p>
+                        <div className="rounded-lg bg-gray-800 p-6 text-center">
+                            <p className="text-lg">
+                                You haven't created any generations yet.
+                            </p>
                         </div>
                     )}
 

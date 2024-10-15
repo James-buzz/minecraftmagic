@@ -11,9 +11,8 @@ interface ArtServiceInterface
     /**
      * Get art style for a given art type and art style identifier.
      *
-     * @param string $artTypeId
-     * @param string $artStyleId
      * @return array{id: string, name: string, description: string, prompt: string}
+     *
      * @throws ArtStyleNotFoundException
      */
     public function getArtStyle(string $artTypeId, string $artStyleId): array;

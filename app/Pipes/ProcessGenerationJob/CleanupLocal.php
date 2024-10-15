@@ -6,7 +6,6 @@ namespace App\Pipes\ProcessGenerationJob;
 
 use Closure;
 use Illuminate\Support\Facades\Storage;
-use Spatie\Image\Exceptions\CouldNotLoadImage;
 
 readonly class CleanupLocal
 {

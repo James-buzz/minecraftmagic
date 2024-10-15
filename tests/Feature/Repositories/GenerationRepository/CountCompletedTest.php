@@ -4,8 +4,6 @@ namespace Tests\Feature\Repositories\GenerationRepository;
 
 use App\Models\Generation;
 use App\Models\User;
-use Exception;
-use Illuminate\Database\QueryException;
 
 class CountCompletedTest extends BaseGenerationRepository
 {
@@ -32,7 +30,7 @@ class CountCompletedTest extends BaseGenerationRepository
             ]);
 
         Generation::factory()
-           ->count($givenCount2)
+            ->count($givenCount2)
             ->create([
                 'user_id' => $givenUserId,
                 'status' => $givenStatus2,

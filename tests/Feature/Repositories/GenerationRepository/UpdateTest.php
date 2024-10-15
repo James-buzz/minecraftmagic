@@ -4,7 +4,6 @@ namespace Tests\Feature\Repositories\GenerationRepository;
 
 use App\Models\Generation;
 use App\Models\User;
-use Exception;
 use Illuminate\Database\QueryException;
 
 class UpdateTest extends BaseGenerationRepository

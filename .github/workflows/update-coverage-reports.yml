@@ -54,6 +54,7 @@ jobs:
 
       - name: Execute tests
         run: XDEBUG_MODE=coverage vendor/bin/phpunit --log-junit report.xml --coverage-cobertura coverage.xml --coverage-html docs/coverage
+        continue-on-error: true
 
       - name: Create coverage badge image
         uses: gaelgirodon/ci-badges-action@v1

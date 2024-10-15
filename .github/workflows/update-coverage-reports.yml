@@ -37,6 +37,12 @@ jobs:
       - name: Install dependencies
         run: composer install --prefer-dist --no-interaction --no-suggest
 
+      - name: Generate Application Key
+        run: php artisan key:generate
+
+      - name: Build Assets
+        run: npm install && npm run build
+
       - name: Execute tests
         run: XDEBUG_MODE=coverage vendor/bin/phpunit --log-junit report.xml --coverage-cobertura coverage.xml --coverage-html docs/coverage
 

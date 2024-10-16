@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Storage;
 
 readonly class CleanupLocal
 {
-    public function handle(mixed $data, Closure $next)
+    public function handle(mixed $data, Closure $next): mixed
     {
         $contextFilePath = $data['result']['file_path'];
         $contextThumbnailFilePath = $data['result']['thumbnail_file_path'];

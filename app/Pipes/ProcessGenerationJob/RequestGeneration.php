@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Pipes\ProcessGenerationJob;
 
 use App\Contracts\ArtServiceInterface;
+use App\Exceptions\ArtStyleNotFoundException;
 use Closure;
 use OpenAI\Laravel\Facades\OpenAI;
 
@@ -12,7 +13,7 @@ readonly class RequestGeneration
 {
     public function __construct(protected ArtServiceInterface $artService) {}
 
-    public function handle(mixed $data, Closure $next)
+    public function handle(mixed $data, Closure $next): mixed
     {
         $generation = $data['generation'];
         $metadata = $generation['metadata'];
@@ -26,6 +27,9 @@ readonly class RequestGeneration
         return $next($data);
     }
 
+    /**
+     * @param  array<mixed>  $metadata
+     */
     private function generateImage(string $prompt, array $metadata): string
     {
         // todo: move to a manager to support other models
@@ -41,6 +45,12 @@ readonly class RequestGeneration
         return $response->data[0]->url;
     }
 
+    /**
+     * @param  array{art_style: string, art_type: string}  $generation
+     * @param  array<mixed>  $metadata
+     *
+     * @throws ArtStyleNotFoundException
+     */
     private function buildPrompt(array $generation, array $metadata): string
     {
         $artStyle = $this->artService->getArtStyle(

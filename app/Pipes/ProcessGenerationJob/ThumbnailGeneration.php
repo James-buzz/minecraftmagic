@@ -19,7 +19,7 @@ readonly class ThumbnailGeneration
     /**
      * @throws CouldNotLoadImage
      */
-    public function handle(mixed $data, Closure $next)
+    public function handle(mixed $data, Closure $next): mixed
     {
         $contextUserId = $data['user'];
         $contextGenerationId = $data['generation']['id'];

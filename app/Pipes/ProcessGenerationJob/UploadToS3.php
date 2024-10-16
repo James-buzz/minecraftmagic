@@ -6,14 +6,10 @@ namespace App\Pipes\ProcessGenerationJob;
 
 use Closure;
 use Illuminate\Support\Facades\Storage;
-use Spatie\Image\Exceptions\CouldNotLoadImage;
 
 readonly class UploadToS3
 {
-    /**
-     * @throws CouldNotLoadImage
-     */
-    public function handle(mixed $data, Closure $next)
+    public function handle(mixed $data, Closure $next): mixed
     {
         $contextFilePath = $data['result']['file_path'];
         $contextThumbnailFilePath = $data['result']['thumbnail_file_path'];

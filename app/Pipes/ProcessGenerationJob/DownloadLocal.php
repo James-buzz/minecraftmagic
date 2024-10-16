@@ -13,6 +13,9 @@ readonly class DownloadLocal
 {
     public function __construct(protected GenerationCreationServiceInterface $creationService) {}
 
+    /**
+     * @return mixed
+     */
     public function handle(mixed $data, Closure $next)
     {
         $contextUserId = $data['user'];

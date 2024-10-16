@@ -20,7 +20,7 @@ interface ArtServiceInterface
     /**
      * Get all art types with their styles.
      *
-     * @return array<array{id: string, name: string, description: string, styles: array<array{id: string, name: string, description: string}>}>
+     * @return array<array{id: string, name: string, styles: array<array{id: string, name: string, description: string}>}>
      */
     public function getAllArtTypesWithStyles(): array;
 

@@ -12,8 +12,8 @@ use App\Jobs\ProcessGenerationJob;
 readonly class GenerationCreationService implements GenerationCreationServiceInterface
 {
     public function __construct(
-        protected readonly GenerationRepositoryInterface $generationRepository,
-        protected readonly ArtRepositoryInterface $artRepository,
+        protected GenerationRepositoryInterface $generationRepository,
+        protected ArtRepositoryInterface $artRepository,
     ) {
     }
 

@@ -4,9 +4,6 @@ namespace Tests\Unit\Services\ArtService;
 
 use App\Exceptions\ArtStyleNotFoundException;
 
-/**
- * @group ArtService
- */
 class GetArtStyleTest extends BaseArtService
 {
     /**

@@ -5,9 +5,13 @@ namespace Tests\Unit\Services\ArtService;
 use App\Contracts\ArtRepositoryInterface;
 use App\Services\ArtService;
 use Mockery\MockInterface;
+use PHPUnit\Framework\Attributes\Small;
 use Tests\Feature\FeatureTestCase;
 
-class BaseArtService extends FeatureTestCase
+/**
+ * @group ArtService
+ */
+#[Small] class BaseArtService extends FeatureTestCase
 {
     protected ArtService $service;
 

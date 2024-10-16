@@ -5,7 +5,7 @@ namespace App\Repositories;
 use App\Contracts\GenerationRepositoryInterface;
 use App\Models\Generation;
 
-readonly class GenerationRepository implements GenerationRepositoryInterface
+class GenerationRepository implements GenerationRepositoryInterface
 {
     public function find(string $generationId): ?array
     {

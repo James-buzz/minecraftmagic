@@ -16,8 +16,6 @@ interface GenerationCreationServiceInterface
      * @param string $userId
      * @param string $generationId
      * @return string
-     * @throws GenerationNotFoundException
-     * @throws UserNotFoundException
      */
     public function getGenerationFilePath(string $userId, string $generationId): string;
 
@@ -27,9 +25,6 @@ interface GenerationCreationServiceInterface
      * @param string $userId
      * @param string $generationId
      * @return string
-     *
-     * @throws GenerationNotFoundException
-     * @throws UserNotFoundException
      */
     public function getGenerationThumbnailFilePath(string $userId, string $generationId): string;
 

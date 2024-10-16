@@ -2,9 +2,6 @@
 
 namespace Tests\Unit\Services\ArtService;
 
-/**
- * @group ArtService
- */
 class GetAllArtTypesTest extends BaseArtService
 {
     public function testWhenTypesProvidedThenReturnTypes(): void

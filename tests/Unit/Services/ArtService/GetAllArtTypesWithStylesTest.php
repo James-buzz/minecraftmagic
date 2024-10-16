@@ -2,12 +2,9 @@
 
 namespace Tests\Unit\Services\ArtService;
 
-/**
- * @group ArtService
- */
 class GetAllArtTypesWithStylesTest extends BaseArtService
 {
-    public function testWhenSingleTypeThenSuccess()
+    public function testWhenSingleTypeThenSuccess(): void
     {
         // Given
         $givenArtTypeId = 'art_type_id_1';

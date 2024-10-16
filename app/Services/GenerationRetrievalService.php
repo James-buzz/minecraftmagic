@@ -6,14 +6,14 @@ namespace App\Services;
 
 use App\Contracts\ArtRepositoryInterface;
 use App\Contracts\GenerationRepositoryInterface;
-use Illuminate\Support\Facades\Storage;
 use App\Contracts\GenerationRetrievalServiceInterface;
+use Illuminate\Support\Facades\Storage;
 
 readonly class GenerationRetrievalService implements GenerationRetrievalServiceInterface
 {
     public function __construct(
-        protected readonly GenerationRepositoryInterface $generationRepository,
-        protected readonly ArtRepositoryInterface $artRepository,
+        protected GenerationRepositoryInterface $generationRepository,
+        protected ArtRepositoryInterface $artRepository,
     ) {
     }
 

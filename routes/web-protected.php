@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/generate', [GenerateController::class, 'index'])->name('generate.index');
-    Route::post('/generate', [GenerateController::class, 'store'])->name('generate.store');
+    Route::post('/generate', [GenerateController::class, 'store'])->middleware('throttle:3,1440')->name('generate.store');
     Route::get('/status/{id}', [StatusController::class, 'show'])->name('status');
     Route::get('/download/{id}', [DownloadController::class, 'show'])->name('download');
 });

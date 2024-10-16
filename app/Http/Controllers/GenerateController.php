@@ -6,19 +6,19 @@ use App\Contracts\ArtServiceInterface;
 use App\Http\Requests\GenerateStoreRequest;
 use App\Services\GenerationCreationService;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class GenerateController extends Controller
 {
     public function __construct(
         protected readonly ArtServiceInterface $artService,
         protected readonly GenerationCreationService $generationService
-    ) {
-    }
+    ) {}
 
     /**
      * Show the generation form.
      */
-    public function index(): \Inertia\Response
+    public function index(): Response
     {
         return Inertia::render('generate', [
             'art_types' => $this->artService->getAllArtTypesWithStyles(),

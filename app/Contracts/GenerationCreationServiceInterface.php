@@ -12,19 +12,11 @@ interface GenerationCreationServiceInterface
 {
     /**
      * Get the file path for the generation.
-     *
-     * @param string $userId
-     * @param string $generationId
-     * @return string
      */
     public function getGenerationFilePath(string $userId, string $generationId): string;
 
     /**
      * Get the thumbnail file path for the generation.
-     *
-     * @param string $userId
-     * @param string $generationId
-     * @return string
      */
     public function getGenerationThumbnailFilePath(string $userId, string $generationId): string;
 
@@ -32,11 +24,7 @@ interface GenerationCreationServiceInterface
      * Request and create a new generation.
      * Return the generation ID.
      *
-     * @param int $userId
-     * @param string $artTypeId
-     * @param string $artStyleId
-     * @param array<mixed> $metadata
-     * @return string
+     * @param  array<mixed>  $metadata
      *
      * @throws UserNotFoundException
      * @throws ArtStyleNotFoundException
@@ -51,8 +39,6 @@ interface GenerationCreationServiceInterface
     /**
      * Set the generation as processing.
      *
-     * @param string $generationId
-     * @return void
      *
      * @throws GenerationNotFoundException
      */
@@ -62,10 +48,6 @@ interface GenerationCreationServiceInterface
      * Set the generation as completed.
      * Save the file path and thumbnail file path.
      *
-     * @param string $generationId
-     * @param string $filePath
-     * @param string $thumbnailFilePath
-     * @return void
      *
      * @throws GenerationNotFoundException
      */
@@ -78,8 +60,6 @@ interface GenerationCreationServiceInterface
     /**
      * Set the generation as failed.
      *
-     * @param string $generationId
-     * @return void
      *
      * @throws GenerationNotFoundException
      */

@@ -14,7 +14,6 @@ interface ArtRepositoryInterface
     /**
      * Get an art type by its identifier (without styles)
      *
-     * @param string $typeId
      * @return array{id: string, name: string}|null
      */
     public function getType(string $typeId): ?array;
@@ -22,7 +21,6 @@ interface ArtRepositoryInterface
     /**
      * Get an art type by its identifier (including styles)
      *
-     * @param string $typeId
      * @return array{id: string, name: string, styles: array<array{id: string, name: string, description: string}>}|null
      */
     public function getTypeWithStyles(string $typeId): ?array;
@@ -30,7 +28,6 @@ interface ArtRepositoryInterface
     /**
      * Get all art styles for a given art type
      *
-     * @param string $typeId
      * @return array<array{id: string, name: string, description: string}>
      */
     public function getStyles(string $typeId): array;
@@ -38,8 +35,6 @@ interface ArtRepositoryInterface
     /**
      * Get an art style for a given art type
      *
-     * @param string $typeId
-     * @param string $styleId
      * @return array{id: string, name: string, description: string, prompt: string}|null
      */
     public function getStyle(string $typeId, string $styleId): ?array;

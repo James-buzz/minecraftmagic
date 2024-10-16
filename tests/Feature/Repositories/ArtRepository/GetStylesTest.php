@@ -5,6 +5,4 @@ namespace Tests\Feature\Repositories\ArtRepository;
 /**
  * @group ArtRepository
  */
-class GetStylesTest extends BaseArtRepository
-{
-}
+class GetStylesTest extends BaseArtRepository {}

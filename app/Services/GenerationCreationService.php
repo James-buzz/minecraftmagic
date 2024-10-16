@@ -14,8 +14,7 @@ readonly class GenerationCreationService implements GenerationCreationServiceInt
     public function __construct(
         protected GenerationRepositoryInterface $generationRepository,
         protected ArtRepositoryInterface $artRepository,
-    ) {
-    }
+    ) {}
 
     public function createGeneration(
         int $userId,

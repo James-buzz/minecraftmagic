@@ -2,15 +2,15 @@
 
 namespace App\Jobs;
 
-use App\Contracts\ArtServiceInterface;
+use App\Contracts\GenerationCreationServiceInterface;
+use App\Contracts\GenerationRetrievalServiceInterface;
+use App\Exceptions\GenerationNotFoundException;
 use App\Models\Generation;
 use App\Pipes\ProcessGenerationJob\CleanupLocal;
 use App\Pipes\ProcessGenerationJob\DownloadLocal;
 use App\Pipes\ProcessGenerationJob\RequestGeneration;
 use App\Pipes\ProcessGenerationJob\ThumbnailGeneration;
 use App\Pipes\ProcessGenerationJob\UploadToS3;
-use App\Services\GenerationCreationService;
-use App\Services\GenerationRetrievalService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Pipeline\Pipeline;
@@ -27,20 +27,20 @@ class ProcessGenerationJob implements ShouldQueue
     public function __construct(
         protected readonly string $userId,
         protected readonly string $generationID,
-    ) {
-    }
+    ) {}
 
     /**
      * Execute the job.
+     *
+     * @throws GenerationNotFoundException
      */
     public function handle(
-        GenerationRetrievalService $generationRetrivalService,
-        GenerationCreationService $generationCreationService,
-        ArtServiceInterface $artService
+        GenerationRetrievalServiceInterface $generationRetrievalService,
+        GenerationCreationServiceInterface $generationCreationService,
     ): void {
         $generationCreationService->setGenerationAsProcessing($this->generationID);
 
-        $generation = $generationRetrivalService->getGeneration($this->generationID);
+        $generation = $generationRetrievalService->getGeneration($this->generationID);
 
         $context = [
             'generation' => $generation,

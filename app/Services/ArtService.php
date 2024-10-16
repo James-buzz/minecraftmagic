@@ -8,9 +8,7 @@ use App\Exceptions\ArtStyleNotFoundException;
 
 readonly class ArtService implements ArtServiceInterface
 {
-    public function __construct(protected ArtRepositoryInterface $artRepository)
-    {
-    }
+    public function __construct(protected ArtRepositoryInterface $artRepository) {}
 
     public function getArtStyle(string $artTypeId, string $artStyleId): array
     {

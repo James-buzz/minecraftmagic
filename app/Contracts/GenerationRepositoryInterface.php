@@ -9,7 +9,6 @@ interface GenerationRepositoryInterface
     /**
      * Find a generation by ID.
      *
-     * @param string $generationId
      * @return array{id: string, status: string, art_type: string, art_style: string, file_path: string, thumbnail_file_path: string}|null
      */
     public function find(string $generationId): ?array;
@@ -17,20 +16,14 @@ interface GenerationRepositoryInterface
     /**
      * Update a generation by ID with data.
      *
-     * @param string $generationId
-     * @param array<string, mixed> $data
-     * @return void
+     * @param  array<string, mixed>  $data
      */
     public function update(string $generationId, array $data): void;
 
     /**
      * Create a new generation.
      *
-     * @param int $userId
-     * @param string $artType
-     * @param string $artStyle
-     * @param array<string, mixed> $metadata
-     * @return string
+     * @param  array<string, mixed>  $metadata
      */
     public function create(
         int $userId,
@@ -42,18 +35,12 @@ interface GenerationRepositoryInterface
     /**
      * Paginate completed generations for a user.
      *
-     * @param int $userId
-     * @param int $page
-     * @param int $perPage
      * @return array<array{id: string, art_type: string, art_style: string, thumbnail_file_path: string}>
      */
     public function paginateCompleted(int $userId, int $page, int $perPage): array;
 
     /**
      * Count completed generations for a user.
-     *
-     * @param int $userId
-     * @return int
      */
     public function countCompleted(int $userId): int;
 }

@@ -31,7 +31,7 @@ class GetAllArtTypesWithStylesTest extends BaseArtService
             ->with($givenArtTypeId)
             ->andReturn([
                 [
-                     'id' => $givenArtStyle1Id,
+                    'id' => $givenArtStyle1Id,
                     'name' => $givenArtStyle1Name,
                     'description' => $givenArtStyle1Description,
                 ],

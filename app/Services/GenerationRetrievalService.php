@@ -14,8 +14,7 @@ readonly class GenerationRetrievalService implements GenerationRetrievalServiceI
     public function __construct(
         protected GenerationRepositoryInterface $generationRepository,
         protected ArtRepositoryInterface $artRepository,
-    ) {
-    }
+    ) {}
 
     public function getPaginatedGenerations(
         int $userId,

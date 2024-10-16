@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Pipes\ProcessGenerationJob;
 
-use App\Services\GenerationCreationService;
+use App\Contracts\GenerationCreationServiceInterface;
 use Closure;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Image\Exceptions\CouldNotLoadImage;
@@ -14,9 +14,7 @@ readonly class ThumbnailGeneration
 {
     private const THUMBNAIL_WIDTH = 300;
 
-    public function __construct(protected GenerationCreationService $creationService)
-    {
-    }
+    public function __construct(protected GenerationCreationServiceInterface $creationService) {}
 
     /**
      * @throws CouldNotLoadImage

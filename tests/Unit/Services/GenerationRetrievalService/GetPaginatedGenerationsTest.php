@@ -2,6 +2,4 @@
 
 namespace Tests\Unit\Services\GenerationRetrievalService;
 
-class GetPaginatedGenerationsTest extends BaseGenerationRetrievalService
-{
-}
+class GetPaginatedGenerationsTest extends BaseGenerationRetrievalService {}

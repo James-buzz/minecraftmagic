@@ -8,7 +8,7 @@ use RectorLaravel\Set\LaravelSetList;
 
 return RectorConfig::configure()
     ->withPaths([
-        __DIR__ . '/app',
+        __DIR__.'/app',
     ])
     ->withSets([
         LaravelLevelSetList::UP_TO_LARAVEL_110,

@@ -13,6 +13,6 @@ class BaseGenerationRepository extends FeatureTestCase
     {
         parent::setUp();
 
-        $this->generationRepository = new GenerationRepository();
+        $this->generationRepository = new GenerationRepository;
     }
 }

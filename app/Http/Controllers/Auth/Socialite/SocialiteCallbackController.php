@@ -21,7 +21,7 @@ class SocialiteCallbackController extends Controller
             'name' => $providerUser->getName(),
             'email' => $providerUser->getEmail(),
             'provider_id' => $providerUser->getId(),
-            'provider_type' => $provider
+            'provider_type' => $provider,
         ]);
 
         event(new Registered($user));

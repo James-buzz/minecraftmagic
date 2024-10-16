@@ -16,6 +16,6 @@ class BaseArtRepository extends FeatureTestCase
 
         Storage::fake();
 
-        $this->repository = new ArtRepository();
+        $this->repository = new ArtRepository;
     }
 }

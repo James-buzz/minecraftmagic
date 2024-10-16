@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace App\Pipes\ProcessGenerationJob;
 
-use App\Services\GenerationCreationService;
+use App\Contracts\GenerationCreationServiceInterface;
 use Closure;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 
 readonly class DownloadLocal
 {
-    public function __construct(protected readonly GenerationCreationService $creationService)
-    {
-    }
+    public function __construct(protected GenerationCreationServiceInterface $creationService) {}
 
     public function handle(mixed $data, Closure $next)
     {
@@ -25,7 +24,7 @@ readonly class DownloadLocal
         $data['result'] = [];
         $data['result']['file_path'] = $filePath;
 
-        $imageContent = file_get_contents($contextUrl);
+        $imageContent = Http::get($contextUrl)->body();
 
         Storage::disk('local')
             ->put($filePath, $imageContent);

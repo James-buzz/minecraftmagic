@@ -1,11 +1,11 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\GenerateController;
-use App\Http\Controllers\StatusController;
 use App\Http\Controllers\DownloadController;
+use App\Http\Controllers\GenerateController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\StatusController;
+use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');

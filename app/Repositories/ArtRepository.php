@@ -21,9 +21,11 @@ readonly class ArtRepository implements ArtRepositoryInterface
             try {
                 $jsonPath = resource_path('art.json');
                 $jsonContent = File::get($jsonPath);
+
                 return json_decode($jsonContent, true, flags: JSON_THROW_ON_ERROR) ?? [];
             } catch (\Exception $e) {
                 report($e);
+
                 return [];
             }
         });
@@ -57,7 +59,7 @@ readonly class ArtRepository implements ArtRepositoryInterface
             return [
                 'id' => $style['id'],
                 'name' => $style['name'],
-                'description' => $style['description']
+                'description' => $style['description'],
                 // filter out prompt
             ];
         }, $type['styles'] ?? []);
@@ -83,14 +85,13 @@ readonly class ArtRepository implements ArtRepositoryInterface
 
         // Include the prompt only for this method
         $fullStyle = $this->findStyleWithPrompt($typeId, $styleId);
+
         return $fullStyle ? array_merge($style, ['prompt' => $fullStyle['prompt']]) : null;
     }
 
     /**
      * Find an art type by its identifier
      *
-     * @param string $typeId
-     * @param bool $includeStyles
      * @return array{id: string, name: string}|array{id: string, name: string, styles: array<array{id: string, name: string, description: string}>}|null
      */
     private function findType(string $typeId, bool $includeStyles): ?array
@@ -110,8 +111,6 @@ readonly class ArtRepository implements ArtRepositoryInterface
     /**
      * Find a style with its prompt
      *
-     * @param string $typeId
-     * @param string $styleId
      * @return array<string, mixed>|null
      */
     private function findStyleWithPrompt(string $typeId, string $styleId): ?array

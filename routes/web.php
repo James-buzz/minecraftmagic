@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\WelcomeController;
+use App\Http\Controllers\AboutController;
 use App\Http\Controllers\Legal\PrivacyController;
 use App\Http\Controllers\Legal\TermsController;
-use App\Http\Controllers\AboutController;
+use App\Http\Controllers\WelcomeController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
 Route::get('/privacy', [PrivacyController::class, 'index'])->name('privacy');

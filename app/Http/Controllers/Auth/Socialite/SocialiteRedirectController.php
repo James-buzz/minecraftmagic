@@ -14,5 +14,4 @@ class SocialiteRedirectController extends Controller
     {
         return Socialite::driver($provider)->redirect();
     }
-
 }

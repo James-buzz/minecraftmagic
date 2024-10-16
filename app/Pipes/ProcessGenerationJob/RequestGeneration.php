@@ -10,9 +10,7 @@ use OpenAI\Laravel\Facades\OpenAI;
 
 readonly class RequestGeneration
 {
-    public function __construct(protected ArtServiceInterface $artService)
-    {
-    }
+    public function __construct(protected ArtServiceInterface $artService) {}
 
     public function handle(mixed $data, Closure $next)
     {

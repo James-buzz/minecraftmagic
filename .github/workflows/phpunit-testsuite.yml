@@ -37,11 +37,11 @@ jobs:
       - name: Install npm dependencies
         run: npm install
 
-      - name: Storage Permission
-        run: chmod -R 777 storage bootstrap/cache public/build
-
       - name: Build Vite assets
         run: npm run build
+
+      - name: Storage Permission
+        run: chmod -R 777 storage bootstrap/cache public/build
 
       - name: Start dev server in background
         run: php artisan serve &

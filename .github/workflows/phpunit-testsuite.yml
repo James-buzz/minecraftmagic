@@ -44,7 +44,7 @@ jobs:
         run: chmod -R 777 storage bootstrap/cache public/build
 
       - name: Clear cache
-        run: php artisan optimize:clear
+        run: php artisan config:clear && php artisan route:clear && php artisan view:clear
 
       - name: Start dev server in background
         run: php artisan serve &

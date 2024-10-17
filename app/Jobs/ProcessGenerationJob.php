@@ -70,11 +70,8 @@ class ProcessGenerationJob implements ShouldQueue
             });
     }
 
-    public function failed(): void
+    public function failed(GenerationCreationServiceInterface $generationCreationService): void
     {
-        // temporary
-        Generation::findOrFail($this->generationID)->update([
-            'status' => 'failed',
-        ]);
+        $generationCreationService->setGenerationAsFailed($this->generationID);
     }
 }

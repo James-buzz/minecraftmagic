@@ -3,9 +3,13 @@
 namespace Tests\Unit\Jobs\ProcessGenerationJob;
 
 use App\Jobs\ProcessGenerationJob;
+use PHPUnit\Framework\Attributes\Small;
 use Tests\TestCase;
 
-class BaseProcessGenerationJob extends TestCase
+/**
+ * @group ProcessGenerationJob
+ */
+#[Small] class BaseProcessGenerationJob extends TestCase
 {
     protected ProcessGenerationJob $job;
 

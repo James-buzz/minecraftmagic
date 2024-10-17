@@ -2,6 +2,7 @@ import PrimaryButton from '@/components/primary-button';
 import AuthenticatedLayout from '@/layouts/authenticated-layout';
 import { Head, router } from '@inertiajs/react';
 import React, { useState } from 'react';
+import { usePage } from '@inertiajs/react'
 
 interface ArtStyle {
     id: string;
@@ -23,6 +24,8 @@ const imageSizes = ['1024x1024', '1024x1792', '1792x1024'];
 const imageQualities = ['standard', 'hd'];
 
 export default function Generate({ art_types }: PageProps) {
+    const { flash } = usePage().props
+
     const [selectedType, setSelectedType] = useState<string | null>();
     const [selectedStyle, setSelectedStyle] = useState<string | null>(null);
     const [selectedQuality, setSelectedQuality] = useState('standard');
@@ -213,6 +216,12 @@ export default function Generate({ art_types }: PageProps) {
                             />
                         </div>
                     </div>
+
+                    {flash && flash.error && (
+                        <div className="bg-red-500 text-white p-4 rounded-lg">
+                            {flash.error}
+                        </div>
+                    )}
 
                     <PrimaryButton
                         type="submit"

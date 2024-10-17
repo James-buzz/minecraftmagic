@@ -5,12 +5,14 @@ use App\Http\Controllers\DownloadController;
 use App\Http\Controllers\GenerateController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StatusController;
+use App\Http\Middleware\LimitOneGenerationConcurrently;
+use App\Http\Middleware\LimitTotalGenerationPerDay;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/generate', [GenerateController::class, 'index'])->name('generate.index');
-    Route::post('/generate', [GenerateController::class, 'store'])->middleware('throttle:3,1440')->name('generate.store');
+    Route::post('/generate', [GenerateController::class, 'store'])->middleware([LimitTotalGenerationPerDay::class, LimitOneGenerationConcurrently::class])->name('generate.store');
     Route::get('/status/{id}', [StatusController::class, 'show'])->name('status');
     Route::get('/download/{id}', [DownloadController::class, 'show'])->name('download');
 });

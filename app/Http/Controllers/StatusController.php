@@ -14,7 +14,9 @@ class StatusController extends Controller
      */
     public function show(string $id): \Inertia\Response
     {
-        $status = $this->retrievalService->getGeneration($id);
+        $userId = auth()->id();
+
+        $status = $this->retrievalService->getGeneration($userId, $id);
 
         return Inertia::render('status', ['status' => $status]);
     }

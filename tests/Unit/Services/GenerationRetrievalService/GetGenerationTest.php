@@ -17,7 +17,7 @@ class GetGenerationTest extends BaseGenerationRetrievalService
 
         // Mock
         $this->generationRepository->shouldReceive('find')
-            ->with($givenGenerationId)
+            ->with($givenGenerationUserId, $givenGenerationId)
             ->andReturn([
                 'user_id' => $givenGenerationUserId,
                 'status' => $givenGenerationStatus,
@@ -38,7 +38,7 @@ class GetGenerationTest extends BaseGenerationRetrievalService
         ];
 
         // Action
-        $actualGeneration = $this->service->getGeneration($givenGenerationId);
+        $actualGeneration = $this->service->getGeneration($givenGenerationUserId, $givenGenerationId);
 
         // Assert
         $this->assertEquals($expectedGeneration, $actualGeneration);

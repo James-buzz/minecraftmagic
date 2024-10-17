@@ -7,9 +7,9 @@ use App\Models\Generation;
 
 class GenerationRepository implements GenerationRepositoryInterface
 {
-    public function find(string $generationId): ?array
+    public function find(string $userId, string $generationId): ?array
     {
-        $generation = Generation::find($generationId);
+        $generation = Generation::where('user_id', $userId)->find($generationId);
 
         if ($generation === null) {
             return null;

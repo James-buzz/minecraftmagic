@@ -11,12 +11,12 @@ interface GenerationRetrievalServiceInterface
      *
      * @return array<mixed>
      */
-    public function getGeneration(string $generationId): array;
+    public function getGeneration(string $userId, string $generationId): array;
 
     /**
      * Get the temporary URL for the file associated with a generation.
      */
-    public function getGenerationFileUrl(string $generationId): string;
+    public function getGenerationFileUrl(string $userId, string $generationId): string;
 
     /**
      * Get a paginated list of generations for a user.

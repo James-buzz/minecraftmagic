@@ -22,7 +22,7 @@ class GetGenerationFileUrlTest extends BaseGenerationRetrievalService
 
         // Mock
         $this->generationRepository->shouldReceive('find')
-            ->with($givenGenerationId)
+            ->with($givenGenerationUserId, $givenGenerationId)
             ->andReturn([
                 'user_id' => $givenGenerationUserId,
                 'status' => $givenGenerationStatus,
@@ -32,11 +32,11 @@ class GetGenerationFileUrlTest extends BaseGenerationRetrievalService
                 'thumbnail_file_path' => $givenGenerationThumbnailFilePath,
             ]);
 
-        $mockStorageFacade = $this->mock('alias:'.Storage::class);
-        $mockStorageFacade->shouldReceive('disk')
+        Storage::shouldReceive('disk')
             ->with('s3')
             ->andReturnSelf();
-        $mockStorageFacade->shouldReceive('temporaryUrl')
+
+        Storage::shouldReceive('temporaryUrl')
             ->with($givenGenerationFilePath, Mockery::type(DateTimeInterface::class))
             ->andReturn($givenTemporaryURL);
 
@@ -44,7 +44,7 @@ class GetGenerationFileUrlTest extends BaseGenerationRetrievalService
         $expectedURL = $givenTemporaryURL;
 
         // Action
-        $actualURL = $this->service->getGenerationFileUrl($givenGenerationId);
+        $actualURL = $this->service->getGenerationFileUrl($givenGenerationUserId, $givenGenerationId);
 
         // Assert
         $this->assertEquals($expectedURL, $actualURL);

@@ -40,7 +40,7 @@ class ProcessGenerationJob implements ShouldQueue
     ): void {
         $generationCreationService->setGenerationAsProcessing($this->generationID);
 
-        $generation = $generationRetrievalService->getGeneration($this->generationID);
+        $generation = $generationRetrievalService->getGeneration($this->userId, $this->generationID);
 
         $context = [
             'generation' => $generation,

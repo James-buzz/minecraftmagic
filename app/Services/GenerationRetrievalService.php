@@ -48,15 +48,15 @@ readonly class GenerationRetrievalService implements GenerationRetrievalServiceI
         ];
     }
 
-    public function getGeneration(string $generationId): array
+    public function getGeneration(string $userId, string $generationId): array
     {
-        return $this->generationRepository->find($generationId);
+        return $this->generationRepository->find($userId, $generationId);
     }
 
-    public function getGenerationFileUrl(string $generationId): string
+    public function getGenerationFileUrl(string $userId, string $generationId): string
     {
         return Storage::disk('s3')->temporaryUrl(
-            $this->generationRepository->find($generationId)['file_path'],
+            $this->generationRepository->find($userId, $generationId)['file_path'],
             now()->addMinutes(5)
         );
     }

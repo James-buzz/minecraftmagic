@@ -41,7 +41,7 @@ class FindTest extends BaseGenerationRepository
         $expectedGenerationThumbnailPath = $givenGenerationThumbnailPath;
 
         // Action
-        $result = $this->generationRepository->find((string) $givenGenerationId);
+        $result = $this->generationRepository->find((string) $givenUserId, (string) $givenGenerationId);
 
         // Assert
         $this->assertIsArray($result);
@@ -57,9 +57,10 @@ class FindTest extends BaseGenerationRepository
     {
         // Given
         $givenGenerationId = 36;
+        $givenUserId = 1;
 
         // Action
-        $result = $this->generationRepository->find((string) $givenGenerationId);
+        $result = $this->generationRepository->find((string) $givenUserId, (string) $givenGenerationId);
 
         // Assert
         $this->assertNull($result);

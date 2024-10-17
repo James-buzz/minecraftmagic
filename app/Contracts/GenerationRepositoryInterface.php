@@ -11,7 +11,7 @@ interface GenerationRepositoryInterface
      *
      * @return array{id: string, status: string, art_type: string, art_style: string, file_path: string, thumbnail_file_path: string}|null
      */
-    public function find(string $generationId): ?array;
+    public function find(string $userId, string $generationId): ?array;
 
     /**
      * Update a generation by ID with data.

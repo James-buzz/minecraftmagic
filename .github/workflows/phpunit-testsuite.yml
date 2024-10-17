@@ -43,6 +43,9 @@ jobs:
       - name: Storage Permission
         run: chmod -R 777 storage bootstrap/cache public/build
 
+      - name: Clear cache
+        run: php artisan optimize:clear
+
       - name: Start dev server in background
         run: php artisan serve &
 

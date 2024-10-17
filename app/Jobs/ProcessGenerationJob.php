@@ -5,7 +5,6 @@ namespace App\Jobs;
 use App\Contracts\GenerationCreationServiceInterface;
 use App\Contracts\GenerationRetrievalServiceInterface;
 use App\Exceptions\GenerationNotFoundException;
-use App\Models\Generation;
 use App\Pipes\ProcessGenerationJob\CleanupLocal;
 use App\Pipes\ProcessGenerationJob\DownloadLocal;
 use App\Pipes\ProcessGenerationJob\RequestGeneration;

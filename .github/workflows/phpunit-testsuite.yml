@@ -1,4 +1,4 @@
-name: Check PHPUnit tests
+name: PHPUnit Testsuite
 
 on:
   pull_request:
@@ -42,9 +42,6 @@ jobs:
 
       - name: Start dev server in background
         run: php artisan serve &
-
-      - name: Storage Permission
-        run: chmod -R 777 storage bootstrap/cache
 
       - name: Prepare Laravel Application
         run: |

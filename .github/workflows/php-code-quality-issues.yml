@@ -1,4 +1,4 @@
-name: Check PHP code quality issues
+name: PHP Code Quality
 
 on:
   pull_request:

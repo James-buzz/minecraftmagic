@@ -7,7 +7,6 @@ namespace App\Services;
 use App\Contracts\ArtRepositoryInterface;
 use App\Contracts\GenerationCreationServiceInterface;
 use App\Contracts\GenerationRepositoryInterface;
-use App\Jobs\ProcessGenerationJob;
 
 readonly class GenerationCreationService implements GenerationCreationServiceInterface
 {

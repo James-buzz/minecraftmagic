@@ -1,4 +1,4 @@
-name: "Update Readme Badges"
+name: "Update Coverage Reports"
 
 on:
   push:

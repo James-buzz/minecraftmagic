@@ -4,7 +4,6 @@ namespace Tests\Unit\Services\GenerationCreationService;
 
 use App\Exceptions\ArtStyleNotFoundException;
 use App\Exceptions\UserNotFoundException;
-use App\Jobs\ProcessGenerationJob;
 
 class CreateGenerationTest extends BaseGenerationCreationService
 {

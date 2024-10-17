@@ -40,8 +40,8 @@ jobs:
       - name: Build Vite assets
         run: npm run build
 
-      - name: Storage Permission
-        run: chmod -R 777 storage bootstrap/cache public/build
+      - name: List build directory
+        run: ls -R public/build
 
       - name: Clear cache
         run: php artisan config:clear && php artisan route:clear && php artisan view:clear

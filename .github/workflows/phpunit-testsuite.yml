@@ -40,12 +40,6 @@ jobs:
       - name: Build Vite assets
         run: npm run build
 
-      - name: List build directory
-        run: ls -R public/build
-
-      - name: Clear cache
-        run: php artisan config:clear && php artisan route:clear && php artisan view:clear
-
       - name: Start dev server in background
         run: php artisan serve &
 
@@ -59,7 +53,3 @@ jobs:
           DB_CONNECTION: sqlite
           DB_DATABASE: ':memory:'
         run: ./vendor/bin/phpunit
-
-      - name: Output Laravel Log
-        if: failure()
-        run: cat storage/logs/laravel.log

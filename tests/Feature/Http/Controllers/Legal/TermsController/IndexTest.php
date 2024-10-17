@@ -10,7 +10,7 @@ class IndexTest extends BaseTermsController
     {
         // Given
         $givenRoute = 'terms';
-        $givenInertiaAsset = 'legal/terms';
+        $givenInertiaAsset = 'legal/Terms';
 
         // Action
         $response = $this->get(route($givenRoute));

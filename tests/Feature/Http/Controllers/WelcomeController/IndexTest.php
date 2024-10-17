@@ -11,7 +11,7 @@ class IndexTest extends BaseDashboardController
     {
         // Given
         $givenRoute = 'welcome';
-        $givenInertiaAsset = 'welcome';
+        $givenInertiaAsset = 'Welcome';
 
         // Action
         $response = $this

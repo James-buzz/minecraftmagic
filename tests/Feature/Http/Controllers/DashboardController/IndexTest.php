@@ -13,7 +13,7 @@ class IndexTest extends BaseDashboardController
     {
         // Given
         $givenRoute = 'dashboard';
-        $givenInertiaAsset = 'dashboard';
+        $givenInertiaAsset = 'Dashboard';
         $givenGenerationCount = 2;
         $givenUserId = 118;
 

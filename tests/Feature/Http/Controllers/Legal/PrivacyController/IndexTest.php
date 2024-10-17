@@ -10,7 +10,7 @@ class IndexTest extends BasePrivacyController
     {
         // Given
         $givenRoute = 'privacy';
-        $givenInertiaAsset = 'legal/privacy';
+        $givenInertiaAsset = 'legal/Privacy';
 
         // Action
         $response = $this->get(route($givenRoute));

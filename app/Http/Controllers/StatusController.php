@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\GenerationRetrievalService;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class StatusController extends Controller
 {
@@ -12,7 +13,7 @@ class StatusController extends Controller
     /**
      * Display the status page.
      */
-    public function show(string $id): \Inertia\Response
+    public function show(string $id): Response
     {
         $userId = auth()->id();
 

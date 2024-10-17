@@ -2,7 +2,6 @@ import PrimaryButton from '@/components/primary-button';
 import AuthenticatedLayout from '@/layouts/authenticated-layout';
 import { Head, router } from '@inertiajs/react';
 import React, { useState } from 'react';
-import { usePage } from '@inertiajs/react'
 
 interface ArtStyle {
     id: string;
@@ -18,14 +17,15 @@ interface ArtType {
 
 interface PageProps {
     art_types: ArtType[];
+    flash?: {
+        error?: string;
+    };
 }
 
 const imageSizes = ['1024x1024', '1024x1792', '1792x1024'];
 const imageQualities = ['standard', 'hd'];
 
-export default function Generate({ art_types }: PageProps) {
-    const { flash } = usePage().props
-
+export default function Generate({ art_types, flash }: PageProps) {
     const [selectedType, setSelectedType] = useState<string | null>();
     const [selectedStyle, setSelectedStyle] = useState<string | null>(null);
     const [selectedQuality, setSelectedQuality] = useState('standard');

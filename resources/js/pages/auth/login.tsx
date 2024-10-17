@@ -28,7 +28,7 @@ export default function Login({
     };
 
     const redirectToGithub = () => {
-        router.visit(route('socialite.redirect', { provider: 'github' }));
+        window.location.href = (route('socialite.redirect', { provider: 'github' }));
     };
 
     return (

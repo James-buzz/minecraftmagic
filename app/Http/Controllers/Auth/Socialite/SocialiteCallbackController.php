@@ -17,14 +17,19 @@ class SocialiteCallbackController extends Controller
     {
         $providerUser = Socialite::driver($provider)->user();
 
-        $user = User::create([
-            'name' => $providerUser->getName(),
-            'email' => $providerUser->getEmail(),
-            'provider_id' => $providerUser->getId(),
-            'provider_type' => $provider,
-        ]);
+        $user = User::where('email', $providerUser->getEmail())->first();
 
-        event(new Registered($user));
+        if (!$user) {
+            $user = User::create([
+                'name' => $providerUser->getName(),
+                'email' => $providerUser->getEmail(),
+                'provider_id' => $providerUser->getId(),
+                'provider_type' => $provider,
+                'email_verified_at' => now(),
+            ]);
+
+            event(new Registered($user));
+        }
 
         Auth::login($user);
 

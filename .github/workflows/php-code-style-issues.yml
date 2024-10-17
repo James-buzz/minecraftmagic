@@ -1,4 +1,4 @@
-name: Check PHP code style issues
+name: PHP Code Style
 
 on:
   pull_request:

@@ -1,4 +1,4 @@
-name: Check PHPUnit tests
+name: PHPUnit Testsuite
 
 on:
   pull_request:
@@ -38,7 +38,7 @@ jobs:
         run: npm install
 
       - name: Build Vite assets
-        run: npm run build
+        run: npm run dev &
 
       - name: Start dev server in background
         run: php artisan serve &

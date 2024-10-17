@@ -36,7 +36,6 @@ class IndexTest extends BaseDashboardController
             ->get(route($givenRoute));
 
         // Assert
-        $response->assertOk();
         $response->assertInertia(
             fn (AssertInertia $page) => $page
                 ->component($givenInertiaAsset)

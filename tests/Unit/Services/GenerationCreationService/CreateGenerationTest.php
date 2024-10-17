@@ -29,11 +29,6 @@ class CreateGenerationTest extends BaseGenerationCreationService
             ->with($givenUserId, $givenArtTypeId, $givenArtStyleId, $givenMetadata)
             ->andReturn($givenGenerationId);
 
-        $this->mock('alias:'.ProcessGenerationJob::class)
-            ->shouldReceive('dispatch')
-            ->once()
-            ->with($givenUserId, $givenGenerationId);
-
         // Expected
         $expectedGenerationId = $givenGenerationId;
 

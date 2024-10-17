@@ -22,14 +22,7 @@ readonly class GenerationCreationService implements GenerationCreationServiceInt
         string $artStyleId,
         array $metadata
     ): string {
-        $generationId = $this->generationRepository->create($userId, $artTypeId, $artStyleId, $metadata);
-
-        ProcessGenerationJob::dispatch(
-            (string) $userId,
-            $generationId
-        );
-
-        return $generationId;
+        return $this->generationRepository->create($userId, $artTypeId, $artStyleId, $metadata);
     }
 
     public function setGenerationAsProcessing(string $generationId): void

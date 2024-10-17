@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Contracts\ArtServiceInterface;
 use App\Http\Requests\GenerateStoreRequest;
+use App\Jobs\ProcessGenerationJob;
 use App\Services\GenerationCreationService;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -54,6 +55,8 @@ class GenerateController extends Controller
             $artStyle,
             $metadata
         );
+
+        ProcessGenerationJob::dispatch($userId, $recordId);
 
         return redirect()->route('status', ['id' => $recordId]);
     }

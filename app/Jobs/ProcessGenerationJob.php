@@ -37,6 +37,7 @@ class ProcessGenerationJob implements ShouldQueue
     public function handle(
         GenerationRetrievalServiceInterface $generationRetrievalService,
         GenerationCreationServiceInterface $generationCreationService,
+        Pipeline $pipeline,
     ): void {
         $generationCreationService->setGenerationAsProcessing($this->generationID);
 
@@ -47,7 +48,7 @@ class ProcessGenerationJob implements ShouldQueue
             'user' => $this->userId,
         ];
 
-        app(Pipeline::class)
+        $pipeline
             ->send($context)
             ->through([
                 RequestGeneration::class,

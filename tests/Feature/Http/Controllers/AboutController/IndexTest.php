@@ -10,7 +10,7 @@ class IndexTest extends BaseAboutController
     {
         // Given
         $givenRoute = 'about';
-        $givenInertiaAsset = 'about';
+        $givenInertiaAsset = 'About';
 
         // Action
         $response = $this->get(route($givenRoute));

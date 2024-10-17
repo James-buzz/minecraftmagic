@@ -56,7 +56,7 @@ class GenerateController extends Controller
             $metadata
         );
 
-        ProcessGenerationJob::dispatch($userId, $recordId);
+        ProcessGenerationJob::dispatch((string) $userId, $recordId);
 
         return redirect()->route('status', ['id' => $recordId]);
     }

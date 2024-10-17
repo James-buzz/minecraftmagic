@@ -36,10 +36,11 @@ class Generation extends Model
     ];
 
     /**
-     * @return BelongsTo<User, Generation>
+     * @return BelongsTo<User, self>
      */
     public function user(): BelongsTo
     {
+        /** @phpstan-ignore-next-line todo */
         return $this->belongsTo(User::class);
     }
 

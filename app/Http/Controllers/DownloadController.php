@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\GenerationRetrievalService;
+use Illuminate\Http\JsonResponse;
 
 class DownloadController extends Controller
 {
@@ -11,10 +12,12 @@ class DownloadController extends Controller
     /**
      * Retrieve the download URL for a generation.
      */
-    public function show(string $generationId): \Illuminate\Http\JsonResponse
+    public function show(string $generationId): JsonResponse
     {
+        $userId = auth()->id();
+
         return response()->json([
-            'url' => $this->retrievalService->getGenerationFileUrl($generationId),
+            'url' => $this->retrievalService->getGenerationFileUrl($userId, $generationId),
         ]);
     }
 }

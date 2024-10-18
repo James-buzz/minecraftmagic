@@ -21,8 +21,8 @@ class Generation extends Model
     use HasFactory;
 
     use HasUlids;
-    use SoftDeletes;
     use LogsActivity;
+    use SoftDeletes;
 
     protected $fillable = [
         'user_id',
@@ -41,7 +41,7 @@ class Generation extends Model
     /**
      * The Log events to be recorded.
      *
-     * @var string[] $recordEvents
+     * @var string[]
      */
     protected static array $recordEvents = ['updated', 'deleted'];
 

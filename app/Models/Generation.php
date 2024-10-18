@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
  * @mixin Builder
@@ -20,6 +22,7 @@ class Generation extends Model
 
     use HasUlids;
     use SoftDeletes;
+    use LogsActivity;
 
     protected $fillable = [
         'user_id',
@@ -34,6 +37,13 @@ class Generation extends Model
     protected $hidden = [
         'user_id',
     ];
+
+    /**
+     * The Log events to be recorded.
+     *
+     * @var string[] $recordEvents
+     */
+    protected static array $recordEvents = ['updated', 'deleted'];
 
     /**
      * @return BelongsTo<User, self>
@@ -52,5 +62,11 @@ class Generation extends Model
         return [
             'metadata' => 'array',
         ];
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logExcept(['created_at', 'updated_at', 'deleted_at']);
     }
 }

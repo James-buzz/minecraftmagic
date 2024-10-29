@@ -26,12 +26,6 @@ class GenerateController extends Controller
         ]);
     }
 
-    public function show(string $generationId): void
-    {
-        // TODO: page to preview the generated art
-        // comment, like, share, etc.
-    }
-
     /**
      * Store a new generation.
      */

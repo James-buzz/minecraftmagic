@@ -12,12 +12,12 @@ class DownloadController extends Controller
     /**
      * Retrieve the download URL for a generation.
      */
-    public function show(string $generationId): JsonResponse
+    public function show(string $id): JsonResponse
     {
         $userId = auth()->id();
 
         return response()->json([
-            'url' => $this->retrievalService->getGenerationFileUrl($userId, $generationId),
+            'url' => $this->retrievalService->getGenerationFileUrl($userId, $id),
         ]);
     }
 }

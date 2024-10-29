@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Repositories\ArtRepository;
+namespace Tests\Unit\Repositories\ArtRepository;
 
 class GetTypeWithStylesTest extends BaseArtRepository
 {

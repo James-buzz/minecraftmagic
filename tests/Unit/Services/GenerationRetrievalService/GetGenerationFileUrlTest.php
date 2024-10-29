@@ -21,7 +21,7 @@ class GetGenerationFileUrlTest extends BaseGenerationRetrievalService
         $givenTemporaryURL = 'temporary_url_1';
 
         // Mock
-        $this->generationRepository->shouldReceive('find')
+        $this->mockGenerationRepository->shouldReceive('find')
             ->with($givenGenerationUserId, $givenGenerationId)
             ->andReturn([
                 'user_id' => $givenGenerationUserId,

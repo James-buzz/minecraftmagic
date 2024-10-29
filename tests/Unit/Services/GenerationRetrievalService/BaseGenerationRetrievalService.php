@@ -17,21 +17,21 @@ use Tests\Feature\FeatureTestCase;
     protected GenerationRetrievalService $service;
 
     /** @var MockInterface&GenerationRepositoryInterface */
-    protected MockInterface $generationRepository;
+    protected MockInterface $mockGenerationRepository;
 
     /** @var MockInterface&ArtRepositoryInterface */
-    protected MockInterface $artRepository;
+    protected MockInterface $mockArtRepository;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->generationRepository = $this->mock(GenerationRepositoryInterface::class);
-        $this->artRepository = $this->mock(ArtRepositoryInterface::class);
+        $this->mockGenerationRepository = $this->mock(GenerationRepositoryInterface::class);
+        $this->mockArtRepository = $this->mock(ArtRepositoryInterface::class);
 
         $this->service = new GenerationRetrievalService(
-            $this->generationRepository,
-            $this->artRepository
+            $this->mockGenerationRepository,
+            $this->mockArtRepository
         );
     }
 }

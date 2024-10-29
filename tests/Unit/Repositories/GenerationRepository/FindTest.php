@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Repositories\GenerationRepository;
+namespace Tests\Unit\Repositories\GenerationRepository;
 
 use App\Models\Generation;
 use App\Models\User;

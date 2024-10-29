@@ -13,6 +13,9 @@ readonly class RequestGeneration
 {
     public function __construct(protected ArtServiceInterface $artService) {}
 
+    /**
+     * @throws ArtStyleNotFoundException
+     */
     public function handle(mixed $data, Closure $next): mixed
     {
         $generation = $data['generation'];

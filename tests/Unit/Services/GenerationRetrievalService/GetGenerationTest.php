@@ -16,7 +16,7 @@ class GetGenerationTest extends BaseGenerationRetrievalService
         $givenGenerationThumbnailFilePath = 'thumbnail_file_path_1';
 
         // Mock
-        $this->generationRepository->shouldReceive('find')
+        $this->mockGenerationRepository->shouldReceive('find')
             ->with($givenGenerationUserId, $givenGenerationId)
             ->andReturn([
                 'user_id' => $givenGenerationUserId,

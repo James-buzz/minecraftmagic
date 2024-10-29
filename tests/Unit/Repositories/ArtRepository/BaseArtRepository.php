@@ -1,12 +1,15 @@
 <?php
 
-namespace Tests\Feature\Repositories\ArtRepository;
+namespace Tests\Unit\Repositories\ArtRepository;
 
 use App\Repositories\ArtRepository;
-use Tests\Feature\FeatureTestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
-class BaseArtRepository extends FeatureTestCase
+class BaseArtRepository extends TestCase
 {
+    use RefreshDatabase;
+
     protected ArtRepository $repository;
 
     public function setUp(): void

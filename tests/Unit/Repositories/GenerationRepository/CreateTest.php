@@ -1,54 +1,55 @@
 <?php
 
-namespace Tests\Feature\Repositories\GenerationRepository;
+namespace Tests\Unit\Repositories\GenerationRepository;
 
-use App\Models\Generation;
 use App\Models\User;
 use Illuminate\Database\QueryException;
 
-class UpdateTest extends BaseGenerationRepository
+class CreateTest extends BaseGenerationRepository
 {
     public function testCanCreate(): void
     {
         // Given
         $givenUserId = 1;
-        $givenData = [
-            'file_path' => 'a_file_path',
+        $givenArtType = 'a_art_type_id';
+        $givenArtStyle = 'b_art_style_id';
+        $givenMetadata = [
+            'random' => 123,
         ];
-        $givenGenerationId = 2;
 
         // Precondition
         User::factory()->create([
             'id' => $givenUserId,
         ]);
-        Generation::factory()->create([
-            'id' => $givenGenerationId,
-            'user_id' => $givenUserId,
-            'file_path' => null,
-        ]);
 
         // Expected
         $expectedUserId = $givenUserId;
-        $expectedFilePath = $givenData['file_path'];
+        $expectedArtType = $givenArtType;
+        $expectedArtStyle = $givenArtStyle;
 
         // Pre-assert
-        $this->assertDatabaseHas('generations', [
-            'id' => $givenGenerationId,
-            'user_id' => $givenUserId,
-            'file_path' => null,
+        $this->assertDatabaseMissing('generations', [
+            'user_id' => $expectedUserId,
+            'art_type' => $expectedArtType,
+            'art_style' => $expectedArtStyle,
         ]);
 
         // Action
-        $this->generationRepository->update(
-            (string) $givenGenerationId,
-            $givenData
+        $result = $this->generationRepository->create(
+            $givenUserId,
+            $givenArtType,
+            $givenArtStyle,
+            $givenMetadata
         );
 
         // Assert
+        $this->assertNotNull($result);
+        $this->assertIsString($result);
         $this->assertDatabaseHas('generations', [
-            'id' => $givenGenerationId,
+            'id' => $result,
             'user_id' => $expectedUserId,
-            'file_path' => $expectedFilePath,
+            'art_type' => $expectedArtType,
+            'art_style' => $expectedArtStyle,
         ]);
     }
 

@@ -19,7 +19,7 @@ class SocialiteCallbackController extends Controller
 
         $user = User::where('email', $providerUser->getEmail())->first();
 
-        if (!$user) {
+        if (! $user) {
             $user = User::create([
                 'name' => $providerUser->getName(),
                 'email' => $providerUser->getEmail(),

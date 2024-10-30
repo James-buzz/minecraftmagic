@@ -13,6 +13,7 @@ use App\Pipes\ProcessGenerationJob\UploadToS3;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Pipeline\Pipeline;
+use Throwable;
 
 class ProcessGenerationJob implements ShouldQueue
 {
@@ -69,8 +70,10 @@ class ProcessGenerationJob implements ShouldQueue
             });
     }
 
-    public function failed(GenerationCreationServiceInterface $generationCreationService): void
+    public function failed(Throwable $exception): void
     {
+        /** @var GenerationCreationServiceInterface $generationCreationService */
+        $generationCreationService = app(GenerationCreationServiceInterface::class);
         $generationCreationService->setGenerationAsFailed($this->generationID);
     }
 }

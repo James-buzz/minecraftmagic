@@ -19,9 +19,6 @@ Minecraftmagic is a work in progress, but I hope that you find it useful for you
 - 📚 [Standards](.docs/standards.md)
 
 ## Features
-Let me help you rewrite your Features section to better highlight the technical aspects and development practices of your codebase.
-
-## Features
 - **Code Quality & Analysis**
     - Laravel Pint for PHP code style enforcement
     - PHPStan for static code analysis

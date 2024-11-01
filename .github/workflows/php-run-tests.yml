@@ -7,9 +7,24 @@ on:
     types: [ checks_requested ]
 
 jobs:
+
   tests:
     name: Run tests
     runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
     steps:
       - uses: actions/checkout@v3
 
@@ -29,4 +44,9 @@ jobs:
           php artisan key:generate
 
       - name: Run tests
+        env:
+          DB_CONNECTION: mysql
+          DB_DATABASE: test
+          DB_USERNAME: root
+          DB_PASSWORD: password
         run: php artisan test

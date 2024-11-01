@@ -66,6 +66,11 @@ jobs:
         run: |
           cp .env.example .env
           php artisan key:generate
+          echo "DB_CONNECTION=sqlite" >> .env
+          echo "DB_DATABASE=:memory:" >> .env
+          echo "REDIS_HOST=localhost" >> .env
+          echo "REDIS_PORT=6379" >> .env
+          echo "REDIS_CLIENT=predis" >> .env
           php artisan config:cache
           php artisan route:cache
           php artisan view:cache
@@ -76,12 +81,6 @@ jobs:
           npm run build
 
       - name: Run Test Coverage
-        env:
-          DB_CONNECTION: sqlite
-          DB_DATABASE: ":memory:"
-          REDIS_HOST: localhost
-          REDIS_PORT: 6379
-          REDIS_CLIENT: predis
         run: XDEBUG_MODE=coverage vendor/bin/phpunit --log-junit report.xml --coverage-cobertura coverage.xml --coverage-html docs/coverage
         continue-on-error: true
 

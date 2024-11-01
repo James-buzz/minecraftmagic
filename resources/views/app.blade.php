@@ -1,3 +1,6 @@
+<?php
+    $pageComponent = strtolower($page['component']);
+?>
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
@@ -13,7 +16,7 @@
         <!-- Scripts -->
         @routes
         @viteReactRefresh
-        @vite(['resources/js/app.tsx', "resources/js/pages/{$page['component']}.tsx"])
+        @vite(['resources/js/app.tsx', "resources/js/pages/{$pageComponent}.tsx"])
         @inertiaHead
     </head>
     <body class="font-sans antialiased">

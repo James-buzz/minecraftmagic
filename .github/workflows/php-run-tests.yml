@@ -29,6 +29,11 @@ jobs:
           cp .env.example .env
           php artisan key:generate
 
+      - name: Build Vite assets
+        run: |
+          npm install
+          npm run build
+
       - name: Run tests
         env:
           DB_CONNECTION: sqlite

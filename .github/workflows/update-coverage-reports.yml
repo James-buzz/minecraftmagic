@@ -66,11 +66,14 @@ jobs:
         run: |
           cp .env.example .env
           php artisan key:generate
-          echo "DB_CONNECTION=sqlite" >> .env
-          echo "DB_DATABASE=:memory:" >> .env
-          echo "REDIS_HOST=localhost" >> .env
-          echo "REDIS_PORT=6379" >> .env
-          echo "REDIS_CLIENT=predis" >> .env
+
+      - name: Prepare Testing Env
+        run: |
+          sed -i 's/DB_CONNECTION=.*/DB_CONNECTION=sqlite/' .env
+          sed -i 's/DB_DATABASE=.*/DB_DATABASE=:memory:/' .env
+          sed -i 's/REDIS_HOST=.*/REDIS_HOST=localhost/' .env
+          sed -i 's/REDIS_PORT=.*/REDIS_PORT=6379/' .env
+          sed -i 's/REDIS_CLIENT=.*/REDIS_CLIENT=predis/' .env
 
       - name: Install and Build Frontend Assets
         run: |

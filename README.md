@@ -16,6 +16,7 @@ Minecraftmagic is a work in progress, but I hope that you find it useful for you
 
 ## Table of Contents
 - 💻 [Getting Started](.docs/getting-started.md)
+- 📚 [Standards](.docs/standards.md)
 
 ## Features
 Let me help you rewrite your Features section to better highlight the technical aspects and development practices of your codebase.

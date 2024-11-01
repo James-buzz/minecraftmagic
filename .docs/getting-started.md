@@ -51,7 +51,7 @@ This guide will help you set up MinecraftMagic for local development using Larav
 
 Once the setup is complete, the following services are accessible in your browser:
 
-* `http://localhost` - *Laravel Application*
+* `http://localhost` - **Laravel Application**
 * `http://localhost:8025` - Mailpit (Email Testing)
 * `http://localhost:9090` - Prometheus (Metrics)
 * `http://localhost:3030` - Grafana (Metrics Dashboard)

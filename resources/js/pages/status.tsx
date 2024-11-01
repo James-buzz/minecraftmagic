@@ -13,6 +13,7 @@ interface StatusProps {
             image_size?: string;
             image_quality?: string;
         };
+        failed_reason?: string;
     };
 }
 
@@ -50,7 +51,7 @@ export default function Status({ auth, status }: PageProps & StatusProps) {
     };
 
     useEffect(() => {
-        const pollInterval = 5000;
+        const pollInterval = 2000;
         let timeoutId: NodeJS.Timeout;
 
         const checkStatus = () => {
@@ -155,6 +156,11 @@ export default function Status({ auth, status }: PageProps & StatusProps) {
                                     We encountered an error while creating your
                                     image. Please try again.
                                 </p>
+                                <div className="my-6 bg-red-700/10 border-2 border-red-900 rounded-xl p-4">
+                                    <code className="block font-mono text-red-300 text-base">
+                                        {status.failed_reason || 'Unknown error'}
+                                    </code>
+                                </div>
                                 <PrimaryButton
                                     className={
                                         'mt-4 bg-red-600 hover:bg-red-700'

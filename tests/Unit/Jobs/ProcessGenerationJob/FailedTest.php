@@ -11,15 +11,21 @@ class FailedTest extends BaseProcessGenerationJob
     {
         // Given
         $givenGenerationId = $this->generationId;
+        $givenFailedMessage = null;
+
+        // Precondition
+        $preconditionThrowable = new \Exception('test');
 
         // Mock
         /** @var MockInterface|GenerationCreationServiceInterface $mockGenerationCreationService */
         $mockGenerationCreationService = $this->mock(GenerationCreationServiceInterface::class);
         $mockGenerationCreationService->shouldReceive('setGenerationAsFailed')
-            ->with($givenGenerationId)
+            ->with($givenGenerationId, $givenFailedMessage)
             ->once();
 
         // Action
-        $this->job->failed($mockGenerationCreationService);
+        $this->job->failed(
+            $preconditionThrowable
+        );
     }
 }

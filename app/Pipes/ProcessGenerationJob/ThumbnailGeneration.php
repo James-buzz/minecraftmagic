@@ -21,6 +21,8 @@ readonly class ThumbnailGeneration
      */
     public function handle(mixed $data, Closure $next): mixed
     {
+        $stepStartTime = microtime(true);
+
         $contextUserId = $data['user'];
         $contextGenerationId = $data['generation']['id'];
         $contextFilePath = $data['result']['file_path'];
@@ -40,6 +42,9 @@ readonly class ThumbnailGeneration
         Image::load($storagePath)
             ->width(self::THUMBNAIL_WIDTH)
             ->save($storageThumbnailPath);
+
+        $stepEndTime = microtime(true);
+        $data['steps']['thumbnail'] = $stepEndTime - $stepStartTime;
 
         return $next($data);
     }

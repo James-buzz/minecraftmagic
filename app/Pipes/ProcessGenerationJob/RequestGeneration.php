@@ -18,6 +18,8 @@ readonly class RequestGeneration
      */
     public function handle(mixed $data, Closure $next): mixed
     {
+        $stepStartTime = microtime(true);
+
         $generation = $data['generation'];
         $metadata = $generation['metadata'];
 
@@ -26,6 +28,9 @@ readonly class RequestGeneration
         $imageUrl = $this->generateImage($prompt, $metadata);
 
         $data['url'] = $imageUrl;
+
+        $stepEndTime = microtime(true);
+        $data['steps']['request'] = $stepEndTime - $stepStartTime;
 
         return $next($data);
     }

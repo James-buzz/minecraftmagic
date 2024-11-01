@@ -21,6 +21,8 @@ class HandleTest extends BaseProcessGenerationJob
         $givenGenerationId = $this->generationId;
         $givenGenerationFilePath = 'path/to/generation/file';
         $givenGenerationThumbnailFilePath = 'path/to/generation/thumbnail/file';
+        $givenGenerationArtType = 'art_type';
+        $givenGenerationArtStyle = 'art_style';
 
         // Mock
         /** @var MockInterface|GenerationCreationServiceInterface $mockGenerationCreationService */
@@ -40,6 +42,8 @@ class HandleTest extends BaseProcessGenerationJob
                 'id' => $givenGenerationId,
                 'file_path' => $givenGenerationFilePath,
                 'thumbnail_file_path' => $givenGenerationThumbnailFilePath,
+                'art_type' => $givenGenerationArtType,
+                'art_style' => $givenGenerationArtStyle,
             ])
             ->once();
 
@@ -62,6 +66,13 @@ class HandleTest extends BaseProcessGenerationJob
                     'result' => [
                         'file_path' => $givenGenerationFilePath,
                         'thumbnail_file_path' => $givenGenerationThumbnailFilePath,
+                    ],
+                    'steps' => [
+                        'RequestGeneration' => 0.1,
+                        'DownloadLocal' => 0.2,
+                        'ThumbnailGeneration' => 0.3,
+                        'UploadToS3' => 0.4,
+                        'CleanupLocal' => 0.5,
                     ],
                 ];
                 $closure($context);

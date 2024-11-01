@@ -29,6 +29,7 @@ class Generation extends Model
         'metadata',
         'file_path',
         'thumbnail_file_path',
+        'failed_reason',
     ];
 
     protected $hidden = [

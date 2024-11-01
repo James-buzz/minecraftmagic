@@ -63,5 +63,5 @@ interface GenerationCreationServiceInterface
      *
      * @throws GenerationNotFoundException
      */
-    public function setGenerationAsFailed(string $generationId): void;
+    public function setGenerationAsFailed(string $generationId, ?string $failedMessage): void;
 }

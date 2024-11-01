@@ -4,6 +4,9 @@ namespace App\Jobs;
 
 use App\Contracts\GenerationCreationServiceInterface;
 use App\Contracts\GenerationRetrievalServiceInterface;
+use App\Events\Generation\GenerationCompleted;
+use App\Events\Generation\GenerationFailed;
+use App\Events\Generation\GenerationStarted;
 use App\Exceptions\GenerationNotFoundException;
 use App\Pipes\ProcessGenerationJob\CleanupLocal;
 use App\Pipes\ProcessGenerationJob\DownloadLocal;
@@ -13,13 +16,23 @@ use App\Pipes\ProcessGenerationJob\UploadToS3;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Pipeline\Pipeline;
+use OpenAI\Exceptions\ErrorException;
 use Throwable;
 
 class ProcessGenerationJob implements ShouldQueue
 {
     use Queueable;
 
+    /**
+     * @var int The number of times the job may be attempted.
+     */
     public int $tries = 2;
+
+    private float $startTime;
+
+    private string $artType;
+
+    private string $artStyle;
 
     /**
      * Create a new job instance.
@@ -39,9 +52,19 @@ class ProcessGenerationJob implements ShouldQueue
         GenerationCreationServiceInterface $generationCreationService,
         Pipeline $pipeline,
     ): void {
+        $this->startTime = microtime(true);
+
         $generationCreationService->setGenerationAsProcessing($this->generationID);
 
         $generation = $generationRetrievalService->getGeneration($this->userId, $this->generationID);
+
+        $this->artType = $generation['art_type'];
+        $this->artStyle = $generation['art_style'];
+
+        event(new GenerationStarted(
+            $this->artType,
+            $this->artStyle,
+        ));
 
         $context = [
             'generation' => $generation,
@@ -67,13 +90,40 @@ class ProcessGenerationJob implements ShouldQueue
                     $contextFilePath,
                     $contextThumbnailPath
                 );
+
+                $stepTimes = $context['steps'];
+                $duration = microtime(true) - $this->startTime;
+
+                event(new GenerationCompleted(
+                    $this->artType,
+                    $this->artStyle,
+                    $duration,
+                    $stepTimes
+                ));
             });
     }
 
-    public function failed(Throwable $exception): void
+    public function failed(?Throwable $exception): void
     {
-        /** @var GenerationCreationServiceInterface $generationCreationService */
         $generationCreationService = app(GenerationCreationServiceInterface::class);
-        $generationCreationService->setGenerationAsFailed($this->generationID);
+
+        $failedMessage = null;
+        if ($exception instanceof ErrorException) {
+            $failedMessage = substr($exception->getMessage(), 0, 255);
+        }
+
+        $generationCreationService->setGenerationAsFailed(
+            $this->generationID,
+            $failedMessage
+        );
+
+        $totalDuration = microtime(true) - ($this->startTime ?? microtime(true));
+
+        event(new GenerationFailed(
+            $this->artType ?? 'unknown',
+            $this->artStyle ?? 'unknown',
+            $exception,
+            $totalDuration
+        ));
     }
 }

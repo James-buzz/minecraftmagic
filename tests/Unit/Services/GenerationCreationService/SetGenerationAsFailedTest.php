@@ -26,6 +26,6 @@ class SetGenerationAsFailedTest extends BaseGenerationCreationService
             );
 
         // Action
-        $this->service->setGenerationAsFailed($givenGenerationId);
+        $this->service->setGenerationAsFailed($givenGenerationId, null);
     }
 }

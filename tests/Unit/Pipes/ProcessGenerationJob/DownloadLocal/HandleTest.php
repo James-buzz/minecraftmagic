@@ -26,22 +26,21 @@ class HandleTest extends BaseDownloadLocal
             ->andReturn($givenGenerationFilePath);
 
         // Expected
-        $expectedOutputData = [
-            'user' => $givenContextUserId,
-            'generation' => [
-                'id' => $givenContextGenerationId,
-            ],
-            'url' => $givenContextUrl,
-            'result' => [
-                'file_path' => $givenGenerationFilePath,
-            ],
+        $expectedOutputDataUser = $givenContextUserId;
+        $expectedOutputDataGeneration = [
+            'id' => $givenContextGenerationId,
+        ];
+        $expectedOutputDataResult = [
+            'file_path' => $givenGenerationFilePath,
         ];
 
         // Action
-        $this->pipe->handle($givenData, function ($data) use ($expectedOutputData) {
+        $this->pipe->handle($givenData, function ($actualData) use ($expectedOutputDataUser, $expectedOutputDataGeneration, $expectedOutputDataResult) {
 
             // Assert
-            $this->assertEquals($expectedOutputData, $data);
+            $this->assertEquals($expectedOutputDataUser, $actualData['user']);
+            $this->assertEquals($expectedOutputDataGeneration, $actualData['generation']);
+            $this->assertEquals($expectedOutputDataResult, $actualData['result']);
 
         });
     }

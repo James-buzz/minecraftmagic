@@ -3,11 +3,12 @@
 [![Test Coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/James-buzz/63f837f639ec90f1b789af69aab0ddd0/raw/minecraftmagic-pre-alpha-cobertura-coverage.json)](https://james-buzz.github.io/minecraftmagic-pre-alpha/coverage)
 [![Test Results](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/James-buzz/63f837f639ec90f1b789af69aab0ddd0/raw/minecraftmagic-pre-alpha-junit-tests.json)](https://github.com/james-buzz/minecraftmagic-pre-alpha/actions/workflows/tests.yml)
 
-A fun side-project that I built for generating Minecraft AI-Art. You can generate Art such as Server logos - as shown above. Use DALL-E-3 AI technology.
+A fun side-project that I built for generating AI art for Minecraft. You can generate art such as Server logos.
 
 ## Minecraftmagic.com
-Minecraftmagic was originally developed as a side-project to demonstrate how inexpensive AI can generate art resources for Minecraft servers. 
-The project aimed to showcase the potential for server owners to use AI-powered tools to create assets like logos and banners cost-effectively. 
+Minecraftmagic was originally developed as a project to demonstrate how inexpensive AI can be. 
+
+The project aim was to showcase the potential for server owners to use AI-powered tools to create assets like logos and banners cost-effectively. 
 
 The focus later shifted towards demonstrating Laravel best practices through a concrete implementation.
 
@@ -17,8 +18,24 @@ Minecraftmagic is a work in progress, but I hope that you find it useful for you
 - 💻 [Getting Started](.docs/getting-started.md)
 
 ## Features
-- Observability with Prometheus and Grafana
-... 
+Let me help you rewrite your Features section to better highlight the technical aspects and development practices of your codebase.
+
+## Features
+- **Code Quality & Analysis**
+    - Laravel Pint for PHP code style enforcement
+    - PHPStan for static code analysis
+    - Rector for automated code refactoring and upgrades
+- **Testing**
+    - Comprehensive unit and feature tests
+    - Aiming for 100% code coverage
+    - Automated testing via GitHub Actions
+- **Architecture**
+    - Service Layer pattern implementation
+    - Repository pattern for data access abstraction
+    - Separation of concerns
+- **Observability**
+    - Prometheus metrics
+    - Logging extensively (with Pail)
 
 ## Contributing
 

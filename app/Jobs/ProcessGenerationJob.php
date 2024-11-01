@@ -8,6 +8,7 @@ use App\Events\Generation\GenerationCompleted;
 use App\Events\Generation\GenerationFailed;
 use App\Events\Generation\GenerationStarted;
 use App\Exceptions\GenerationNotFoundException;
+use App\Helpers\TimeFormatter;
 use App\Pipes\ProcessGenerationJob\CleanupLocal;
 use App\Pipes\ProcessGenerationJob\DownloadLocal;
 use App\Pipes\ProcessGenerationJob\RequestGeneration;
@@ -16,6 +17,7 @@ use App\Pipes\ProcessGenerationJob\UploadToS3;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Pipeline\Pipeline;
+use Illuminate\Support\Facades\Log;
 use OpenAI\Exceptions\ErrorException;
 use Throwable;
 
@@ -57,6 +59,8 @@ class ProcessGenerationJob implements ShouldQueue
         $generationCreationService->setGenerationAsProcessing($this->generationID);
 
         $generation = $generationRetrievalService->getGeneration($this->userId, $this->generationID);
+
+        Log::info('Started art generation', ['generation_id' => $this->generationID]);
 
         $this->artType = $generation['art_type'];
         $this->artStyle = $generation['art_style'];
@@ -100,6 +104,11 @@ class ProcessGenerationJob implements ShouldQueue
                     $duration,
                     $stepTimes
                 ));
+
+                Log::info('Art generation completed', [
+                    'generation_id' => $contextGenerationId,
+                    'duration' => TimeFormatter::formatPeriod(microtime(true), $this->startTime),
+                ]);
             });
     }
 
@@ -125,5 +134,11 @@ class ProcessGenerationJob implements ShouldQueue
             $exception,
             $totalDuration
         ));
+
+        Log::info('Failed art generation', [
+            'generation_id' => $this->generationID,
+            'duration' => TimeFormatter::formatPeriod(microtime(true), $this->startTime ?? microtime(true)),
+            'exception' => $exception,
+        ]);
     }
 }

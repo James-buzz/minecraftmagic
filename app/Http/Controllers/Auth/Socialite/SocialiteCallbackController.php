@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Laravel\Socialite\Facades\Socialite;
 
 class SocialiteCallbackController extends Controller
@@ -29,6 +30,8 @@ class SocialiteCallbackController extends Controller
             ]);
 
             event(new Registered($user));
+
+            Log::info('User registered', ['user_id' => $user->id, 'provider' => $provider]);
         }
 
         Auth::login($user);

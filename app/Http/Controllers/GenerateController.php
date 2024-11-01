@@ -7,6 +7,7 @@ use App\Events\Generation\GenerationQueued;
 use App\Http\Requests\GenerateStoreRequest;
 use App\Jobs\ProcessGenerationJob;
 use App\Services\GenerationCreationService;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -56,6 +57,8 @@ class GenerateController extends Controller
         ProcessGenerationJob::dispatch((string) $userId, $recordId);
 
         event(new GenerationQueued($artType, $artStyle));
+
+        Log::info('User generated art', ['user_id' => $userId, 'generation_id' => $recordId]);
 
         return redirect()->route('status', ['id' => $recordId]);
     }

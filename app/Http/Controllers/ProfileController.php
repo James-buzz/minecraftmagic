@@ -7,6 +7,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -37,6 +38,8 @@ class ProfileController extends Controller
 
         $request->user()->save();
 
+        Log::info('User updated profile', ['user_id' => $request->user()->id]);
+
         return Redirect::route('profile.edit');
     }
 
@@ -57,6 +60,8 @@ class ProfileController extends Controller
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+
+        Log::info('User deleted account', ['user_id' => $user->id]);
 
         return Redirect::to('/');
     }

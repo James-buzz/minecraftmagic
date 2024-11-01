@@ -20,9 +20,13 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+        env:
+          REDIS_PASSWORD: secret
     steps:
-
+      # Checkout code
       - uses: actions/checkout@v3
+
+      # Setup PHP
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -32,11 +36,32 @@ jobs:
             bcmath, soap, intl, gd, exif, iconv
           coverage: none
 
+      # Cache composer
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      # Cache npm dependencies
+      - name: Cache Composer dependencies
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
       - name: Update package list
         run: sudo apt-get update
 
-      - name: Install dependencies
-        run: composer install --prefer-dist --no-interaction --no-suggest
+      # Install dependencies with --prefer-dist for faster installation
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-interaction --no-progress
+
+      - name: Install NPM dependencies
+        run: npm ci
+
+      - name: Build Vite assets
+        run: npm run build
 
       - name: Create .env file
         run: cp .env.example .env
@@ -63,6 +88,6 @@ jobs:
           DB_CONNECTION: sqlite
           DB_DATABASE: ':memory:'
           REDIS_HOST: localhost
-          REDIS_PASSWORD: null
+          REDIS_PASSWORD: secret
           REDIS_PORT: 6379
         run: ./vendor/bin/phpunit

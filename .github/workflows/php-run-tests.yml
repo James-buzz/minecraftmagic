@@ -7,10 +7,11 @@ on:
     types: [ checks_requested ]
 
 jobs:
-
   tests:
-    name: Run tests
+    name: Run Testsuite
     runs-on: ubuntu-latest
+    timeout-minutes: 5
+
     services:
       redis:
         image: redis
@@ -21,6 +22,7 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+
     steps:
       - uses: actions/checkout@v3
 
@@ -30,21 +32,41 @@ jobs:
           php-version: '8.2'
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv
           coverage: none
+          tools: composer:v2
 
-      - name: Run composer install
-        run: composer install -n --prefer-dist
+      # Cache Composer dependencies
+      - name: Cache Composer dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.composer/cache
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      # Cache npm dependencies
+      - name: Cache npm dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-node-
+
+      - name: Install Composer Dependencies
+        run: composer install -n --prefer-dist --no-progress
 
       - name: Prepare Laravel Application
         run: |
           cp .env.example .env
           php artisan key:generate
+          php artisan config:cache
+          php artisan route:cache
+          php artisan view:cache
 
-      - name: Build Vite assets
+      - name: Install and Build Frontend Assets
         run: |
-          npm install
+          npm ci
           npm run build
 
-      - name: Run tests
+      - name: Run Testsuite
         env:
           DB_CONNECTION: sqlite
           DB_DATABASE: ":memory:"

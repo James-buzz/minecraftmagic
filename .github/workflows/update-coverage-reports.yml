@@ -35,7 +35,7 @@ jobs:
           coverage: xdebug
 
       - name: Install dependencies
-        run: composer install --prefer-dist --no-interaction --no-suggest
+        run: composer install --no-progress --prefer-dist --optimize-autoloader
 
       - name: Create .env file
         run: cp .env.example .env

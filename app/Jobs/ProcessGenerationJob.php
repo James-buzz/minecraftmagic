@@ -60,7 +60,7 @@ class ProcessGenerationJob implements ShouldQueue
 
         $generation = $generationRetrievalService->getGeneration($this->userId, $this->generationID);
 
-        Log::info('Started art generation', ['generation_id' => $this->generationID]);
+        Log::info('Queue started art generation', ['generation_id' => $this->generationID]);
 
         $this->artType = $generation['art_type'];
         $this->artStyle = $generation['art_style'];
@@ -105,7 +105,7 @@ class ProcessGenerationJob implements ShouldQueue
                     $stepTimes
                 ));
 
-                Log::info('Art generation completed', [
+                Log::info('Queue completed art generation', [
                     'generation_id' => $contextGenerationId,
                     'duration' => TimeFormatter::formatPeriod(microtime(true), $this->startTime),
                 ]);
@@ -135,7 +135,7 @@ class ProcessGenerationJob implements ShouldQueue
             $totalDuration
         ));
 
-        Log::info('Failed art generation', [
+        Log::info('Queue failed art generation', [
             'generation_id' => $this->generationID,
             'duration' => TimeFormatter::formatPeriod(microtime(true), $this->startTime ?? microtime(true)),
             'exception' => $exception,

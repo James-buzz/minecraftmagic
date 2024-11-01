@@ -13,6 +13,6 @@ class TermsController extends Controller
      */
     public function index(): Response
     {
-        return Inertia::render('legal/terms');
+        return Inertia::render('Legal/Terms');
     }
 }

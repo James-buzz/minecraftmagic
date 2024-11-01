@@ -19,6 +19,6 @@ class StatusController extends Controller
 
         $status = $this->retrievalService->getGeneration($userId, $id);
 
-        return Inertia::render('status', ['status' => $status]);
+        return Inertia::render('Status', ['status' => $status]);
     }
 }

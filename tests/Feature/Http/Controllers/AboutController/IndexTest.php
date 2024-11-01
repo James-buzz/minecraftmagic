@@ -13,7 +13,7 @@ class IndexTest extends BaseAboutController
         $actualResponse->assertOk();
         $actualResponse->assertInertia(
             fn ($assert) => $assert
-                ->component('about')
+                ->component('About')
         );
     }
 }

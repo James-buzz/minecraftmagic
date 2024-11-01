@@ -51,7 +51,7 @@ class ShowTest extends BaseStatusController
             // Assert
             ->assertInertia(
                 fn ($assert) => $assert
-                    ->component('status', [
+                    ->component('Status', [
                         'status' => $expectedStatus,
                     ])
             );

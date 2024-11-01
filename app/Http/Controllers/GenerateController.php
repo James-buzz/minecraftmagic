@@ -25,7 +25,7 @@ class GenerateController extends Controller
     {
         $artTypes = $this->artService->getAllArtTypesWithStyles();
 
-        return Inertia::render('generate', [
+        return Inertia::render('Generate', [
             'art_types' => $artTypes,
         ]);
     }

@@ -1,26 +1,17 @@
-name: "Update Coverage Reports"
+name: PHP Testsuite
 
 on:
-  push:
-    branches:
-      - main
-
-  workflow_dispatch:
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: true
+  pull_request:
+    branches: [ "main" ]
+  merge_group:
+    types: [ checks_requested ]
 
 jobs:
-  test:
-    name: Run TestCoverage Report
+  tests:
+    name: Run Testsuite
     runs-on: ubuntu-latest
     timeout-minutes: 5
+
     services:
       redis:
         image: redis
@@ -33,15 +24,15 @@ jobs:
           --health-retries 5
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v3
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.2
-          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick, fileinfo
-          coverage: xdebug
+          php-version: '8.2'
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv
+          coverage: none
+          tools: composer:v2
 
       # Cache Composer dependencies
       - name: Cache Composer dependencies
@@ -80,26 +71,5 @@ jobs:
           npm ci
           npm run build
 
-      - name: Run Test Coverage
-        run: XDEBUG_MODE=coverage vendor/bin/phpunit --log-junit report.xml --coverage-cobertura coverage.xml --coverage-html docs/coverage
-        continue-on-error: true
-
-      - name: Create Coverage Badge
-        uses: gaelgirodon/ci-badges-action@v1
-        with:
-          gist-id: 63f837f639ec90f1b789af69aab0ddd0
-          token: ${{ secrets.GIST_TOKEN }}
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          # Upload entire repository
-          path: './docs'
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
-
+      - name: Run Testsuite
+        run: php artisan test

@@ -4,7 +4,7 @@ import InputLabel from '@/components/input-label';
 import PrimaryButton from '@/components/primary-button';
 import TextInput from '@/components/text-input';
 import GuestLayout from '@/layouts/guest-layout';
-import { Head, Link, router, useForm } from '@inertiajs/react';
+import { Head, Link, useForm } from '@inertiajs/react';
 import { FormEventHandler } from 'react';
 
 export default function Login({
@@ -28,7 +28,9 @@ export default function Login({
     };
 
     const redirectToGithub = () => {
-        window.location.href = (route('socialite.redirect', { provider: 'github' }));
+        window.location.href = route('socialite.redirect', {
+            provider: 'github',
+        });
     };
 
     return (

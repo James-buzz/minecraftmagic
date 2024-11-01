@@ -216,7 +216,7 @@ export default function Generate({ art_types, flash }: PageProps) {
                     </div>
 
                     {flash && flash.error && (
-                        <div className="bg-red-500 text-white p-4 rounded-lg">
+                        <div className="rounded-lg bg-red-500 p-4 text-white">
                             {flash.error}
                         </div>
                     )}

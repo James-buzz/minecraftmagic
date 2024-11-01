@@ -13,7 +13,7 @@ class IndexTest extends BaseTermsController
         $actualResponse->assertOk();
         $actualResponse->assertInertia(
             fn ($assert) => $assert
-                ->component('legal/terms')
+                ->component('Legal/Terms')
         );
     }
 }

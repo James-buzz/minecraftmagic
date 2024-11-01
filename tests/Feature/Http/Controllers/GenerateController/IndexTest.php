@@ -19,7 +19,7 @@ class IndexTest extends BaseGenerateController
         $actualResponse->assertOk();
         $actualResponse->assertInertia(
             fn ($assert) => $assert
-                ->component('generate')
+                ->component('Generate')
                 ->has('art_types')
         );
     }

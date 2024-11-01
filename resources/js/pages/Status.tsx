@@ -156,9 +156,10 @@ export default function Status({ auth, status }: PageProps & StatusProps) {
                                     We encountered an error while creating your
                                     image. Please try again.
                                 </p>
-                                <div className="my-6 bg-red-700/10 border-2 border-red-900 rounded-xl p-4">
-                                    <code className="block font-mono text-red-300 text-base">
-                                        {status.failed_reason || 'Unknown error'}
+                                <div className="my-6 rounded-xl border-2 border-red-900 bg-red-700/10 p-4">
+                                    <code className="block font-mono text-base text-red-300">
+                                        {status.failed_reason ||
+                                            'Unknown error'}
                                     </code>
                                 </div>
                                 <PrimaryButton

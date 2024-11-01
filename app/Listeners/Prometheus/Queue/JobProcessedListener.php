@@ -16,13 +16,13 @@ class JobProcessedListener
         $queueName = $event->job->getQueue();
 
         // Total
-        $gauge = Prometheus::getOrRegisterGauge(
+        $counter = Prometheus::getOrRegisterCounter(
             'app',
             'queue_jobs_processed_total',
             'Number of jobs that have been processed',
             ['job', 'queue']
         );
-        $gauge->inc([$jobName, $queueName]);
+        $counter->inc([$jobName, $queueName]);
     }
 
     private function getJobName(string $jobClass): string

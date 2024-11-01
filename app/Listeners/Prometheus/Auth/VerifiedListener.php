@@ -12,12 +12,12 @@ class VerifiedListener
      */
     public function handle(Verified $event): void
     {
-        $gauge = Prometheus::getOrRegisterGauge(
+        $counter = Prometheus::getOrRegisterCounter(
             'app',
             'auth_verified_total',
             'Number of email verifications',
         );
 
-        $gauge->inc();
+        $counter->inc();
     }
 }

@@ -12,12 +12,12 @@ class RegisteredListener
      */
     public function handle(Registered $event): void
     {
-        $gauge = Prometheus::getOrRegisterGauge(
+        $counter = Prometheus::getOrRegisterCounter(
             'app',
             'auth_registered_total',
             'Number of registered users'
         );
 
-        $gauge->inc();
+        $counter->inc();
     }
 }

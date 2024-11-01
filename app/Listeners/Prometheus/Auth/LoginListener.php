@@ -12,12 +12,12 @@ class LoginListener
      */
     public function handle(Login $event): void
     {
-        $gauge = Prometheus::getOrRegisterGauge(
+        $counter = Prometheus::getOrRegisterCounter(
             'app',
             'auth_login_total',
             'Number of logins',
         );
 
-        $gauge->inc();
+        $counter->inc();
     }
 }

@@ -14,13 +14,13 @@ class LockoutListener
     {
         $ip = $event->request->ip();
 
-        $gauge = Prometheus::getOrRegisterGauge(
+        $counter = Prometheus::getOrRegisterCounter(
             'app',
             'auth_lockout_total',
             'Number of lockouts',
             ['ip'],
         );
 
-        $gauge->inc(['ip' => $ip]);
+        $counter->inc(['ip' => $ip]);
     }
 }

@@ -16,25 +16,13 @@ class GenerationQueuedListener
         $artStyle = $event->artStyle;
 
         // Total
-        $gauge = Prometheus::getOrRegisterGauge(
+        $totalCounter = Prometheus::getOrRegisterCounter(
             'app',
             'generation_queued_total',
             'Number of generations queued total',
             ['art_type', 'art_style']
         );
-        $gauge->inc([
-            'art_type' => $artType,
-            'art_style' => $artStyle,
-        ]);
-
-        // Queued
-        $gauge = Prometheus::getOrRegisterGauge(
-            'app',
-            'generation_queued',
-            'Number of generations queued currently',
-            ['art_type', 'art_style']
-        );
-        $gauge->inc([
+        $totalCounter->inc([
             'art_type' => $artType,
             'art_style' => $artStyle,
         ]);

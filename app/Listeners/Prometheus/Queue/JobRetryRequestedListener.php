@@ -12,7 +12,7 @@ class JobRetryRequestedListener
      */
     public function handle(JobRetryRequested $event): void
     {
-        $gauge = Prometheus::getOrRegisterGauge(
+        $counter = Prometheus::getOrRegisterCounter(
             'app',
             'queue_jobs_retries_total',
             'Number of jobs that have been retried',
@@ -20,7 +20,7 @@ class JobRetryRequestedListener
         );
 
         $jobName = $this->getJobName($event->payload()['data']['commandName']);
-        $gauge->inc(['job' => $jobName]);
+        $counter->inc(['job' => $jobName]);
     }
 
     private function getJobName(string $jobClass): string

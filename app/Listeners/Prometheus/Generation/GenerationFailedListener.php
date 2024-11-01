@@ -17,26 +17,27 @@ class GenerationFailedListener
         $totalDuration = $event->totalDuration;
 
         // Total
-        $gauge = Prometheus::getOrRegisterGauge(
+        $failedCounter = Prometheus::getOrRegisterCounter(
             'app',
             'generation_failed_total',
             'Number of generations failed',
-            ['art_type', 'art_style', 'total_duration']
-        );
-        $gauge->inc([
-            'art_type' => $artType,
-            'art_style' => $artStyle,
-            'total_duration' => $totalDuration,
-        ]);
-
-        // Processing
-        $gauge = Prometheus::getOrRegisterGauge(
-            'app',
-            'generation_processing',
-            'Number of generations processing',
             ['art_type', 'art_style']
         );
-        $gauge->dec([
+        $failedCounter->inc([
+            'art_type' => $artType,
+            'art_style' => $artStyle,
+        ]);
+
+        // Duration
+        $durationGauge = Prometheus::getOrRegisterGauge(
+            'app',
+            'generation_failed_duration_seconds',
+            'Duration of generation requests',
+            ['art_type', 'art_style']
+        );
+
+        $durationInSeconds = $totalDuration / 1_000_000;
+        $durationGauge->set($durationInSeconds, [
             'art_type' => $artType,
             'art_style' => $artStyle,
         ]);

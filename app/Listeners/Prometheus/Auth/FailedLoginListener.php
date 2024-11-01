@@ -14,13 +14,13 @@ class FailedLoginListener
     {
         $email = $event->credentials['email'];
 
-        $gauge = Prometheus::getOrRegisterGauge(
+        $counter = Prometheus::getOrRegisterCounter(
             'app',
             'auth_failed_login_total',
             'Number of failed login attempts',
             ['subject'],
         );
 
-        $gauge->inc(['subject' => $email]);
+        $counter->inc(['subject' => $email]);
     }
 }

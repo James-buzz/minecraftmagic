@@ -15,14 +15,14 @@ class JobFailedListener
         $jobName = $this->getJobName($event->job->resolveName());
         $queueName = $event->job->getQueue();
 
-        $gauge = Prometheus::getOrRegisterGauge(
+        $counter = Prometheus::getOrRegisterCounter(
             'app',
             'queue_jobs_failed_total',
             'Number of jobs that have failed',
             ['job', 'queue']
         );
 
-        $gauge->inc([$jobName, $queueName]);
+        $counter->inc([$jobName, $queueName]);
     }
 
     private function getJobName(string $jobClass): string

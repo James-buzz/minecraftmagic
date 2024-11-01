@@ -46,8 +46,6 @@ class PrometheusBasicAuth
 
     /**
      * Return unauthorized response
-     *
-     * @return \Illuminate\Http\Response
      */
     private function unauthorizedResponse(): Response
     {

@@ -14,13 +14,13 @@ class PasswordResetListener
     {
         $authId = $event->user->getAuthIdentifier();
 
-        $gauge = Prometheus::getOrRegisterGauge(
+        $counter = Prometheus::getOrRegisterCounter(
             'app',
             'auth_password_reset_total',
             'Number of password reset attempts',
             ['auth_id'],
         );
 
-        $gauge->inc(['auth_id' => $authId]);
+        $counter->inc(['auth_id' => $authId]);
     }
 }

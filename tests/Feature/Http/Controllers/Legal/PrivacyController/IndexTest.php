@@ -13,7 +13,7 @@ class IndexTest extends BasePrivacyController
         $actualResponse->assertOk();
         $actualResponse->assertInertia(
             fn ($assert) => $assert
-                ->component('legal/privacy')
+                ->component('Legal/Privacy')
         );
     }
 }

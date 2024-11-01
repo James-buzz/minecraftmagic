@@ -13,6 +13,6 @@ class PrivacyController extends Controller
      */
     public function index(): Response
     {
-        return Inertia::render('legal/privacy');
+        return Inertia::render('Legal/Privacy');
     }
 }

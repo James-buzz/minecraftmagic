@@ -28,7 +28,7 @@ class DashboardController extends Controller
             $currentPage
         );
 
-        return Inertia::render('dashboard', [
+        return Inertia::render('Dashboard', [
             'paginatedGenerations' => $paginatedGenerations,
         ]);
     }

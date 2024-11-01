@@ -7,7 +7,6 @@ use Tests\Feature\FeatureTestCase;
 class BaseGenerateController extends FeatureTestCase
 {
     protected string $indexRoute;
-
     protected string $storeRoute;
 
     public function setUp(): void

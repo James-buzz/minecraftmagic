@@ -8,7 +8,7 @@ class BaseAboutController extends FeatureTestCase
 {
     protected string $route;
 
-    protected function setUp(): void
+    public function setUp(): void
     {
         parent::setUp();
 

@@ -71,9 +71,6 @@ jobs:
           echo "REDIS_HOST=localhost" >> .env
           echo "REDIS_PORT=6379" >> .env
           echo "REDIS_CLIENT=predis" >> .env
-          php artisan config:cache
-          php artisan route:cache
-          php artisan view:cache
 
       - name: Install and Build Frontend Assets
         run: |

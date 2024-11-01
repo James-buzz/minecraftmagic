@@ -29,9 +29,15 @@ readonly class GenerationCreationService implements GenerationCreationServiceInt
         $this->generationRepository->update($generationId, ['status' => 'processing']);
     }
 
-    public function setGenerationAsFailed(string $generationId): void
+    public function setGenerationAsFailed(string $generationId, ?string $failedMessage): void
     {
-        $this->generationRepository->update($generationId, ['status' => 'failed']);
+        $data = ['status' => 'failed'];
+
+        if ($failedMessage !== null) {
+            $data['failed_reason'] = $failedMessage;
+        }
+
+        $this->generationRepository->update($generationId, $data);
     }
 
     public function setGenerationAsCompleted(

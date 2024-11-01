@@ -9,7 +9,7 @@ interface GenerationRepositoryInterface
     /**
      * Find a generation by ID.
      *
-     * @return array{id: string, status: string, art_type: string, art_style: string, file_path: string, thumbnail_file_path: string}|null
+     * @return array{id: string, status: string, art_type: string, art_style: string, file_path: string, thumbnail_file_path: string, failed_reason: string|null}|null
      */
     public function find(string $userId, string $generationId): ?array;
 

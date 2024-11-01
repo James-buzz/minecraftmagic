@@ -50,22 +50,22 @@ class HandleTest extends BaseUploadToS3
             ->andReturnTrue();
 
         // Expected
-        $expectedOutputData = [
-            'user' => $givenContextUserId,
-            'generation' => [
-                'id' => $givenContextGenerationId,
-            ],
-            'result' => [
-                'file_path' => $givenContextFilePath,
-                'thumbnail_file_path' => $givenGenerationThumbnailFilePath,
-            ],
+        $expectedOutputDataUser = $givenContextUserId;
+        $expectedOutputDataGeneration = [
+            'id' => $givenContextGenerationId,
+        ];
+        $expectedOutputDataResult = [
+            'file_path' => $givenContextFilePath,
+            'thumbnail_file_path' => $givenGenerationThumbnailFilePath,
         ];
 
         // Action
-        $this->pipe->handle($givenData, function ($actualData) use ($expectedOutputData) {
+        $this->pipe->handle($givenData, function ($actualData) use ($expectedOutputDataUser, $expectedOutputDataGeneration, $expectedOutputDataResult) {
 
             // Assert
-            $this->assertEquals($expectedOutputData, $actualData);
+            $this->assertEquals($expectedOutputDataUser, $actualData['user']);
+            $this->assertEquals($expectedOutputDataGeneration, $actualData['generation']);
+            $this->assertEquals($expectedOutputDataResult, $actualData['result']);
 
         });
     }

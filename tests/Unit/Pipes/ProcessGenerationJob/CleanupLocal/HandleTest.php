@@ -33,12 +33,15 @@ class HandleTest extends BaseCleanupLocal
             ->andReturn(true);
 
         // Expected
-        $expectedOutputData = $givenOutputData;
+        $expectedOutputDataResult = [
+            'file_path' => $givenContextFilePath,
+            'thumbnail_file_path' => $givenContextThumbnailPath,
+        ];
 
         // Action
-        $this->pipe->handle($givenData, function ($data) use ($expectedOutputData) {
+        $this->pipe->handle($givenData, function ($actualData) use ($expectedOutputDataResult) {
             // Assert
-            $this->assertEquals($expectedOutputData, $data);
+            $this->assertEquals($expectedOutputDataResult, $actualData['result']);
         });
     }
 }

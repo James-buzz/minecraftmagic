@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Listeners\Auth;
+namespace App\Listeners\Prometheus\Auth;
 
 use App\Facades\Prometheus;
 use Illuminate\Auth\Events\Registered;
+
 class RegisteredListener
 {
     /**
@@ -12,7 +13,7 @@ class RegisteredListener
     public function handle(Registered $event): void
     {
         $gauge = Prometheus::getOrRegisterGauge(
-            config('app.name'),
+            'app',
             'auth_registered_total',
             'Number of registered users'
         );

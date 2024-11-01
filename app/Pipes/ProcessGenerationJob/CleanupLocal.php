@@ -11,6 +11,8 @@ readonly class CleanupLocal
 {
     public function handle(mixed $data, Closure $next): mixed
     {
+        $stepStartTime = microtime(true);
+
         $contextFilePath = $data['result']['file_path'];
         $contextThumbnailFilePath = $data['result']['thumbnail_file_path'];
 
@@ -19,6 +21,9 @@ readonly class CleanupLocal
 
         Storage::disk('local')
             ->delete($contextThumbnailFilePath);
+
+        $stepEndTime = microtime(true);
+        $data['steps']['cleanup'] = $stepEndTime - $stepStartTime;
 
         return $next($data);
     }

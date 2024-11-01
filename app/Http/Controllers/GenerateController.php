@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Contracts\ArtServiceInterface;
+use App\Events\Generation\GenerationQueued;
 use App\Http\Requests\GenerateStoreRequest;
 use App\Jobs\ProcessGenerationJob;
 use App\Services\GenerationCreationService;
@@ -21,8 +22,10 @@ class GenerateController extends Controller
      */
     public function index(): Response
     {
+        $artTypes = $this->artService->getAllArtTypesWithStyles();
+
         return Inertia::render('generate', [
-            'art_types' => $this->artService->getAllArtTypesWithStyles(),
+            'art_types' => $artTypes,
         ]);
     }
 
@@ -51,6 +54,8 @@ class GenerateController extends Controller
         );
 
         ProcessGenerationJob::dispatch((string) $userId, $recordId);
+
+        event(new GenerationQueued($artType, $artStyle));
 
         return redirect()->route('status', ['id' => $recordId]);
     }

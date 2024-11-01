@@ -5,7 +5,8 @@ namespace App\Http\Middleware;
 use Closure;
 use Exception;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
 class PrometheusBasicAuth
 {
@@ -16,7 +17,7 @@ class PrometheusBasicAuth
      *
      * @throws Exception
      */
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, Closure $next): Response|SymfonyResponse
     {
         $requiredUsername = config('prometheus.basic_auth.username');
         $requiredPassword = config('prometheus.basic_auth.password');

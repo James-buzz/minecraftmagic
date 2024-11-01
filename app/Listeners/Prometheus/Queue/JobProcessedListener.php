@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Listeners\Queue;
+namespace App\Listeners\Prometheus\Queue;
 
 use App\Facades\Prometheus;
 use Illuminate\Queue\Events\JobProcessed;
@@ -15,13 +15,13 @@ class JobProcessedListener
         $jobName = $this->getJobName($event->job->resolveName());
         $queueName = $event->job->getQueue();
 
+        // Total
         $gauge = Prometheus::getOrRegisterGauge(
-            config('app.name'),
-            'queue_jobs_total_processed',
+            'app',
+            'queue_jobs_processed_total',
             'Number of jobs that have been processed',
             ['job', 'queue']
         );
-
         $gauge->inc([$jobName, $queueName]);
     }
 

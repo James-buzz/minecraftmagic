@@ -18,6 +18,8 @@ readonly class DownloadLocal
      */
     public function handle(mixed $data, Closure $next)
     {
+        $stepStartTime = microtime(true);
+
         $contextUserId = $data['user'];
         $contextGenerationId = $data['generation']['id'];
         $contextUrl = $data['url'];
@@ -31,6 +33,9 @@ readonly class DownloadLocal
 
         Storage::disk('local')
             ->put($filePath, $imageContent);
+
+        $stepEndTime = microtime(true);
+        $data['steps']['download'] = $stepEndTime - $stepStartTime;
 
         return $next($data);
     }

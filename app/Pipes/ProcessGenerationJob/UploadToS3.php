@@ -11,6 +11,8 @@ readonly class UploadToS3
 {
     public function handle(mixed $data, Closure $next): mixed
     {
+        $stepStartTime = microtime(true);
+
         $contextFilePath = $data['result']['file_path'];
         $contextThumbnailFilePath = $data['result']['thumbnail_file_path'];
 
@@ -23,6 +25,9 @@ readonly class UploadToS3
             $contextThumbnailFilePath,
             Storage::disk('local')->get($contextThumbnailFilePath)
         );
+
+        $stepEndTime = microtime(true);
+        $data['steps']['upload'] = $stepEndTime - $stepStartTime;
 
         return $next($data);
     }

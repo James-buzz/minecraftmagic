@@ -17,7 +17,7 @@ Minecraftmagic is a work in progress, but I hope that you find it useful for you
 - 💻 [Getting Started](.docs/getting-started.md)
 
 ## Features
-
+- Observability with Prometheus and Grafana
 ... 
 
 ## Contributing

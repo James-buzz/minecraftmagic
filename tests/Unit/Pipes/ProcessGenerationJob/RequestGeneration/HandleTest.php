@@ -40,13 +40,12 @@ class HandleTest extends BaseRequestGeneration
         ]);
 
         // Expected
-        $expectedOutputData = $givenData;
-        $expectedOutputData['url'] = 'https://openai.com/fake-image.png';
+        $expectedOutputDataUrl = 'https://openai.com/fake-image.png';
 
         // Action
-        $this->pipe->handle($givenData, function ($data) use ($expectedOutputData) {
+        $this->pipe->handle($givenData, function ($actualOutputData) use ($expectedOutputDataUrl) {
             // Assert
-            $this->assertEquals($expectedOutputData, $data);
+            $this->assertEquals($expectedOutputDataUrl, $actualOutputData['url']);
         });
     }
 }

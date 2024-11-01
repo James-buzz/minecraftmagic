@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Listeners\Queue;
+namespace App\Listeners\Prometheus\Queue;
 
 use App\Facades\Prometheus;
 use Illuminate\Queue\Events\JobFailed;
@@ -16,8 +16,8 @@ class JobFailedListener
         $queueName = $event->job->getQueue();
 
         $gauge = Prometheus::getOrRegisterGauge(
-            config('app.name'),
-            'queue_jobs_failed',
+            'app',
+            'queue_jobs_failed_total',
             'Number of jobs that have failed',
             ['job', 'queue']
         );

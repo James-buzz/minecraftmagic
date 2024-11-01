@@ -201,10 +201,7 @@ export default function Generate({ art_types, flash }: PageProps) {
                                 htmlFor="serverName"
                                 className="mb-2 block text-sm font-medium"
                             >
-                                Minecraft Server Name{' '}
-                                <span className={'text-xs text-gray-500'}>
-                                    (Optional)
-                                </span>
+                                Minecraft Server Name*
                             </label>
                             <input
                                 type="text"
@@ -213,6 +210,7 @@ export default function Generate({ art_types, flash }: PageProps) {
                                 onChange={(e) => setServerName(e.target.value)}
                                 className="w-full rounded-md border border-gray-600 bg-gray-700 p-2 text-white"
                                 placeholder="Enter your server name"
+                                required={true}
                             />
                         </div>
                     </div>

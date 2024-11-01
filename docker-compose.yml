@@ -71,6 +71,32 @@ services:
                 - ping
             retries: 3
             timeout: 5s
+    prometheus:
+        image: prom/prometheus:latest
+        ports:
+            - "9090:9090"
+        volumes:
+            - "./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml"
+        networks:
+            - sail
+        restart: unless-stopped
+    node-exporter:
+        image: prom/node-exporter:latest
+        ports:
+            - "9100:9100"
+        networks:
+            - sail
+        restart: unless-stopped
+    grafana:
+        image: grafana/grafana:latest
+        ports:
+            - "3030:3000"
+        volumes:
+            - "sail-grafana:/var/lib/grafana"
+            - "./docker/grafana/provisioning:/etc/grafana/provisioning"
+        networks:
+            - sail
+        restart: unless-stopped
 networks:
     sail:
         driver: bridge
@@ -78,4 +104,6 @@ volumes:
     sail-mysql:
         driver: local
     sail-redis:
+        driver: local
+    sail-grafana:
         driver: local

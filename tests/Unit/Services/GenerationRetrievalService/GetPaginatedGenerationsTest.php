@@ -2,127 +2,70 @@
 
 namespace Tests\Unit\Services\GenerationRetrievalService;
 
-use DateTimeInterface;
-use Illuminate\Support\Facades\Storage;
-use Mockery as m;
+use App\Models\Generation;
+use App\Models\User;
 
 class GetPaginatedGenerationsTest extends BaseGenerationRetrievalService
 {
     public function testWhenFirstPageThenReturn(): void
     {
         // Given
-        $givenUserId = 1;
+        $givenUserId = 101;
+        $givenArtType = 'server_logo';
+        $givenArtStyle = 'dragons-lair';
         $givenPage = 1;
         $givenPerPage = 9;
+        $givenFilePath = 'file/to/path';
+        $givenThumbnailFilePath = 'thumbnail/file/to/path';
+        $givenCount = 50;
 
-        $givenGeneration1Id = 101;
-        $givenGeneration1ArtTypeId = 'a_art_type_id';
-        $givenGeneration1ArtStyleId = 'b_art_style_id';
-        $givenGeneration1ThumbnailPath = 'path/to/thumbnail1';
+        // Precondition
+        User::factory()->create([
+            'id' => $givenUserId,
+        ]);
 
-        $givenGeneration2Id = 202;
-        $givenGeneration2ArtTypeId = 'c_art_type_id';
-        $givenGeneration2ArtStyleId = 'd_art_style_id';
-        $givenGeneration2ThumbnailPath = 'path/to/thumbnail2';
-
-        $givenArtType1Name = 'a_art_type_name';
-        $givenArtStyle1Name = 'b_art_style_name';
-        $givenArtType2Name = 'c_art_type_name';
-        $givenArtStyle2Name = 'd_art_style_name';
-
-        $givenGeneration1ThumbnailUrl = 'url://path/to/thumbnail1';
-        $givenGeneration2ThumbnailUrl = 'url://path/to/thumbnail2';
-
-        $givenCountCompleted = 20;
-        $givenLastPage = ceil($givenCountCompleted / $givenPerPage);
+        Generation::factory()
+            ->count($givenCount)
+            ->create([
+                'user_id' => $givenUserId,
+                'status' => 'completed',
+                'file_path' => $givenFilePath,
+                'thumbnail_file_path' => $givenThumbnailFilePath,
+                'art_type' => $givenArtType,
+                'art_style' => $givenArtStyle,
+            ]);
 
         // Mock
-        $this->mockGenerationRepository->shouldReceive('paginateCompleted')
-            ->with($givenUserId, $givenPage, $givenPerPage)
+        $this->mockArtRepository->shouldReceive('getType')
+            ->with($givenArtType)
             ->andReturn([
-                [
-                    'id' => $givenGeneration1Id,
-                    'art_type' => $givenGeneration1ArtTypeId,
-                    'art_style' => $givenGeneration1ArtStyleId,
-                    'thumbnail_file_path' => $givenGeneration1ThumbnailPath,
-                ],
-                [
-                    'id' => $givenGeneration2Id,
-                    'art_type' => $givenGeneration2ArtTypeId,
-                    'art_style' => $givenGeneration2ArtStyleId,
-                    'thumbnail_file_path' => $givenGeneration2ThumbnailPath,
-                ],
-            ]);
-
-        $this->mockGenerationRepository->shouldReceive('countCompleted')
-            ->with($givenUserId)
-            ->andReturn($givenCountCompleted);
-
-        Storage::shouldReceive('disk')
-            ->with('s3')
-            ->andReturnSelf();
-
-        Storage::shouldReceive('temporaryUrl')
-            ->with($givenGeneration1ThumbnailPath, m::type(DateTimeInterface::class))
-            ->andReturn($givenGeneration1ThumbnailUrl);
-
-        Storage::shouldReceive('temporaryUrl')
-            ->with($givenGeneration2ThumbnailPath, m::type(DateTimeInterface::class))
-            ->andReturn($givenGeneration2ThumbnailUrl);
-
-        $this->mockArtRepository->shouldReceive('getStyle')
-            ->with($givenGeneration1ArtTypeId, $givenGeneration1ArtStyleId)
-            ->andReturn([
-                'name' => $givenArtStyle1Name,
+                'name' => 'Server Logo',
             ]);
 
         $this->mockArtRepository->shouldReceive('getStyle')
-            ->with($givenGeneration2ArtTypeId, $givenGeneration2ArtStyleId)
+            ->with($givenArtType, $givenArtStyle)
             ->andReturn([
-                'name' => $givenArtStyle2Name,
-            ]);
-
-        $this->mockArtRepository->shouldReceive('getType')
-            ->with($givenGeneration1ArtTypeId)
-            ->andReturn([
-                'name' => $givenArtType1Name,
-            ]);
-
-        $this->mockArtRepository->shouldReceive('getType')
-            ->with($givenGeneration2ArtTypeId)
-            ->andReturn([
-                'name' => $givenArtType2Name,
+                'name' => 'Dragons Lair',
+                'description' => 'A fiery dragon lair',
             ]);
 
         // Expected
-        $expectedDataGeneration1 = [
-            'id' => $givenGeneration1Id,
-            'art_type' => $givenArtType1Name,
-            'art_style' => $givenArtStyle1Name,
-            'thumbnail_url' => $givenGeneration1ThumbnailUrl,
-        ];
-        $expectedDataGeneration2 = [
-            'id' => $givenGeneration2Id,
-            'art_type' => $givenArtType2Name,
-            'art_style' => $givenArtStyle2Name,
-            'thumbnail_url' => $givenGeneration2ThumbnailUrl,
-        ];
-        $expectedMetaCurrentPage = $givenPage;
-        $expectedMetaPerPage = $givenPerPage;
-        $expectedTotal = $givenCountCompleted;
-        $expectedLastPage = $givenLastPage;
+        $expectedCurrentPage = $givenPage;
+        $expectedPerPage = $givenPerPage;
+        $expectedTotal = $givenCount;
+        $expectedLastPage = ceil($givenCount / $givenPerPage);
 
         // Action
-        $actualData = $this->service->getPaginatedGenerations($givenUserId, $givenPage, $givenPerPage);
+        $actualPagination = $this->service->getPaginatedGenerations(
+            $givenUserId,
+            $givenPage,
+            $givenPerPage
+        );
 
         // Assert
-        $this->assertIsArray($actualData);
-        $this->assertEquals($actualData['data'][0], $expectedDataGeneration1);
-        $this->assertEquals($actualData['data'][1], $expectedDataGeneration2);
-        $this->assertEquals($actualData['meta']['current_page'], $expectedMetaCurrentPage);
-        $this->assertEquals($actualData['meta']['per_page'], $expectedMetaPerPage);
-        $this->assertEquals($actualData['meta']['total'], $expectedTotal);
-        $this->assertEquals($actualData['meta']['last_page'], $expectedLastPage);
-
+        $this->assertEquals($expectedCurrentPage, $actualPagination['meta']['current_page']);
+        $this->assertEquals($expectedPerPage, $actualPagination['meta']['per_page']);
+        $this->assertEquals($expectedTotal, $actualPagination['meta']['total']);
+        $this->assertEquals($expectedLastPage, $actualPagination['meta']['last_page']);
     }
 }

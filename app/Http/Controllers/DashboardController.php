@@ -8,9 +8,7 @@ use Inertia\Response;
 
 class DashboardController extends Controller
 {
-    public function __construct(
-        protected readonly GenerationRetrievalService $generationService
-    ) {}
+    public function __construct(protected readonly GenerationRetrievalService $generationService) {}
 
     /**
      * Display the dashboard.

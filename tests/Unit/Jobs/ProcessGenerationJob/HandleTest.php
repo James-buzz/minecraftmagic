@@ -4,6 +4,9 @@ namespace Tests\Unit\Jobs\ProcessGenerationJob;
 
 use App\Contracts\GenerationCreationServiceInterface;
 use App\Contracts\GenerationRetrievalServiceInterface;
+use App\Jobs\ProcessGenerationJob;
+use App\Models\Generation;
+use App\Models\User;
 use App\Pipes\ProcessGenerationJob\CleanupLocal;
 use App\Pipes\ProcessGenerationJob\DownloadLocal;
 use App\Pipes\ProcessGenerationJob\RequestGeneration;
@@ -17,20 +20,32 @@ class HandleTest extends BaseProcessGenerationJob
     public function testWhenJobIsHandledThenSuccess(): void
     {
         // Given
-        $givenUserId = $this->userId;
-        $givenGenerationId = $this->generationId;
+        $givenUserId = 101;
+        $givenGenerationId = 201;
         $givenGenerationFilePath = 'path/to/generation/file';
         $givenGenerationThumbnailFilePath = 'path/to/generation/thumbnail/file';
-        $givenGenerationArtType = 'art_type';
-        $givenGenerationArtStyle = 'art_style';
+        $givenGenerationArtType = 'server_logo';
+        $givenGenerationArtStyle = 'dragons-lair';
+
+        // Precondition
+        User::factory()->create(['id' => $givenUserId]);
+
+        Generation::factory()->create([
+            'id' => $givenGenerationId,
+            'user_id' => $givenUserId,
+            'file_path' => $givenGenerationFilePath,
+            'thumbnail_file_path' => $givenGenerationThumbnailFilePath,
+            'art_type' => $givenGenerationArtType,
+            'art_style' => $givenGenerationArtStyle,
+        ]);
 
         // Mock
         /** @var MockInterface|GenerationCreationServiceInterface $mockGenerationCreationService */
         $mockGenerationCreationService = $this->mock(GenerationCreationServiceInterface::class);
-        $mockGenerationCreationService->shouldReceive('setGenerationAsProcessing')
+        $mockGenerationCreationService->shouldReceive('updateStatusAsProcessing')
             ->with($givenGenerationId)
             ->once();
-        $mockGenerationCreationService->shouldReceive('setGenerationAsCompleted')
+        $mockGenerationCreationService->shouldReceive('updateStatusAsCompleted')
             ->with($givenGenerationId, $givenGenerationFilePath, $givenGenerationThumbnailFilePath)
             ->once();
 
@@ -81,7 +96,8 @@ class HandleTest extends BaseProcessGenerationJob
             });
 
         // Action
-        $this->job->handle(
+        $job = new ProcessGenerationJob((string) $givenUserId, (string) $givenGenerationId);
+        $job->handle(
             $mockGenerationRetrievalService,
             $mockGenerationCreationService,
             $mockPipeline,

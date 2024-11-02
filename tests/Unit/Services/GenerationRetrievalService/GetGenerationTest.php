@@ -2,43 +2,50 @@
 
 namespace Tests\Unit\Services\GenerationRetrievalService;
 
+use App\Models\Generation;
+use App\Models\User;
+use Illuminate\Support\Str;
+
 class GetGenerationTest extends BaseGenerationRetrievalService
 {
     public function testWhenGenerationThenSuccess(): void
     {
         // Given
-        $givenGenerationId = '1';
-        $givenGenerationUserId = '1';
+        $givenGenerationId = Str::ulid();
+        $givenUserId = 101;
         $givenGenerationStatus = 'completed';
-        $givenGenerationArtType = 'art_type_id_1';
-        $givenGenerationArtStyle = 'art_style_id_1';
-        $givenGenerationFilePath = 'file_path_1';
-        $givenGenerationThumbnailFilePath = 'thumbnail_file_path_1';
+        $givenGenerationArtType = 'server_logo';
+        $givenGenerationArtStyle = 'dragons-lair';
+        $givenGenerationFilePath = 'file/to/path';
+        $givenGenerationThumbnailFilePath = 'thumbnail/to/path';
 
-        // Mock
-        $this->mockGenerationRepository->shouldReceive('find')
-            ->with($givenGenerationUserId, $givenGenerationId)
-            ->andReturn([
-                'user_id' => $givenGenerationUserId,
-                'status' => $givenGenerationStatus,
-                'art_type' => $givenGenerationArtType,
-                'art_style' => $givenGenerationArtStyle,
-                'file_path' => $givenGenerationFilePath,
-                'thumbnail_file_path' => $givenGenerationThumbnailFilePath,
-            ]);
+        // Precondition
+        User::factory()->create([
+            'id' => $givenUserId,
+        ]);
 
-        // Expected
-        $expectedGeneration = [
-            'user_id' => $givenGenerationUserId,
+        Generation::factory()->create([
+            'id' => $givenGenerationId,
+            'user_id' => $givenUserId,
             'status' => $givenGenerationStatus,
             'art_type' => $givenGenerationArtType,
             'art_style' => $givenGenerationArtStyle,
             'file_path' => $givenGenerationFilePath,
             'thumbnail_file_path' => $givenGenerationThumbnailFilePath,
+        ]);
+
+        // Expected
+        $expectedGeneration = [
+            'id' => $givenGenerationId,
+            'metadata' => [],
+            'status' => $givenGenerationStatus,
+            'art_type' => $givenGenerationArtType,
+            'art_style' => $givenGenerationArtStyle,
+            'file_path' => $givenGenerationFilePath,
         ];
 
         // Action
-        $actualGeneration = $this->service->getGeneration($givenGenerationUserId, $givenGenerationId);
+        $actualGeneration = $this->service->getGeneration($givenUserId, $givenGenerationId);
 
         // Assert
         $this->assertEquals($expectedGeneration, $actualGeneration);

@@ -2,8 +2,11 @@
 
 namespace Tests\Unit\Services\GenerationRetrievalService;
 
+use App\Models\Generation;
+use App\Models\User;
 use DateTimeInterface;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Mockery;
 
 class GetGenerationFileUrlTest extends BaseGenerationRetrievalService
@@ -11,27 +14,31 @@ class GetGenerationFileUrlTest extends BaseGenerationRetrievalService
     public function testWhenGenerationThenTemporaryUrl(): void
     {
         // Given
-        $givenGenerationId = '1';
-        $givenGenerationUserId = '1';
+        $givenUserId = 101;
+        $givenGenerationId = Str::ulid();
         $givenGenerationStatus = 'completed';
-        $givenGenerationArtType = 'art_type_id_1';
-        $givenGenerationArtStyle = 'art_style_id_1';
-        $givenGenerationFilePath = 'file_path_1';
-        $givenGenerationThumbnailFilePath = 'thumbnail_file_path_1';
-        $givenTemporaryURL = 'temporary_url_1';
+        $givenGenerationArtType = 'server_logo';
+        $givenGenerationArtStyle = 'dragons-lair';
+        $givenGenerationFilePath = 'path/to/file';
+        $givenGenerationThumbnailFilePath = 'path/to/thumbnail';
+        $givenTemporaryURL = 'temporary/url';
+
+        // Precondition
+        User::factory()->create([
+            'id' => $givenUserId,
+        ]);
+
+        Generation::factory()->create([
+            'id' => $givenGenerationId,
+            'user_id' => $givenUserId,
+            'status' => $givenGenerationStatus,
+            'art_type' => $givenGenerationArtType,
+            'art_style' => $givenGenerationArtStyle,
+            'file_path' => $givenGenerationFilePath,
+            'thumbnail_file_path' => $givenGenerationThumbnailFilePath,
+        ]);
 
         // Mock
-        $this->mockGenerationRepository->shouldReceive('find')
-            ->with($givenGenerationUserId, $givenGenerationId)
-            ->andReturn([
-                'user_id' => $givenGenerationUserId,
-                'status' => $givenGenerationStatus,
-                'art_type' => $givenGenerationArtType,
-                'art_style' => $givenGenerationArtStyle,
-                'file_path' => $givenGenerationFilePath,
-                'thumbnail_file_path' => $givenGenerationThumbnailFilePath,
-            ]);
-
         Storage::shouldReceive('disk')
             ->with('s3')
             ->andReturnSelf();
@@ -44,7 +51,7 @@ class GetGenerationFileUrlTest extends BaseGenerationRetrievalService
         $expectedURL = $givenTemporaryURL;
 
         // Action
-        $actualURL = $this->service->getGenerationFileUrl($givenGenerationUserId, $givenGenerationId);
+        $actualURL = $this->service->getGenerationFileUrl($givenUserId, $givenGenerationId);
 
         // Assert
         $this->assertEquals($expectedURL, $actualURL);

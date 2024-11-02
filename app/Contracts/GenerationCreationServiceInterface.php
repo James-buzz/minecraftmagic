@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace App\Contracts;
 
-use App\Exceptions\ArtStyleNotFoundException;
-use App\Exceptions\GenerationNotFoundException;
-use App\Exceptions\UserNotFoundException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 interface GenerationCreationServiceInterface
 {
@@ -24,10 +22,7 @@ interface GenerationCreationServiceInterface
      * Request and create a new generation.
      * Return the generation ID.
      *
-     * @param  array<mixed>  $metadata
-     *
-     * @throws UserNotFoundException
-     * @throws ArtStyleNotFoundException
+     * @param  array<string, mixed>  $metadata
      */
     public function createGeneration(
         int $userId,
@@ -37,21 +32,19 @@ interface GenerationCreationServiceInterface
     ): string;
 
     /**
-     * Set the generation as processing.
+     * Set the status of Generation as processing.
      *
-     *
-     * @throws GenerationNotFoundException
+     * @throws ModelNotFoundException
      */
-    public function setGenerationAsProcessing(string $generationId): void;
+    public function updateStatusAsProcessing(string $generationId): void;
 
     /**
      * Set the generation as completed.
      * Save the file path and thumbnail file path.
      *
-     *
-     * @throws GenerationNotFoundException
+     * @throws ModelNotFoundException
      */
-    public function setGenerationAsCompleted(
+    public function updateStatusAsCompleted(
         string $generationId,
         string $filePath,
         string $thumbnailFilePath
@@ -60,8 +53,7 @@ interface GenerationCreationServiceInterface
     /**
      * Set the generation as failed.
      *
-     *
-     * @throws GenerationNotFoundException
+     * @throws ModelNotFoundException
      */
-    public function setGenerationAsFailed(string $generationId, ?string $failedMessage): void;
+    public function updateStatusAsFailed(string $generationId, ?string $failedMessage): void;
 }

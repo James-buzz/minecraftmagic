@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Pipes\ProcessGenerationJob;
 
 use App\Contracts\ArtServiceInterface;
-use App\Exceptions\ArtStyleNotFoundException;
 use Closure;
 use OpenAI\Laravel\Facades\OpenAI;
 
@@ -13,9 +12,6 @@ readonly class RequestGeneration
 {
     public function __construct(protected ArtServiceInterface $artService) {}
 
-    /**
-     * @throws ArtStyleNotFoundException
-     */
     public function handle(mixed $data, Closure $next): mixed
     {
         $stepStartTime = microtime(true);
@@ -40,7 +36,6 @@ readonly class RequestGeneration
      */
     private function generateImage(string $prompt, array $metadata): string
     {
-        // todo: move to a manager to support other models
         $response = OpenAI::images()->create([
             'model' => 'dall-e-3',
             'prompt' => $prompt,
@@ -56,8 +51,6 @@ readonly class RequestGeneration
     /**
      * @param  array{art_style: string, art_type: string}  $generation
      * @param  array<mixed>  $metadata
-     *
-     * @throws ArtStyleNotFoundException
      */
     private function buildPrompt(array $generation, array $metadata): string
     {

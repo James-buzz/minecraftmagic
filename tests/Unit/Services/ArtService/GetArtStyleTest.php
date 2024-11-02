@@ -2,13 +2,10 @@
 
 namespace Tests\Unit\Services\ArtService;
 
-use App\Exceptions\ArtStyleNotFoundException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class GetArtStyleTest extends BaseArtService
 {
-    /**
-     * @throws ArtStyleNotFoundException
-     */
     public function testWhenArtStyleThenSuccess(): void
     {
         // Given
@@ -45,9 +42,6 @@ class GetArtStyleTest extends BaseArtService
         $this->assertEquals($expectedArtStylePrompt, $actualArtStyle['prompt']);
     }
 
-    /**
-     * @throws ArtStyleNotFoundException
-     */
     public function testWhenArtStyleNotFoundThenFail(): void
     {
         // Given
@@ -61,7 +55,7 @@ class GetArtStyleTest extends BaseArtService
             ->andReturn(null);
 
         // Expected
-        $this->expectException(ArtStyleNotFoundException::class);
+        $this->expectException(ModelNotFoundException::class);
 
         // Action
         $actualArtStyle = $this->service->getArtStyle($givenArtTypeId, $givenArtStyleId);

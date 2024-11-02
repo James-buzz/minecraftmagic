@@ -6,53 +6,72 @@ namespace App\Services;
 
 use App\Contracts\ArtRepositoryInterface;
 use App\Contracts\GenerationCreationServiceInterface;
-use App\Contracts\GenerationRepositoryInterface;
+use App\Models\Generation;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-readonly class GenerationCreationService implements GenerationCreationServiceInterface
+class GenerationCreationService implements GenerationCreationServiceInterface
 {
     public function __construct(
-        protected GenerationRepositoryInterface $generationRepository,
         protected ArtRepositoryInterface $artRepository,
     ) {}
 
-    public function createGeneration(
-        int $userId,
-        string $artTypeId,
-        string $artStyleId,
-        array $metadata
-    ): string {
-        return $this->generationRepository->create($userId, $artTypeId, $artStyleId, $metadata);
+    public function createGeneration(int $userId, string $artTypeId, string $artStyleId, array $metadata): string
+    {
+        $record = Generation::create([
+            'user_id' => $userId,
+            'art_type' => $artTypeId,
+            'art_style' => $artStyleId,
+            'metadata' => $metadata,
+        ]);
+
+        return $record->id;
     }
 
-    public function setGenerationAsProcessing(string $generationId): void
+    public function updateStatusAsProcessing(string $generationId): void
     {
-        $this->generationRepository->update($generationId, ['status' => 'processing']);
-    }
+        $generation = Generation::find($generationId);
 
-    public function setGenerationAsFailed(string $generationId, ?string $failedMessage): void
-    {
-        $data = ['status' => 'failed'];
-
-        if ($failedMessage !== null) {
-            $data['failed_reason'] = $failedMessage;
+        if (! $generation) {
+            throw new ModelNotFoundException("Generation with ID {$generationId} not found");
         }
 
-        $this->generationRepository->update($generationId, $data);
+        $generation->update(['status' => 'processing']);
     }
 
-    public function setGenerationAsCompleted(
+    public function updateStatusAsFailed(string $generationId, ?string $failedMessage): void
+    {
+        $generation = Generation::find($generationId);
+
+        if (! $generation) {
+            throw new ModelNotFoundException("Generation with ID {$generationId} not found");
+        }
+
+        $modelData = ['status' => 'failed'];
+
+        if ($failedMessage !== null) {
+            $modelData['failed_reason'] = $failedMessage;
+        }
+
+        Generation::findOrFail($generationId)
+            ->update($modelData);
+    }
+
+    public function updateStatusAsCompleted(
         string $generationId,
         string $filePath,
         string $thumbnailFilePath
     ): void {
-        $this->generationRepository->update(
-            $generationId,
-            [
-                'status' => 'completed',
-                'file_path' => $filePath,
-                'thumbnail_file_path' => $thumbnailFilePath,
-            ]
-        );
+        $generation = Generation::find($generationId);
+
+        if (! $generation) {
+            throw new ModelNotFoundException("Generation with ID {$generationId} not found");
+        }
+
+        $generation->update([
+            'status' => 'completed',
+            'file_path' => $filePath,
+            'thumbnail_file_path' => $thumbnailFilePath,
+        ]);
     }
 
     public function getGenerationFilePath(string $userId, string $generationId): string

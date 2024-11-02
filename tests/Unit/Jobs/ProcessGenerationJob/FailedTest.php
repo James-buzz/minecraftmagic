@@ -2,30 +2,96 @@
 
 namespace Tests\Unit\Jobs\ProcessGenerationJob;
 
-use App\Contracts\GenerationCreationServiceInterface;
-use Mockery\MockInterface;
+use App\Jobs\ProcessGenerationJob;
+use App\Models\Generation;
+use App\Models\User;
+use Illuminate\Support\Str;
+use OpenAI\Exceptions\ErrorException;
 
 class FailedTest extends BaseProcessGenerationJob
 {
-    public function testWhenJobIsFailedThenUpdateGeneration(): void
+    public function testWhenJobIsFailedWithGenericExceptionThenUpdateGenerationWithoutMessage(): void
     {
         // Given
-        $givenGenerationId = $this->generationId;
-        $givenFailedMessage = null;
+        $givenGenerationId = Str::ulid();
+        $givenUserId = 3;
+        $givenGenerationStatus = 'processing';
 
         // Precondition
+        $user = User::factory()->create([
+            'id' => $givenUserId,
+        ]);
+
+        Generation::factory()->create([
+            'id' => $givenGenerationId,
+            'user_id' => $givenUserId,
+            'status' => $givenGenerationStatus,
+        ]);
+
         $preconditionThrowable = new \Exception('test');
 
-        // Mock
-        /** @var MockInterface|GenerationCreationServiceInterface $mockGenerationCreationService */
-        $mockGenerationCreationService = $this->mock(GenerationCreationServiceInterface::class);
-        $mockGenerationCreationService->shouldReceive('setGenerationAsFailed')
-            ->with($givenGenerationId, $givenFailedMessage)
-            ->once();
-
         // Action
-        $this->job->failed(
+        $job = new ProcessGenerationJob(
+            $givenUserId,
+            $givenGenerationId
+        );
+
+        $job->failed(
             $preconditionThrowable
         );
+
+        // Assert
+        $this->assertDatabaseHas('generations', [
+            'id' => $givenGenerationId,
+            'status' => 'failed',
+            'failed_reason' => null,
+        ]);
+    }
+
+    public function testWhenJobIsFailedWithOpenAIExceptionThenUpdateGenerationWithMessage(): void
+    {
+        // Given
+        $givenGenerationId = Str::ulid();
+        $givenUserId = 3;
+        $givenGenerationStatus = 'processing';
+        $givenExceptionMessage = 'This has failed';
+
+        // Precondition
+        $user = User::factory()->create([
+            'id' => $givenUserId,
+        ]);
+
+        Generation::factory()->create([
+            'id' => $givenGenerationId,
+            'user_id' => $givenUserId,
+            'status' => $givenGenerationStatus,
+        ]);
+
+        $preconditionThrowable = new ErrorException([
+            'message' => $givenExceptionMessage,
+        ]);
+
+        // Action
+        $job = new ProcessGenerationJob(
+            $givenUserId,
+            $givenGenerationId
+        );
+
+        // Expected
+        $expectedGenerationId = $givenGenerationId;
+        $expectedStatus = 'failed';
+        $expectedFailedReason = $givenExceptionMessage;
+
+        // Action
+        $job->failed(
+            $preconditionThrowable
+        );
+
+        // Assert
+        $this->assertDatabaseHas('generations', [
+            'id' => $expectedGenerationId,
+            'status' => $expectedStatus,
+            'failed_reason' => $expectedFailedReason,
+        ]);
     }
 }

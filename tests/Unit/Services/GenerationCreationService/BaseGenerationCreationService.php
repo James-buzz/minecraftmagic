@@ -3,7 +3,6 @@
 namespace Tests\Unit\Services\GenerationCreationService;
 
 use App\Contracts\ArtRepositoryInterface;
-use App\Contracts\GenerationRepositoryInterface;
 use App\Services\GenerationCreationService;
 use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\Small;
@@ -16,9 +15,6 @@ use Tests\Feature\FeatureTestCase;
 {
     protected GenerationCreationService $service;
 
-    /** @var MockInterface&GenerationRepositoryInterface */
-    protected MockInterface $generationRepository;
-
     /** @var MockInterface&ArtRepositoryInterface */
     protected MockInterface $artRepository;
 
@@ -26,11 +22,9 @@ use Tests\Feature\FeatureTestCase;
     {
         parent::setUp();
 
-        $this->generationRepository = $this->mock(GenerationRepositoryInterface::class);
         $this->artRepository = $this->mock(ArtRepositoryInterface::class);
 
         $this->service = new GenerationCreationService(
-            $this->generationRepository,
             $this->artRepository
         );
     }

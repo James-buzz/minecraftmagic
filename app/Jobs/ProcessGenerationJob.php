@@ -7,7 +7,6 @@ use App\Contracts\GenerationRetrievalServiceInterface;
 use App\Events\Generation\GenerationCompleted;
 use App\Events\Generation\GenerationFailed;
 use App\Events\Generation\GenerationStarted;
-use App\Exceptions\GenerationNotFoundException;
 use App\Helpers\TimeFormatter;
 use App\Pipes\ProcessGenerationJob\CleanupLocal;
 use App\Pipes\ProcessGenerationJob\DownloadLocal;
@@ -46,8 +45,6 @@ class ProcessGenerationJob implements ShouldQueue
 
     /**
      * Execute the job.
-     *
-     * @throws GenerationNotFoundException
      */
     public function handle(
         GenerationRetrievalServiceInterface $generationRetrievalService,
@@ -56,7 +53,7 @@ class ProcessGenerationJob implements ShouldQueue
     ): void {
         $this->startTime = microtime(true);
 
-        $generationCreationService->setGenerationAsProcessing($this->generationID);
+        $generationCreationService->updateStatusAsProcessing($this->generationID);
 
         $generation = $generationRetrievalService->getGeneration($this->userId, $this->generationID);
 
@@ -89,7 +86,7 @@ class ProcessGenerationJob implements ShouldQueue
                 $contextFilePath = $context['result']['file_path'];
                 $contextThumbnailPath = $context['result']['thumbnail_file_path'];
 
-                $generationCreationService->setGenerationAsCompleted(
+                $generationCreationService->updateStatusAsCompleted(
                     $contextGenerationId,
                     $contextFilePath,
                     $contextThumbnailPath
@@ -121,7 +118,7 @@ class ProcessGenerationJob implements ShouldQueue
             $failedMessage = substr($exception->getMessage(), 0, 255);
         }
 
-        $generationCreationService->setGenerationAsFailed(
+        $generationCreationService->updateStatusAsFailed(
             $this->generationID,
             $failedMessage
         );

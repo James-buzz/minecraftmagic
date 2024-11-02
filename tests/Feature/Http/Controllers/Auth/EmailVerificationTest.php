@@ -1,6 +1,6 @@
 <?php
 
-namespace Feature\Http\Controllers\Auth;
+namespace Tests\Feature\Http\Controllers\Auth;
 
 use App\Models\User;
 use Illuminate\Auth\Events\Verified;

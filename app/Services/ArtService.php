@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Contracts\ArtRepositoryInterface;
 use App\Contracts\ArtServiceInterface;
-use App\Exceptions\ArtStyleNotFoundException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 readonly class ArtService implements ArtServiceInterface
 {
@@ -15,7 +15,7 @@ readonly class ArtService implements ArtServiceInterface
         $style = $this->artRepository->getStyle($artTypeId, $artStyleId);
 
         if ($style === null) {
-            throw new ArtStyleNotFoundException($artTypeId, $artStyleId);
+            throw new ModelNotFoundException("Art style {$artStyleId} not found");
         }
 
         return $style;

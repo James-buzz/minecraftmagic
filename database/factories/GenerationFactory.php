@@ -25,6 +25,7 @@ class GenerationFactory extends Factory
             'metadata' => [],
             'file_path' => $this->faker->optional()->filePath(),
             'thumbnail_file_path' => $this->faker->optional()->filePath(),
+            'failed_reason' => null,
         ];
     }
 

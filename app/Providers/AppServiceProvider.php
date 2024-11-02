@@ -14,10 +14,9 @@ class AppServiceProvider extends ServiceProvider
     {
         // Repositories
         $this->app->singleton(\App\Contracts\ArtRepositoryInterface::class, \App\Repositories\ArtRepository::class);
-        $this->app->singleton(\App\Contracts\ArtServiceInterface::class, \App\Services\ArtService::class);
-        $this->app->singleton(\App\Contracts\GenerationRepositoryInterface::class, \App\Repositories\GenerationRepository::class);
 
         // Services
+        $this->app->singleton(\App\Contracts\ArtServiceInterface::class, \App\Services\ArtService::class);
         $this->app->singleton(\App\Contracts\GenerationRetrievalServiceInterface::class, \App\Services\GenerationRetrievalService::class);
         $this->app->singleton(\App\Contracts\GenerationCreationServiceInterface::class, \App\Services\GenerationCreationService::class);
     }

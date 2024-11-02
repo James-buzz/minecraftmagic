@@ -2,39 +2,33 @@
 
 namespace Tests\Unit\Services\GenerationCreationService;
 
-use App\Exceptions\ArtStyleNotFoundException;
-use App\Exceptions\UserNotFoundException;
+use App\Models\User;
 
 class CreateGenerationTest extends BaseGenerationCreationService
 {
-    /**
-     * @throws ArtStyleNotFoundException
-     * @throws UserNotFoundException
-     */
     public function testWhenDataThenSuccess(): void
     {
         // Given
-        $givenUserId = 1324342;
-        $givenArtTypeId = 'art_type_id';
-        $givenArtStyleId = 'art_style_id';
-        $givenMetadata = [
-            'key' => 'value',
-        ];
-        $givenGenerationId = 'generation_id';
+        $givenUserId = 133;
+        $givenArtTypeId = 'server_logo';
+        $givenArtStyleId = 'dragons-lair';
 
-        // Mock
-        $this->generationRepository->shouldReceive('create')
-            ->once()
-            ->with($givenUserId, $givenArtTypeId, $givenArtStyleId, $givenMetadata)
-            ->andReturn($givenGenerationId);
-
-        // Expected
-        $expectedGenerationId = $givenGenerationId;
+        // Precondition
+        User::factory()->create(['id' => $givenUserId]);
 
         // Action
-        $this->service->createGeneration($givenUserId, $givenArtTypeId, $givenArtStyleId, $givenMetadata);
+        $this->service->createGeneration(
+            $givenUserId,
+            $givenArtTypeId,
+            $givenArtStyleId,
+            []
+        );
 
         // Assert
-        $this->assertEquals($expectedGenerationId, $givenGenerationId);
+        $this->assertDatabaseHas('generations', [
+            'user_id' => $givenUserId,
+            'art_type' => $givenArtTypeId,
+            'art_style' => $givenArtStyleId,
+        ]);
     }
 }

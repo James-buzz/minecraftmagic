@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Contracts;
 
-use App\Exceptions\ArtStyleNotFoundException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 interface ArtServiceInterface
 {
@@ -13,7 +13,7 @@ interface ArtServiceInterface
      *
      * @return array{id: string, name: string, description: string, prompt: string}
      *
-     * @throws ArtStyleNotFoundException
+     * @throws ModelNotFoundException
      */
     public function getArtStyle(string $artTypeId, string $artStyleId): array;
 

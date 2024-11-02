@@ -4,9 +4,9 @@ namespace Tests\Unit\Services\GenerationRetrievalService;
 
 use App\Models\Generation;
 use App\Models\User;
+use DateTimeInterface;
 use Illuminate\Support\Facades\Storage;
 use Mockery as m;
-use DateTimeInterface;
 
 class GetPaginatedGenerationsTest extends BaseGenerationRetrievalService
 {

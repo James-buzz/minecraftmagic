@@ -35,6 +35,10 @@ Minecraftmagic is a work in progress, but I hope that you find it useful for you
     - Prometheus metrics
     - Logging extensively (with Pail)
 
+## TODO
+
+- Update auth tests
+
 ## Contributing
 
 If you have a suggestion that would make this better, please fork the repo and create a pull request.

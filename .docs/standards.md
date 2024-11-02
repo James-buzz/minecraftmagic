@@ -52,12 +52,3 @@ class UserAlreadyExistsException extends BusinessException
     protected $message = 'User already exists';
 }
 ```
-
-## Testing Strategy
-- Repositories are designed to be easily mockable in unit tests
-- Service layer tests use mocked repositories
-- Feature tests cover full HTTP request/response lifecycle
-- Unit tests typically mock all dependencies except for Repository unit tests which use an in-memory SQLite database
-
-## HTTP Response Standards
-- Utilise status codes over message in responses where possible

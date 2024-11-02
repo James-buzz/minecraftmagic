@@ -1,51 +1,15 @@
 # Standards
 
 ## Architecture Overview
-- Following a layered architecture: Controllers → Services → Repositories → Models
-- Clear separation of concerns between data access, business logic, and presentation
-- Consistent error handling and response patterns across the application
-
-## Repository Layer
-- Repositories abstract all database operations and data access
-- Return `null` when entities are not found rather than throwing exceptions
-- All database queries are encapsulated within repository methods
-- Methods should have clear, descriptive names indicating their purpose
-- Example:
-```php
-/**
- * Find a user by id
- * 
- * @param int $id
- * @return array{id: int, name: string}|null
- */
-public function findById(int $id): array
-{
-    return $this->model->find($id);
-}
-```
+- Following a layered architecture: Controllers → Services → Models
+- Clear separation of concerns between business logic and presentation.
+- Chose to not go with Repository pattern as it is not necessary for such a small project.
 
 ## Service Layer
 - Contains all business logic and orchestration
 - Throws custom exceptions for business rule violations or unexpected scenarios
 - Custom exceptions should be descriptive and meaningful
 - Handles complex operations involving multiple repositories
-- Example:
-```php
-/**
- * Create a new user
- * 
- * @param array<string, mixed> $data 
- * @return int
- */
-public function createUser(array $data): int
-{
-    if ($this->userRepository->findByEmail($data['email'])) {
-        throw new UserAlreadyExistsException('A user with this email already exists');
-    }
-    
-    return $this->userRepository->create($data);
-}
-```
 
 ## Controller Layer (Presentation)
 - Responsible for HTTP request/response handling

@@ -4,6 +4,9 @@ namespace Tests\Unit\Services\GenerationRetrievalService;
 
 use App\Models\Generation;
 use App\Models\User;
+use Illuminate\Support\Facades\Storage;
+use Mockery as m;
+use DateTimeInterface;
 
 class GetPaginatedGenerationsTest extends BaseGenerationRetrievalService
 {
@@ -17,6 +20,7 @@ class GetPaginatedGenerationsTest extends BaseGenerationRetrievalService
         $givenPerPage = 9;
         $givenFilePath = 'file/to/path';
         $givenThumbnailFilePath = 'thumbnail/file/to/path';
+        $givenTemporaryURL = 'temporary/url';
         $givenCount = 50;
 
         // Precondition
@@ -48,6 +52,14 @@ class GetPaginatedGenerationsTest extends BaseGenerationRetrievalService
                 'name' => 'Dragons Lair',
                 'description' => 'A fiery dragon lair',
             ]);
+
+        Storage::shouldReceive('disk')
+            ->with('s3')
+            ->andReturnSelf();
+
+        Storage::shouldReceive('temporaryUrl')
+            ->with($givenThumbnailFilePath, m::type(DateTimeInterface::class))
+            ->andReturn($givenTemporaryURL);
 
         // Expected
         $expectedCurrentPage = $givenPage;

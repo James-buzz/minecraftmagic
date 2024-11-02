@@ -23,8 +23,8 @@ readonly class ArtRepository implements ArtRepositoryInterface
                 $jsonContent = File::get($jsonPath);
 
                 return json_decode($jsonContent, true, flags: JSON_THROW_ON_ERROR) ?? [];
-            } catch (\Exception $e) {
-                report($e);
+            } catch (\Exception $exception) {
+                report($exception);
 
                 return [];
             }

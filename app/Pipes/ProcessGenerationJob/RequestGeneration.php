@@ -65,6 +65,7 @@ readonly class RequestGeneration
             if ($value === null) {
                 continue;
             }
+
             $prompt = str_replace("<$key>", $value, $prompt);
         }
 

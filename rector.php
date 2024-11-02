@@ -13,4 +13,10 @@ return RectorConfig::configure()
     ->withSets([
         LaravelLevelSetList::UP_TO_LARAVEL_110,
         LaravelSetList::LARAVEL_CODE_QUALITY,
+
+    ])->withRules([
+        \Rector\CodingStyle\Rector\Use_\SeparateMultiUseImportsRector::class,
+        \Rector\CodingStyle\Rector\Stmt\RemoveUselessAliasInUseStatementRector::class,
+        \Rector\CodingStyle\Rector\Stmt\NewlineAfterStatementRector::class,
+        \Rector\CodingStyle\Rector\Catch_\CatchExceptionNameMatchingTypeRector::class,
     ]);

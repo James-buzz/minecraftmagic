@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Pipes\ProcessGenerationJob;
 
 use Closure;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 readonly class CleanupLocal
@@ -15,6 +16,10 @@ readonly class CleanupLocal
 
         $contextFilePath = $data['result']['file_path'];
         $contextThumbnailFilePath = $data['result']['thumbnail_file_path'];
+
+        Log::info('Queue cleaning up local files', [
+            'generation_id' => $data['generation']['id'],
+        ]);
 
         Storage::disk('local')
             ->delete($contextFilePath);

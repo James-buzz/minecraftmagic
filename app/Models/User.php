@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+/**
+ * @property bool $is_admin
+ */
 class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<GenerationFactory> */
@@ -40,6 +43,14 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
     /**
+     * Check if the user is an admin
+     */
+    public function isAdmin(): bool
+    {
+        return (bool) $this->is_admin;
+    }
+
+    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
@@ -49,6 +60,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_admin' => 'bool',
         ];
     }
 }

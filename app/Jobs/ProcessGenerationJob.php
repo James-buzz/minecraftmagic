@@ -8,6 +8,7 @@ use App\Events\Generation\GenerationCompleted;
 use App\Events\Generation\GenerationFailed;
 use App\Events\Generation\GenerationStarted;
 use App\Helpers\TimeFormatter;
+use App\Jobs\Middleware\OpenAIRateLimitedMiddleware;
 use App\Pipes\ProcessGenerationJob\CleanupLocal;
 use App\Pipes\ProcessGenerationJob\DownloadLocal;
 use App\Pipes\ProcessGenerationJob\RequestGeneration;
@@ -26,8 +27,15 @@ class ProcessGenerationJob implements ShouldQueue
 
     /**
      * @var int The number of times the job may be attempted.
+     *
+     * This is set to 0 due to the job being rate limited.
      */
-    public int $tries = 2;
+    public int $tries = 0;
+
+    /**
+     * @var int The max exceptions that can be thrown before failing the job.
+     */
+    public int $maxExceptions = 2;
 
     private float $startTime;
 
@@ -137,5 +145,17 @@ class ProcessGenerationJob implements ShouldQueue
             'duration' => TimeFormatter::formatPeriod(microtime(true), $this->startTime ?? microtime(true)),
             'exception' => $exception,
         ]);
+    }
+
+    /**
+     * Get the middleware the job should pass through.
+     *
+     * @return array<mixed>
+     */
+    public function middleware(): array
+    {
+        return [
+            new OpenAIRateLimitedMiddleware,
+        ];
     }
 }

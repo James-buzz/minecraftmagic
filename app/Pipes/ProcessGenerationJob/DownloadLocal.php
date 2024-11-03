@@ -7,6 +7,7 @@ namespace App\Pipes\ProcessGenerationJob;
 use App\Contracts\GenerationCreationServiceInterface;
 use Closure;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 readonly class DownloadLocal
@@ -23,6 +24,8 @@ readonly class DownloadLocal
         $contextUserId = $data['user'];
         $contextGenerationId = $data['generation']['id'];
         $contextUrl = $data['url'];
+
+        Log::info('Queue downloading generation image', ['generation_id' => $contextGenerationId, 'url' => $contextUrl]);
 
         $filePath = $this->creationService->getGenerationFilePath($contextUserId, $contextGenerationId);
 

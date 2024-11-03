@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Concerns\HasFeedback;
 use Database\Factories\GenerationFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
@@ -42,6 +43,7 @@ class Generation extends Model
     /** @use HasFactory<GenerationFactory> */
     use HasFactory;
 
+    use HasFeedback;
     use HasUlids;
     use SoftDeletes;
 

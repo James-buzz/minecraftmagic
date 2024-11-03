@@ -2,8 +2,9 @@ import PrimaryButton from '@/components/primary-button';
 import AuthenticatedLayout from '@/layouts/authenticated-layout';
 import { Menu, Transition } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
-import { Head, Link } from '@inertiajs/react';
-import { Fragment } from 'react';
+import {Head, Link, router} from '@inertiajs/react';
+import React, {Fragment, useState} from 'react';
+import FeedbackDialog from "@/components/feedback-dialog";
 
 interface Generation {
     id: string;
@@ -29,7 +30,19 @@ interface DashboardProps {
         data: Generation[];
         meta: PaginationMeta;
     };
+    flash: {
+        success?: string;
+        error?: string;
+    }
 }
+
+const emojis = [
+    { emoji: '😍', rating: 5 },
+    { emoji: '🙂', rating: 4 },
+    { emoji: '😐', rating: 3 },
+    { emoji: '😕', rating: 2 },
+    { emoji: '😢', rating: 1 }
+];
 
 const Pagination = ({ meta }: { meta: PaginationMeta }) => {
     const { current_page, last_page } = meta;
@@ -136,6 +149,7 @@ const ProfileMenu = ({ name }: { name: string }) => {
 export default function Dashboard({
     auth,
     paginatedGenerations,
+    flash,
 }: DashboardProps) {
     const generations = paginatedGenerations.data;
     const isNewUser = generations.length === 0;
@@ -158,6 +172,16 @@ export default function Dashboard({
             .catch((error) => {
                 console.error('Error downloading file:', error);
             });
+    };
+
+    const [feedbackDialogOpen, setFeedbackDialogOpen] = useState(false);
+    const [selectedGenerationId, setSelectedGenerationId] = useState<string>('');
+
+    const handleFeedbackSubmit = ({ emoji, comment }: { emoji: string; comment: string }) => {
+        router.post(route('feedback.store', selectedGenerationId), {
+            comment,
+            rating: emojis.find((e) => e.emoji === emoji)?.rating,
+        });
     };
 
     return (
@@ -204,6 +228,12 @@ export default function Dashboard({
                         </div>
                     )}
 
+                    {flash.success && (
+                        <div className="rounded-lg bg-green-800 p-4 mb-6">
+                            {flash.success}
+                        </div>
+                    )}
+
                     <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
                         {generations.map((generation: Generation) => (
                             <div
@@ -230,6 +260,22 @@ export default function Dashboard({
                                     >
                                         Download HD
                                     </PrimaryButton>
+                                    <button
+                                        onClick={() => {
+                                            setSelectedGenerationId(generation.id);
+                                            setFeedbackDialogOpen(true);
+                                        }}
+                                        className="rounded-md bg-gray-700 px-3 py-2 text-xs text-gray-200 hover:bg-gray-600"
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22"
+                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+                                             strokeLinecap="round" strokeLinejoin="round"
+                                             className="lucide lucide-message-square-warning">
+                                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                                            <path d="M12 7v2"/>
+                                            <path d="M12 13h.01"/>
+                                        </svg>
+                                    </button>
                                 </div>
                             </div>
                         ))}
@@ -238,16 +284,21 @@ export default function Dashboard({
                     {generations.length === 0 && (
                         <div className="rounded-lg bg-gray-800 p-6 text-center">
                             <p className="text-lg">
-                                You haven't created any generations yet.
+                            You haven't created any generations yet.
                             </p>
                         </div>
                     )}
 
                     {generations.length > 0 && (
-                        <Pagination meta={paginatedGenerations.meta} />
+                        <Pagination meta={paginatedGenerations.meta}/>
                     )}
                 </main>
             </div>
+            <FeedbackDialog
+                isOpen={feedbackDialogOpen}
+                onClose={() => setFeedbackDialogOpen(false)}
+                onSubmit={handleFeedbackSubmit}
+            />
         </AuthenticatedLayout>
     );
 }

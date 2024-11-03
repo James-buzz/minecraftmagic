@@ -7,7 +7,6 @@ namespace App\Pipes\ProcessGenerationJob;
 use App\Contracts\ArtServiceInterface;
 use Closure;
 use Illuminate\Support\Facades\Log;
-use OpenAI\Exceptions\ErrorException;
 use OpenAI\Laravel\Facades\OpenAI;
 
 readonly class RequestGeneration
@@ -40,23 +39,14 @@ readonly class RequestGeneration
      */
     private function generateImage(string $prompt, array $metadata): string
     {
-        try {
-            $response = OpenAI::images()->create([
-                'model' => 'dall-e-3',
-                'prompt' => $prompt,
-                'size' => $metadata['image_size'],
-                'quality' => $metadata['image_quality'],
-                'n' => 1,
-                'response_format' => 'url',
-            ]);
-        } catch (ErrorException $e) {
-            Log::error('Failed to generate image', [
-                'message' => $e->getMessage(),
-                'code' => $e->getCode(),
-                'type' => $e->getErrorType(),
-            ]);
-            throw $e;
-        }
+        $response = OpenAI::images()->create([
+            'model' => 'dall-e-3',
+            'prompt' => $prompt,
+            'size' => $metadata['image_size'],
+            'quality' => $metadata['image_quality'],
+            'n' => 1,
+            'response_format' => 'url',
+        ]);
 
         $meta = $response->meta();
 

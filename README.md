@@ -18,26 +18,31 @@ Minecraftmagic is a work in progress, but I hope that you find it useful for you
 - 💻 [Getting Started](.docs/getting-started.md)
 - 📚 [Standards](.docs/standards.md)
 
+Here's the improved version with clearer descriptions and emojis:
+
 ## Features
-- **Code Quality & Analysis**
-    - Laravel Pint for PHP code style enforcement
-    - PHPStan for static code analysis
-    - Rector for automated code refactoring and upgrades
-- **Testing**
-    - Comprehensive unit and feature tests
-    - Aiming for 100% code coverage
-    - Automated testing via GitHub Actions
-- **Architecture**
-    - Service Layer pattern implementation
-    - Repository pattern for data access abstraction
-    - Separation of concerns
-- **Observability**
-    - Prometheus metrics
-    - Logging extensively (with Pail)
+
+- 📊 Observability - Monitor application metrics and performance with [Prometheus](https://prometheus.io/)
+
+- ⚡ Code Analysis - Ensure code quality and catch potential errors with [PHPStan](https://phpstan.org/)
+
+- 🐛 Debug Tools - Enhance application logging locally with [Laravel Pail](https://github.com/laravel/pail)
+
+- 📈 Code Coverage - Display test coverage status using [Custom Github Action](.github/workflows/update-coverage-reports.yml)
+
+- 🤖 Automated Testing - Validate pull requests with comprehensive checks via [Custom Github Action](.github/workflows/php-run-tests.yml)
+
+- 🚨 Error Monitoring - Track and manage production errors with [Sentry](https://sentry.io/)
+
+- ☁️ Cloud Storage - Handle file storage efficiently using [Cloudflare R2](https://www.cloudflare.com/r2/) (S3 compatible)
+
+- 📧 Email Service - Send transactional emails reliably through [Resend](https://resend.io/)
 
 ## TODO
 
-- Update auth tests
+- [ ] Improve test coverage
+- [ ] Add more features
+- [ ] Allow deletion of generated images
 
 ## Contributing
 

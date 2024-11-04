@@ -14,9 +14,6 @@ The focus later shifted towards demonstrating Laravel best practices through a c
 
 Minecraftmagic is a work in progress, but I hope that you find it useful for your learning.
 
-## Preview
-<img src="./.docs/preview.gif" width="400" alt="Minecraftmagic Preview"/>
-
 ## Table of Contents
 - 💻 [Getting Started](.docs/getting-started.md)
 - 📚 [Standards](.docs/standards.md)
@@ -44,6 +41,9 @@ Minecraftmagic is a work in progress, but I hope that you find it useful for you
 - [ ] Improve test coverage
 - [ ] Add more features
 - [ ] Allow deletion of generated images
+
+## Preview
+<img src="./.docs/preview.gif" width="400" alt="Minecraftmagic Preview"/>
 
 ## Contributing
 

@@ -11,12 +11,9 @@ class ShowTest extends BaseDownloadController
     public function testWhenGenerationThenDownloadUrl(): void
     {
         // Given
-        $givenUserId = 101;
-
         $givenOriginalFilePath = 'original_file.jpg';
         $givenOriginalFileContents = 'some_random_contents';
 
-        $givenGenerationId = 99;
         $givenGenerationStatus = 'completed';
         $givenGenerationFilePath = 'some_random_file_path';
 
@@ -24,20 +21,17 @@ class ShowTest extends BaseDownloadController
         Storage::disk('s3')->put($givenOriginalFilePath, $givenOriginalFileContents);
         Storage::disk('s3')->exists($givenOriginalFilePath);
 
-        $preconditionUser = User::factory()->create([
-            'id' => $givenUserId,
-        ]);
+        $preconditionUser = User::factory()->create();
 
-        Generation::factory()->create([
-            'id' => $givenGenerationId,
-            'user_id' => $givenUserId,
+        $preconditionGeneration = Generation::factory()->create([
+            'user_id' => $preconditionUser->id,
             'status' => $givenGenerationStatus,
             'file_path' => $givenGenerationFilePath,
         ]);
 
         // Action
         $actualJson = $this->actingAs($preconditionUser)
-            ->getJson(route($this->route, ['id' => $givenGenerationId]));
+            ->getJson(route($this->route, ['generation' => $preconditionGeneration->id]));
 
         // Assert
         $actualJson->assertOk();

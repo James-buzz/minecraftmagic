@@ -17,7 +17,7 @@ class UpdateStatusAsCompletedTest extends BaseGenerationCreationService
         $givenStatus = 'completed';
 
         // Precondition
-        Generation::factory()->create([
+        $preconditionGeneration = Generation::factory()->create([
             'id' => $givenGenerationId,
             'status' => $givenPrevStatus,
         ]);
@@ -29,7 +29,7 @@ class UpdateStatusAsCompletedTest extends BaseGenerationCreationService
         $expectedThumbnailFilePath = $givenThumbnailFilePath;
 
         // Action
-        $this->service->updateStatusAsCompleted($givenGenerationId, $givenFilePath, $givenThumbnailFilePath);
+        $this->service->updateStatusAsCompleted($preconditionGeneration, $givenFilePath, $givenThumbnailFilePath);
 
         // Assert
         $this->assertDatabaseHas('generations', [

@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Services\ArtService;
 
+use App\Models\ArtStyle;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class GetArtStyleTest extends BaseArtService
@@ -19,12 +20,12 @@ class GetArtStyleTest extends BaseArtService
         $this->repository->shouldReceive('getStyle')
             ->once()
             ->with($givenArtTypeId, $givenArtStyleId)
-            ->andReturn([
-                'id' => $givenArtStyleId,
-                'name' => $givenArtStyleName,
-                'description' => $givenArtStyleDescription,
-                'prompt' => $givenArtStylePrompt,
-            ]);
+            ->andReturn(new ArtStyle(
+                $givenArtStyleId,
+                $givenArtStyleName,
+                $givenArtStyleDescription,
+                $givenArtStylePrompt
+            ));
 
         // Expected
         $expectedArtStyleId = $givenArtStyleId;
@@ -36,10 +37,10 @@ class GetArtStyleTest extends BaseArtService
         $actualArtStyle = $this->service->getArtStyle($givenArtTypeId, $givenArtStyleId);
 
         // Assert
-        $this->assertEquals($expectedArtStyleId, $actualArtStyle['id']);
-        $this->assertEquals($expectedArtStyleName, $actualArtStyle['name']);
-        $this->assertEquals($expectedArtStyleDescription, $actualArtStyle['description']);
-        $this->assertEquals($expectedArtStylePrompt, $actualArtStyle['prompt']);
+        $this->assertEquals($expectedArtStyleId, $actualArtStyle->id);
+        $this->assertEquals($expectedArtStyleName, $actualArtStyle->name);
+        $this->assertEquals($expectedArtStyleDescription, $actualArtStyle->description);
+        $this->assertEquals($expectedArtStylePrompt, $actualArtStyle->prompt);
     }
 
     public function testWhenArtStyleNotFoundThenFail(): void

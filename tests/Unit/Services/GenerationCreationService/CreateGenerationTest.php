@@ -2,6 +2,8 @@
 
 namespace Tests\Unit\Services\GenerationCreationService;
 
+use App\Models\ArtStyle;
+use App\Models\ArtType;
 use App\Models\User;
 
 class CreateGenerationTest extends BaseGenerationCreationService
@@ -10,25 +12,38 @@ class CreateGenerationTest extends BaseGenerationCreationService
     {
         // Given
         $givenUserId = 133;
-        $givenArtTypeId = 'server_logo';
-        $givenArtStyleId = 'dragons-lair';
+        $givenArtType = new ArtType(
+            'dragons',
+            'Dragons',
+        );
+        $givenArtStyle = new ArtStyle(
+            'dragons_styles',
+            'Dragons',
+            'Dragon style',
+            'Draw a dragon',
+        );
 
         // Precondition
-        User::factory()->create(['id' => $givenUserId]);
+        $preconditionUser = User::factory()->create(['id' => $givenUserId]);
+
+        // Expected
+        $expectedUserId = $givenUserId;
+        $expectedArtTypeId = $givenArtType->id;
+        $expectedArtStyleId = $givenArtStyle->id;
 
         // Action
         $this->service->createGeneration(
-            $givenUserId,
-            $givenArtTypeId,
-            $givenArtStyleId,
+            $preconditionUser,
+            $givenArtType,
+            $givenArtStyle,
             []
         );
 
         // Assert
         $this->assertDatabaseHas('generations', [
-            'user_id' => $givenUserId,
-            'art_type' => $givenArtTypeId,
-            'art_style' => $givenArtStyleId,
+            'user_id' => $expectedUserId,
+            'art_type' => $expectedArtTypeId,
+            'art_style' => $expectedArtStyleId,
         ]);
     }
 }

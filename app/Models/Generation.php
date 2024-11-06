@@ -26,7 +26,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Pagination\LengthAwarePaginator paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
  *
  * @property string $id
- * @property string $user_id
+ * @property int $user_id
  * @property string $status
  * @property string $art_type
  * @property string $art_style
@@ -58,6 +58,10 @@ class Generation extends Model
         'failed_reason',
     ];
 
+    protected $casts = [
+        'metadata' => 'array',
+    ];
+
     protected $hidden = [
         'user_id',
     ];
@@ -76,15 +80,5 @@ class Generation extends Model
     {
         /** @phpstan-ignore-next-line todo */
         return $this->belongsTo(User::class);
-    }
-
-    /**
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'metadata' => 'array',
-        ];
     }
 }

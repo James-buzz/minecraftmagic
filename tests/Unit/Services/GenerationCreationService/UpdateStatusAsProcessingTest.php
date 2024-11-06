@@ -10,22 +10,20 @@ class UpdateStatusAsProcessingTest extends BaseGenerationCreationService
     public function testWhenInputThenUpdate(): void
     {
         // Given
-        $givenGenerationId = Str::ulid();
         $givenPrevStatus = 'pending';
         $givenStatus = 'processing';
 
         // Precondition
-        Generation::factory()->create([
-            'id' => $givenGenerationId,
+        $preconditionGeneration = Generation::factory()->create([
             'status' => $givenPrevStatus,
         ]);
 
         // Expected
-        $expectedGenerationId = $givenGenerationId;
+        $expectedGenerationId = $preconditionGeneration->id;
         $expectedStatus = $givenStatus;
 
         // Action
-        $this->service->updateStatusAsProcessing($givenGenerationId);
+        $this->service->updateStatusAsProcessing($preconditionGeneration);
 
         // Assert
         $this->assertDatabaseHas('generations', [

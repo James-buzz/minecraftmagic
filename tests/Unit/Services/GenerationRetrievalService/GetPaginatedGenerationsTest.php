@@ -2,6 +2,8 @@
 
 namespace Tests\Unit\Services\GenerationRetrievalService;
 
+use App\Models\ArtStyle;
+use App\Models\ArtType;
 use App\Models\Generation;
 use App\Models\User;
 use DateTimeInterface;
@@ -13,9 +15,13 @@ class GetPaginatedGenerationsTest extends BaseGenerationRetrievalService
     public function testWhenFirstPageThenReturn(): void
     {
         // Given
-        $givenUserId = 101;
-        $givenArtType = 'server_logo';
-        $givenArtStyle = 'dragons-lair';
+        $givenArtTypeId = 'server_logo';
+        $givenArtTypeName = 'Server Logo';
+        $givenArtStyleId = 'dragons-lair';
+        $givenArtStyleName = 'Dragons Lair';
+        $givenArtStyleDescription = 'A fantasy theme with dragons and knights.';
+        $givenArtStylePrompt = 'A fantasy theme with dragons and knights.';
+
         $givenPage = 1;
         $givenPerPage = 9;
         $givenFilePath = 'file/to/path';
@@ -24,34 +30,35 @@ class GetPaginatedGenerationsTest extends BaseGenerationRetrievalService
         $givenCount = 50;
 
         // Precondition
-        User::factory()->create([
-            'id' => $givenUserId,
-        ]);
+        $preconditionUser = User::factory()->create();
 
         Generation::factory()
             ->count($givenCount)
             ->create([
-                'user_id' => $givenUserId,
+                'user_id' => $preconditionUser->id,
                 'status' => 'completed',
                 'file_path' => $givenFilePath,
                 'thumbnail_file_path' => $givenThumbnailFilePath,
-                'art_type' => $givenArtType,
-                'art_style' => $givenArtStyle,
+                'art_type' => $givenArtTypeId,
+                'art_style' => $givenArtStyleId,
             ]);
 
         // Mock
         $this->mockArtRepository->shouldReceive('getType')
-            ->with($givenArtType)
-            ->andReturn([
-                'name' => 'Server Logo',
-            ]);
+            ->with($givenArtTypeId)
+            ->andReturn(new ArtType(
+                $givenArtTypeId,
+                $givenArtTypeName,
+            ));
 
         $this->mockArtRepository->shouldReceive('getStyle')
-            ->with($givenArtType, $givenArtStyle)
-            ->andReturn([
-                'name' => 'Dragons Lair',
-                'description' => 'A fiery dragon lair',
-            ]);
+            ->with($givenArtTypeId, $givenArtStyleId)
+            ->andReturn(new ArtStyle(
+                $givenArtStyleId,
+                $givenArtStyleName,
+                $givenArtStyleDescription,
+                $givenArtStylePrompt,
+            ));
 
         Storage::shouldReceive('disk')
             ->with('s3')
@@ -69,7 +76,7 @@ class GetPaginatedGenerationsTest extends BaseGenerationRetrievalService
 
         // Action
         $actualPagination = $this->service->getPaginatedGenerations(
-            $givenUserId,
+            $preconditionUser,
             $givenPage,
             $givenPerPage
         );
@@ -79,5 +86,7 @@ class GetPaginatedGenerationsTest extends BaseGenerationRetrievalService
         $this->assertEquals($expectedPerPage, $actualPagination['meta']['per_page']);
         $this->assertEquals($expectedTotal, $actualPagination['meta']['total']);
         $this->assertEquals($expectedLastPage, $actualPagination['meta']['last_page']);
+
+        $this->assertCount($givenPerPage, $actualPagination['data']);
     }
 }

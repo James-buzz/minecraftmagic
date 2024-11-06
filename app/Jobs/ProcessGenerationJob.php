@@ -2,13 +2,14 @@
 
 namespace App\Jobs;
 
-use App\Contracts\GenerationCreationServiceInterface;
-use App\Contracts\GenerationRetrievalServiceInterface;
+use App\Contracts\GenerationServiceInterface;
 use App\Events\Generation\GenerationCompleted;
 use App\Events\Generation\GenerationFailed;
 use App\Events\Generation\GenerationStarted;
 use App\Helpers\TimeFormatter;
 use App\Jobs\Middleware\OpenAIRateLimitedMiddleware;
+use App\Models\Generation;
+use App\Models\User;
 use App\Pipes\ProcessGenerationJob\CleanupLocal;
 use App\Pipes\ProcessGenerationJob\DownloadLocal;
 use App\Pipes\ProcessGenerationJob\RequestGeneration;
@@ -17,13 +18,14 @@ use App\Pipes\ProcessGenerationJob\UploadToS3;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Pipeline\Pipeline;
+use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use OpenAI\Exceptions\ErrorException;
 use Throwable;
 
 class ProcessGenerationJob implements ShouldQueue
 {
-    use Queueable;
+    use Queueable, SerializesModels;
 
     /**
      * @var int The number of times the job may be attempted.
@@ -47,28 +49,25 @@ class ProcessGenerationJob implements ShouldQueue
      * Create a new job instance.
      */
     public function __construct(
-        protected readonly string $userId,
-        protected readonly string $generationID,
+        protected readonly User $user,
+        protected readonly Generation $generation,
     ) {}
 
     /**
      * Execute the job.
      */
     public function handle(
-        GenerationRetrievalServiceInterface $generationRetrievalService,
-        GenerationCreationServiceInterface $generationCreationService,
+        GenerationServiceInterface $generationCreationService,
         Pipeline $pipeline,
     ): void {
         $this->startTime = microtime(true);
 
-        $generationCreationService->updateStatusAsProcessing($this->generationID);
+        $generationCreationService->updateStatusAsProcessing($this->generation);
 
-        $generation = $generationRetrievalService->getGeneration($this->userId, $this->generationID);
+        Log::info('Queue started art generation', ['generation_id' => $this->generation->id]);
 
-        Log::info('Queue started art generation', ['generation_id' => $this->generationID]);
-
-        $this->artType = $generation['art_type'];
-        $this->artStyle = $generation['art_style'];
+        $this->artType = $this->generation->art_type;
+        $this->artStyle = $this->generation->art_style;
 
         event(new GenerationStarted(
             $this->artType,
@@ -76,8 +75,17 @@ class ProcessGenerationJob implements ShouldQueue
         ));
 
         $context = [
-            'generation' => $generation,
-            'user' => $this->userId,
+            'generation' => [
+                'id' => $this->generation->id,
+                'art_type' => $this->generation->art_type,
+                'art_style' => $this->generation->art_style,
+                'metadata' => $this->generation->metadata,
+            ],
+            'user' => [
+                'id' => $this->user->id,
+                'email' => $this->user->email,
+                'name' => $this->user->name,
+            ]
         ];
 
         $pipeline
@@ -95,7 +103,7 @@ class ProcessGenerationJob implements ShouldQueue
                 $contextThumbnailPath = $context['result']['thumbnail_file_path'];
 
                 $generationCreationService->updateStatusAsCompleted(
-                    $contextGenerationId,
+                    $this->generation,
                     $contextFilePath,
                     $contextThumbnailPath
                 );
@@ -119,17 +127,14 @@ class ProcessGenerationJob implements ShouldQueue
 
     public function failed(?Throwable $exception): void
     {
-        $generationCreationService = app(GenerationCreationServiceInterface::class);
+        $generationCreationService = app(GenerationServiceInterface::class);
 
         $failedMessage = null;
         if ($exception instanceof ErrorException) {
             $failedMessage = substr($exception->getMessage(), 0, 255);
         }
 
-        $generationCreationService->updateStatusAsFailed(
-            $this->generationID,
-            $failedMessage
-        );
+        $generationCreationService->updateStatusAsFailed($this->generation, $failedMessage);
 
         $totalDuration = microtime(true) - ($this->startTime ?? microtime(true));
 
@@ -141,7 +146,7 @@ class ProcessGenerationJob implements ShouldQueue
         ));
 
         Log::info('Queue failed art generation', [
-            'generation_id' => $this->generationID,
+            'generation_id' => $this->generation->id,
             'duration' => TimeFormatter::formatPeriod(microtime(true), $this->startTime ?? microtime(true)),
             'exception' => $exception,
         ]);

@@ -4,19 +4,23 @@ declare(strict_types=1);
 
 namespace App\Contracts;
 
+use App\Models\ArtStyle;
+use App\Models\ArtType;
+use App\Models\Generation;
+use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-interface GenerationCreationServiceInterface
+interface GenerationServiceInterface
 {
     /**
      * Get the file path for the generation.
      */
-    public function getGenerationFilePath(string $userId, string $generationId): string;
+    public function getGenerationFilePath(Generation $generation): string;
 
     /**
      * Get the thumbnail file path for the generation.
      */
-    public function getGenerationThumbnailFilePath(string $userId, string $generationId): string;
+    public function getGenerationThumbnailFilePath(Generation $generation): string;
 
     /**
      * Request and create a new generation.
@@ -24,19 +28,14 @@ interface GenerationCreationServiceInterface
      *
      * @param  array<string, mixed>  $metadata
      */
-    public function createGeneration(
-        int $userId,
-        string $artTypeId,
-        string $artStyleId,
-        array $metadata
-    ): string;
+    public function createGeneration(User $user, ArtType $artType, ArtStyle $artStyle, array $metadata): Generation;
 
     /**
      * Set the status of Generation as processing.
      *
      * @throws ModelNotFoundException
      */
-    public function updateStatusAsProcessing(string $generationId): void;
+    public function updateStatusAsProcessing(Generation $generation): void;
 
     /**
      * Set the generation as completed.
@@ -44,16 +43,12 @@ interface GenerationCreationServiceInterface
      *
      * @throws ModelNotFoundException
      */
-    public function updateStatusAsCompleted(
-        string $generationId,
-        string $filePath,
-        string $thumbnailFilePath
-    ): void;
+    public function updateStatusAsCompleted(Generation $generation, string $filePath, string $thumbnailFilePath): void;
 
     /**
      * Set the generation as failed.
      *
      * @throws ModelNotFoundException
      */
-    public function updateStatusAsFailed(string $generationId, ?string $failedMessage): void;
+    public function updateStatusAsFailed(Generation $generation, ?string $failedMessage): void;
 }

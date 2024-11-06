@@ -13,18 +13,13 @@ class FailedTest extends BaseProcessGenerationJob
     public function testWhenJobIsFailedWithGenericExceptionThenUpdateGenerationWithoutMessage(): void
     {
         // Given
-        $givenGenerationId = Str::ulid();
-        $givenUserId = 3;
         $givenGenerationStatus = 'processing';
 
         // Precondition
-        $user = User::factory()->create([
-            'id' => $givenUserId,
-        ]);
+        $preconditionUser = User::factory()->create();
 
-        Generation::factory()->create([
-            'id' => $givenGenerationId,
-            'user_id' => $givenUserId,
+        $preconditionGeneration = Generation::factory()->create([
+            'user_id' => $preconditionUser->id,
             'status' => $givenGenerationStatus,
         ]);
 
@@ -32,8 +27,8 @@ class FailedTest extends BaseProcessGenerationJob
 
         // Action
         $job = new ProcessGenerationJob(
-            $givenUserId,
-            $givenGenerationId
+            $preconditionUser,
+            $preconditionGeneration
         );
 
         $job->failed(
@@ -42,7 +37,8 @@ class FailedTest extends BaseProcessGenerationJob
 
         // Assert
         $this->assertDatabaseHas('generations', [
-            'id' => $givenGenerationId,
+            'id' => $preconditionGeneration->id,
+            'user_id' => $preconditionUser->id,
             'status' => 'failed',
             'failed_reason' => null,
         ]);
@@ -51,19 +47,14 @@ class FailedTest extends BaseProcessGenerationJob
     public function testWhenJobIsFailedWithOpenAIExceptionThenUpdateGenerationWithMessage(): void
     {
         // Given
-        $givenGenerationId = Str::ulid();
-        $givenUserId = 3;
         $givenGenerationStatus = 'processing';
         $givenExceptionMessage = 'This has failed';
 
         // Precondition
-        $user = User::factory()->create([
-            'id' => $givenUserId,
-        ]);
+        $preconditionUser = User::factory()->create();
 
-        Generation::factory()->create([
-            'id' => $givenGenerationId,
-            'user_id' => $givenUserId,
+        $preconditionGeneration = Generation::factory()->create([
+            'user_id' => $preconditionUser->id,
             'status' => $givenGenerationStatus,
         ]);
 
@@ -73,12 +64,12 @@ class FailedTest extends BaseProcessGenerationJob
 
         // Action
         $job = new ProcessGenerationJob(
-            $givenUserId,
-            $givenGenerationId
+            $preconditionUser,
+            $preconditionGeneration
         );
 
         // Expected
-        $expectedGenerationId = $givenGenerationId;
+        $expectedGenerationId = $preconditionGeneration->id;
         $expectedStatus = 'failed';
         $expectedFailedReason = $givenExceptionMessage;
 

@@ -14,8 +14,6 @@ class GetGenerationFileUrlTest extends BaseGenerationRetrievalService
     public function testWhenGenerationThenTemporaryUrl(): void
     {
         // Given
-        $givenUserId = 101;
-        $givenGenerationId = Str::ulid();
         $givenGenerationStatus = 'completed';
         $givenGenerationArtType = 'server_logo';
         $givenGenerationArtStyle = 'dragons-lair';
@@ -24,13 +22,10 @@ class GetGenerationFileUrlTest extends BaseGenerationRetrievalService
         $givenTemporaryURL = 'temporary/url';
 
         // Precondition
-        User::factory()->create([
-            'id' => $givenUserId,
-        ]);
+        $preconditionUser = User::factory()->create();
 
-        Generation::factory()->create([
-            'id' => $givenGenerationId,
-            'user_id' => $givenUserId,
+        $preconditionGeneration = Generation::factory()->create([
+            'user_id' => $preconditionUser->id,
             'status' => $givenGenerationStatus,
             'art_type' => $givenGenerationArtType,
             'art_style' => $givenGenerationArtStyle,
@@ -51,7 +46,7 @@ class GetGenerationFileUrlTest extends BaseGenerationRetrievalService
         $expectedURL = $givenTemporaryURL;
 
         // Action
-        $actualURL = $this->service->getGenerationFileUrl($givenUserId, $givenGenerationId);
+        $actualURL = $this->service->getGenerationFileUrl($preconditionGeneration);
 
         // Assert
         $this->assertEquals($expectedURL, $actualURL);

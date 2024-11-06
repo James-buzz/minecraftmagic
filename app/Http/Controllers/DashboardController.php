@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Services\GenerationRetrievalService;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class DashboardController extends Controller
 {
-    public function __construct(protected readonly GenerationRetrievalService $generationService) {}
+    public function __construct(
+        protected readonly GenerationRetrievalService $generationService
+    ) {}
 
     /**
      * Display the dashboard.
@@ -18,11 +21,11 @@ class DashboardController extends Controller
         /** @var int $currentPage */
         $currentPage = request()->query('page', '1');
 
-        /** @var int $userId */
-        $userId = auth()->id();
+        /** @var User $user */
+        $user = auth()->user();
 
         $paginatedGenerations = $this->generationService->getPaginatedGenerations(
-            $userId,
+            $user,
             $currentPage
         );
 

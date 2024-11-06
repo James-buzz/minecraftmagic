@@ -11,8 +11,6 @@ class StoreTest extends BaseGenerateController
     public function testWhenIndexThenResolve(): void
     {
         // Given
-        $givenUserId = 101;
-
         $givenArtType = 'server_logo';
         $givenArtStyle = 'dragons-lair';
         $givenMetadata = [
@@ -23,12 +21,10 @@ class StoreTest extends BaseGenerateController
         // Precondition
         Bus::fake();
 
-        $preconditionUser = User::factory()->create([
-            'id' => $givenUserId,
-        ]);
+        $preconditionUser = User::factory()->create();
 
         // Expected
-        $expectedUserId = $givenUserId;
+        $expectedUserId = $preconditionUser->id;
         $expectedArtType = $givenArtType;
         $expectedArtStyle = $givenArtStyle;
 

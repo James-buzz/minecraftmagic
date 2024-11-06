@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Pipes\ProcessGenerationJob\ThumbnailGeneration;
 
-use App\Contracts\GenerationCreationServiceInterface;
+use App\Contracts\GenerationServiceInterface;
 use App\Pipes\ProcessGenerationJob\ThumbnailGeneration;
 use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\Small;
@@ -13,7 +13,7 @@ use Tests\TestCase;
  */
 #[Small] class BaseThumbnailGeneration extends TestCase
 {
-    protected MockInterface|GenerationCreationServiceInterface $mockCreationService;
+    protected MockInterface|GenerationServiceInterface $mockCreationService;
 
     protected ThumbnailGeneration $pipe;
 
@@ -21,7 +21,7 @@ use Tests\TestCase;
     {
         parent::setUp();
 
-        $this->mockCreationService = $this->mock(GenerationCreationServiceInterface::class);
+        $this->mockCreationService = $this->mock(GenerationServiceInterface::class);
 
         $this->pipe = new ThumbnailGeneration($this->mockCreationService);
     }

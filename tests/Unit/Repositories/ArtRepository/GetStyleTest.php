@@ -24,9 +24,9 @@ class GetStyleTest extends BaseArtRepository
         $actualStyle = $this->repository->getStyle($givenTypeId, $givenStyleId);
 
         // Assert
-        $this->assertEquals($expectedArtStyleId, $actualStyle['id']);
-        $this->assertEquals($expectedArtStyleName, $actualStyle['name']);
-        $this->assertEquals($expectedArtStyleDescription, $actualStyle['description']);
-        $this->assertEquals($expectedArtStylePrompt, $actualStyle['prompt']);
+        $this->assertEquals($expectedArtStyleId, $actualStyle->id);
+        $this->assertEquals($expectedArtStyleName, $actualStyle->name);
+        $this->assertEquals($expectedArtStyleDescription, $actualStyle->description);
+        $this->assertEquals($expectedArtStylePrompt, $actualStyle->prompt);
     }
 }

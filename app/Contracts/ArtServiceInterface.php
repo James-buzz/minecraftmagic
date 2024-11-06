@@ -4,30 +4,36 @@ declare(strict_types=1);
 
 namespace App\Contracts;
 
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Models\ArtStyle;
+use App\Models\ArtType;
 
 interface ArtServiceInterface
 {
     /**
-     * Get art style for a given art type and art style identifier.
-     *
-     * @return array{id: string, name: string, description: string, prompt: string}
-     *
-     * @throws ModelNotFoundException
+     * Get art type for a given art type identifier.
      */
-    public function getArtStyle(string $artTypeId, string $artStyleId): array;
+    public function getArtType(string $artTypeId): ArtType;
 
     /**
-     * Get all art types with their styles.
+     * Get art style for a given art type and art style identifier.
+     */
+    public function getArtStyle(string $artTypeId, string $artStyleId): ArtStyle;
+
+    /**
+     * Get all art types with their associated styles.
      *
-     * @return array<array{id: string, name: string, styles: array<array{id: string, name: string, description: string}>}>
+     * @return array<array{
+     *     id: string,
+     *     name: string,
+     *     styles: array<ArtStyle>
+     * }>
      */
     public function getAllArtTypesWithStyles(): array;
 
     /**
      * Get all art types.
      *
-     * @return array<array{id: string, name: string}>
+     * @return ArtType[]
      */
     public function getAllArtTypes(): array;
 }

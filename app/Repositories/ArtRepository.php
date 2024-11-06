@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Repositories;
 
 use App\Contracts\ArtRepositoryInterface;
+use App\Models\ArtStyle;
+use App\Models\ArtType;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 
@@ -31,70 +33,78 @@ readonly class ArtRepository implements ArtRepositoryInterface
         });
     }
 
+    /**
+     * @return ArtType[]
+     */
     public function getTypes(): array
     {
         return array_map(
-            fn (array $type): array => [
-                'id' => $type['id'],
-                'name' => $type['name'],
-            ],
+            fn (array $type): ArtType => new ArtType(
+                id: $type['id'],
+                name: $type['name'],
+            ),
             $this->data['types'] ?? []
         );
     }
 
-    public function getType(string $typeId): ?array
+    public function getType(string $typeId): ?ArtType
     {
-        return $this->findType($typeId, includeStyles: false);
-    }
-
-    public function getTypeWithStyles(string $typeId): ?array
-    {
-        $type = $this->findType($typeId, includeStyles: true);
+        $type = $this->findType($typeId);
 
         if ($type === null) {
             return null;
         }
 
-        $type['styles'] = array_map(function ($style) {
-            return [
-                'id' => $style['id'],
-                'name' => $style['name'],
-                'description' => $style['description'],
-                // filter out prompt
-            ];
-        }, $type['styles'] ?? []);
-
-        return $type;
+        return new ArtType(
+            id: $type['id'],
+            name: $type['name'],
+        );
     }
 
+    /**
+     * @return ArtStyle[]
+     */
     public function getStyles(string $typeId): array
     {
-        $type = $this->getTypeWithStyles($typeId);
+        $type = $this->findType($typeId, includeStyles: true);
 
-        return $type['styles'] ?? [];
+        if ($type === null) {
+            return [];
+        }
+
+        return array_map(
+            fn (array $style): ArtStyle => new ArtStyle(
+                id: $style['id'],
+                name: $style['name'],
+                description: $style['description'],
+                prompt: $style['prompt'],
+            ),
+            $type['styles'] ?? []
+        );
     }
 
-    public function getStyle(string $typeId, string $styleId): ?array
+    public function getStyle(string $typeId, string $styleId): ?ArtStyle
     {
-        $styles = $this->getStyles($typeId);
-        $style = $styles[array_search($styleId, array_column($styles, 'id'), true)] ?? null;
+        $style = $this->findStyleWithPrompt($typeId, $styleId);
 
         if ($style === null) {
             return null;
         }
 
-        // Include the prompt only for this method
-        $fullStyle = $this->findStyleWithPrompt($typeId, $styleId);
-
-        return $fullStyle ? array_merge($style, ['prompt' => $fullStyle['prompt']]) : null;
+        return new ArtStyle(
+            id: $style['id'],
+            name: $style['name'],
+            description: $style['description'],
+            prompt: $style['prompt'],
+        );
     }
 
     /**
      * Find an art type by its identifier
      *
-     * @return array{id: string, name: string}|array{id: string, name: string, styles: array<array{id: string, name: string, description: string}>}|null
+     * @return array{id: string, name: string, styles?: array<array{id: string, name: string, description: string, prompt: string}>}|null
      */
-    private function findType(string $typeId, bool $includeStyles): ?array
+    private function findType(string $typeId, bool $includeStyles = false): ?array
     {
         $type = array_values(array_filter(
             $this->data['types'] ?? [],
@@ -111,11 +121,12 @@ readonly class ArtRepository implements ArtRepositoryInterface
     /**
      * Find a style with its prompt
      *
-     * @return array<string, mixed>|null
+     * @return array{id: string, name: string, description: string, prompt: string}|null
      */
     private function findStyleWithPrompt(string $typeId, string $styleId): ?array
     {
         $type = $this->findType($typeId, includeStyles: true);
+
         if ($type === null) {
             return null;
         }

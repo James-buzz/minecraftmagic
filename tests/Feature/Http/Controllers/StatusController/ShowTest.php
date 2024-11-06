@@ -10,24 +10,18 @@ class ShowTest extends BaseStatusController
     public function testWhenStatusIsFoundThenReturn(): void
     {
         // Given
-        $givenUserId = 101;
-
         $givenArtType = 'server_logo';
         $givenArtStyle = 'dragons-lair';
 
-        $givenGenerationId = 99;
         $givenGenerationStatus = 'completed';
         $givenGenerationFilePath = 'some_random_file_path';
         $givenGenerationThumbnailPath = 'some_random_thumbnail_path';
 
         // Precondition
-        $preconditionUser = User::factory()->create([
-            'id' => $givenUserId,
-        ]);
+        $preconditionUser = User::factory()->create();
 
-        Generation::factory()->create([
-            'id' => $givenGenerationId,
-            'user_id' => $givenUserId,
+        $preconditionGeneration = Generation::factory()->create([
+            'user_id' => $preconditionUser->id,
             'status' => $givenGenerationStatus,
             'art_type' => $givenArtType,
             'art_style' => $givenArtStyle,
@@ -37,7 +31,7 @@ class ShowTest extends BaseStatusController
 
         // Expected
         $expectedStatus = [
-            'id' => $givenGenerationId,
+            'id' => $preconditionGeneration->id,
             'status' => $givenGenerationStatus,
             'art_type' => $givenArtType,
             'art_style' => $givenArtStyle,
@@ -47,7 +41,7 @@ class ShowTest extends BaseStatusController
 
         // Action
         $this->actingAs($preconditionUser)
-            ->get(route($this->route, ['id' => $givenGenerationId]))
+            ->get(route($this->route, ['generation' => $preconditionGeneration->id]))
             // Assert
             ->assertInertia(
                 fn ($assert) => $assert

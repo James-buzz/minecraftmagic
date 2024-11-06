@@ -14,9 +14,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/generate', [GenerateController::class, 'index'])->name('generate.index');
     Route::post('/generate', [GenerateController::class, 'store'])->middleware([LimitTotalGenerationPerDay::class, LimitOneGenerationConcurrently::class])->name('generate.store');
-    Route::get('/status/{id}', [StatusController::class, 'show'])->name('status');
-    Route::get('/download/{id}', [DownloadController::class, 'show'])->name('download');
-    Route::post('/feedback/{id}', [FeedbackController::class, 'store'])->name('feedback.store');
+    Route::get('/status/{generation}', [StatusController::class, 'show'])->name('status');
+    Route::get('/download/{generation}', [DownloadController::class, 'show'])->name('download');
+    Route::post('/feedback/{generation}', [FeedbackController::class, 'store'])->name('feedback.store');
 });
 
 Route::middleware(['auth'])->group(function () {

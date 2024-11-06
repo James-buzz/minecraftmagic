@@ -11,30 +11,25 @@ class UpdateStatusAsFailedTest extends BaseGenerationCreationService
     public function testWhenErrorReasonThenUpdateToFailed(): void
     {
         // Given
-        $givenUserId = 303;
-        $givenGenerationId = Str::ulid();
         $givenPrevStatus = 'processing';
         $givenStatus = 'failed';
         $givenFailedReason = 'A reason this failed';
 
         // Precondition
-        User::factory()->create([
-            'id' => $givenUserId,
-        ]);
+        $preconditionUser = User::factory()->create();
 
-        Generation::factory()->create([
-            'id' => $givenGenerationId,
-            'user_id' => $givenUserId,
+        $preconditionGeneration = Generation::factory()->create([
+            'user_id' => $preconditionUser->id,
             'status' => $givenPrevStatus,
         ]);
 
         // Expected
-        $expectedGenerationId = $givenGenerationId;
         $expectedStatus = $givenStatus;
         $expectedErrorReason = $givenFailedReason;
+        $expectedGenerationId = $preconditionGeneration->id;
 
         // Action
-        $this->service->updateStatusAsFailed($givenGenerationId, $givenFailedReason);
+        $this->service->updateStatusAsFailed($preconditionGeneration, $givenFailedReason);
 
         // Assert
         $this->assertDatabaseHas('generations', [

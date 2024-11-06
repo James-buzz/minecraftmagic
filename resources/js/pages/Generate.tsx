@@ -88,7 +88,7 @@ export default function Generate({ art_types, flash }: PageProps) {
                             Select Art Type
                         </h3>
                         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
-                            {art_types.map((type) => (
+                            {art_types && art_types.map((type) => (
                                 <div
                                     key={type.id}
                                     className={`relative cursor-pointer transition-all duration-300 ${

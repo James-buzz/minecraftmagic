@@ -12,12 +12,15 @@ class HandleTest extends BaseCleanupLocal
         $givenContextFilePath = 'original_image.png';
         $givenContextThumbnailPath = 'thumbnail_image.png';
         $givenData = [
+            'generation' => [
+                'id' => 1,
+                'status' => 'pending'
+            ],
             'result' => [
                 'file_path' => $givenContextFilePath,
                 'thumbnail_file_path' => $givenContextThumbnailPath,
             ],
         ];
-        $givenOutputData = $givenData;
 
         // Mock
         Storage::shouldReceive('disk')

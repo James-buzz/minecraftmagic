@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Pipes\ProcessGenerationJob;
 
+use App\Models\Generation;
 use Closure;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -14,11 +15,13 @@ readonly class UploadToS3
     {
         $stepStartTime = microtime(true);
 
+        $contextGeneration = $data['generation'];
+
         $contextFilePath = $data['result']['file_path'];
         $contextThumbnailFilePath = $data['result']['thumbnail_file_path'];
 
         Log::info('Queue uploading generation image to S3', [
-            'generation_id' => $data['generation']['id'],
+            'generation_id' => $contextGeneration['id'],
             'file_path' => $contextFilePath,
             'thumbnail_file_path' => $contextThumbnailFilePath,
         ]);

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Pipes\ProcessGenerationJob;
 
 use App\Contracts\ArtServiceInterface;
+use App\Models\Generation;
 use Closure;
 use Illuminate\Support\Facades\Log;
 use OpenAI\Laravel\Facades\OpenAI;
@@ -17,14 +18,13 @@ readonly class RequestGeneration
     {
         $stepStartTime = microtime(true);
 
-        $generation = $data['generation'];
-        $metadata = $generation['metadata'];
+        $contextGeneration = $data['generation'];
 
-        $prompt = $this->buildPrompt($generation, $metadata);
+        $prompt = $this->buildPrompt($contextGeneration);
 
-        Log::info('Queue requesting OpenAI', ['generation_id' => $generation['id']]);
+        Log::info('Queue requesting OpenAI', ['generation_id' => $contextGeneration['id']]);
 
-        $imageUrl = $this->generateImage($prompt, $metadata);
+        $imageUrl = $this->generateImage($prompt, $contextGeneration['metadata']);
 
         $data['url'] = $imageUrl;
 
@@ -56,18 +56,18 @@ readonly class RequestGeneration
     }
 
     /**
-     * @param  array{art_style: string, art_type: string}  $generation
-     * @param  array<mixed>  $metadata
+     * @param  array<mixed>  $generation
      */
-    private function buildPrompt(array $generation, array $metadata): string
+    private function buildPrompt(array $generation): string
     {
-        $artStyle = $this->artService->getArtStyle(
-            $generation['art_type'],
-            $generation['art_style']
-        );
+        $artType = $generation['art_type'];
+        $artStyle = $generation['art_style'];
+        $metadata = $generation['metadata'];
+
+        $artStyle = $this->artService->getArtStyle($artType, $artStyle);
 
         $fields = $metadata['fields'] ?? [];
-        $prompt = $artStyle['prompt'];
+        $prompt = $artStyle->prompt;
         foreach ($fields as $key => $value) {
             if ($value === null) {
                 continue;

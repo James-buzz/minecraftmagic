@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Pipes\ProcessGenerationJob\DownloadLocal;
 
-use App\Contracts\GenerationCreationServiceInterface;
+use App\Contracts\GenerationServiceInterface;
 use App\Pipes\ProcessGenerationJob\DownloadLocal;
 use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\Small;
@@ -13,7 +13,7 @@ use Tests\TestCase;
  */
 #[Small] class BaseDownloadLocal extends TestCase
 {
-    protected MockInterface|GenerationCreationServiceInterface $mockCreationService;
+    protected MockInterface|GenerationServiceInterface $mockCreationService;
 
     protected DownloadLocal $pipe;
 
@@ -21,7 +21,7 @@ use Tests\TestCase;
     {
         parent::setUp();
 
-        $this->mockCreationService = $this->mock(GenerationCreationServiceInterface::class);
+        $this->mockCreationService = $this->mock(GenerationServiceInterface::class);
 
         $this->pipe = new DownloadLocal($this->mockCreationService);
     }

@@ -10,6 +10,9 @@ use Illuminate\Notifications\Notifiable;
 
 /**
  * @property bool $is_admin
+ * @property int $id
+ * @property string $email
+ * @property string $name
  */
 class User extends Authenticatable implements MustVerifyEmail
 {

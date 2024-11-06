@@ -2,22 +2,35 @@
 
 namespace Tests\Unit\Pipes\ProcessGenerationJob\ThumbnailGeneration;
 
+use App\Models\Generation;
+use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Image\Image;
+use Mockery as m;
 
 class HandleTest extends BaseThumbnailGeneration
 {
     public function testWhenPassedThenReturnCorrectData(): void
     {
         // Given
-        $givenContextUserId = '1';
-        $givenContextGenerationId = '11';
         $givenContextFilePath = 'path/to/file';
         $givenGenerationThumbnailFilePath = 'path/to/generation/thumbnail';
+
+        // Precondition
+        $preconditionUser = User::factory()->create();
+
+        $preconditionGeneration = Generation::factory()->create([
+            'user_id' => $preconditionUser->id,
+            'status' => 'pending',
+        ]);
+
         $givenData = [
-            'user' => $givenContextUserId,
+            'user' => [
+                'id' => $preconditionUser->id,
+            ],
             'generation' => [
-                'id' => $givenContextGenerationId,
+                'id' => $preconditionGeneration->id,
+                'status' => $preconditionGeneration->status,
             ],
             'result' => [
                 'file_path' => $givenContextFilePath,
@@ -27,7 +40,8 @@ class HandleTest extends BaseThumbnailGeneration
         // Mock
         $this->mockCreationService
             ->shouldReceive('getGenerationThumbnailFilePath')
-            ->with($givenContextUserId, $givenContextGenerationId)
+            ->once()
+            ->with(m::type(Generation::class))
             ->andReturn($givenGenerationThumbnailFilePath);
 
         Storage::shouldReceive('disk')
@@ -58,9 +72,12 @@ class HandleTest extends BaseThumbnailGeneration
             ->andReturnSelf();
 
         // Expected
-        $expectedOutputDataUser = $givenContextUserId;
+        $expectedOutputDataUser = [
+            'id' => $preconditionUser->id,
+        ];
         $expectedOutputDataGeneration = [
-            'id' => $givenContextGenerationId,
+            'id' => $preconditionGeneration->id,
+            'status'=> $preconditionGeneration->status,
         ];
         $expectedOutputDataResult = [
             'file_path' => $givenContextFilePath,

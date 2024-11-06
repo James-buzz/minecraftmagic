@@ -21,7 +21,7 @@ class GetTypeTest extends BaseArtRepository
         $actualStyle = $this->repository->getType($givenTypeId);
 
         // Assert
-        $this->assertEquals($expectedTypeId, $actualStyle['id']);
-        $this->assertEquals($expectedTypeName, $actualStyle['name']);
+        $this->assertEquals($expectedTypeId, $actualStyle->id);
+        $this->assertEquals($expectedTypeName, $actualStyle->name);
     }
 }

@@ -2,8 +2,8 @@
 
 namespace Tests\Unit\Jobs\ProcessGenerationJob;
 
-use App\Contracts\GenerationCreationServiceInterface;
 use App\Contracts\GenerationRetrievalServiceInterface;
+use App\Contracts\GenerationServiceInterface;
 use App\Jobs\ProcessGenerationJob;
 use App\Models\Generation;
 use App\Models\User;
@@ -20,46 +20,43 @@ class HandleTest extends BaseProcessGenerationJob
     public function testWhenJobIsHandledThenSuccess(): void
     {
         // Given
-        $givenUserId = 101;
-        $givenGenerationId = 201;
         $givenGenerationFilePath = 'path/to/generation/file';
         $givenGenerationThumbnailFilePath = 'path/to/generation/thumbnail/file';
         $givenGenerationArtType = 'server_logo';
         $givenGenerationArtStyle = 'dragons-lair';
 
         // Precondition
-        User::factory()->create(['id' => $givenUserId]);
+        $preconditionUser = User::factory()->create();
 
-        Generation::factory()->create([
-            'id' => $givenGenerationId,
-            'user_id' => $givenUserId,
-            'file_path' => $givenGenerationFilePath,
-            'thumbnail_file_path' => $givenGenerationThumbnailFilePath,
+        $preconditionGeneration = Generation::factory()->create([
+            'user_id' => $preconditionUser->id,
             'art_type' => $givenGenerationArtType,
             'art_style' => $givenGenerationArtStyle,
+            'metadata'=> []
         ]);
 
+        $preconditionContext = [
+            'generation' => [
+                'id' => $preconditionGeneration->id,
+                'art_type' => $preconditionGeneration->art_type,
+                'art_style' => $preconditionGeneration->art_style,
+                'metadata' => $preconditionGeneration->metadata,
+            ],
+            'user' => [
+                'id' => $preconditionUser->id,
+                'email' => $preconditionUser->email,
+                'name' => $preconditionUser->name,
+            ]
+        ];
+
         // Mock
-        /** @var MockInterface|GenerationCreationServiceInterface $mockGenerationCreationService */
-        $mockGenerationCreationService = $this->mock(GenerationCreationServiceInterface::class);
+        /** @var MockInterface|GenerationServiceInterface $mockGenerationCreationService */
+        $mockGenerationCreationService = $this->mock(GenerationServiceInterface::class);
         $mockGenerationCreationService->shouldReceive('updateStatusAsProcessing')
-            ->with($givenGenerationId)
+            ->with($preconditionGeneration)
             ->once();
         $mockGenerationCreationService->shouldReceive('updateStatusAsCompleted')
-            ->with($givenGenerationId, $givenGenerationFilePath, $givenGenerationThumbnailFilePath)
-            ->once();
-
-        /** @var MockInterface|GenerationRetrievalServiceInterface $mockGenerationRetrievalService */
-        $mockGenerationRetrievalService = $this->mock(GenerationRetrievalServiceInterface::class);
-        $mockGenerationRetrievalService->shouldReceive('getGeneration')
-            ->with($givenUserId, $givenGenerationId)
-            ->andReturn([
-                'id' => $givenGenerationId,
-                'file_path' => $givenGenerationFilePath,
-                'thumbnail_file_path' => $givenGenerationThumbnailFilePath,
-                'art_type' => $givenGenerationArtType,
-                'art_style' => $givenGenerationArtStyle,
-            ])
+            ->with($preconditionGeneration, $givenGenerationFilePath, $givenGenerationThumbnailFilePath)
             ->once();
 
         /** @var MockInterface|Pipeline $mockPipeline */
@@ -75,9 +72,14 @@ class HandleTest extends BaseProcessGenerationJob
             ])
             ->andReturnSelf();
         $mockPipeline->shouldReceive('then')
-            ->withArgs(function ($closure) use ($givenGenerationId, $givenGenerationFilePath, $givenGenerationThumbnailFilePath) {
+            ->withArgs(function ($closure) use ($preconditionGeneration, $givenGenerationFilePath, $givenGenerationThumbnailFilePath) {
                 $context = [
-                    'generation' => ['id' => $givenGenerationId],
+                    'generation' => [
+                        'id' => $preconditionGeneration->id,
+                        'user_id' => $preconditionGeneration->user_id,
+                        'art_type' => $preconditionGeneration->art_type,
+                        'art_style' => $preconditionGeneration->art_style,
+                    ],
                     'result' => [
                         'file_path' => $givenGenerationFilePath,
                         'thumbnail_file_path' => $givenGenerationThumbnailFilePath,
@@ -96,9 +98,11 @@ class HandleTest extends BaseProcessGenerationJob
             });
 
         // Action
-        $job = new ProcessGenerationJob((string) $givenUserId, (string) $givenGenerationId);
+        $job = new ProcessGenerationJob(
+            $preconditionUser,
+            $preconditionGeneration,
+        );
         $job->handle(
-            $mockGenerationRetrievalService,
             $mockGenerationCreationService,
             $mockPipeline,
         );

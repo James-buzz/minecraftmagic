@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class FeedbackController extends Controller
 {
-    public function store(Generation $id, Request $request): \Illuminate\Http\RedirectResponse
+    public function store(Generation $generation, Request $request): \Illuminate\Http\RedirectResponse
     {
         $request->validate([
             'comment' => 'nullable|string|max:255',
@@ -18,7 +18,7 @@ class FeedbackController extends Controller
         /** @var User $user */
         $user = auth()->user();
 
-        $id->feedback()->create([
+        $generation->feedback()->create([
             'user_id' => $user->id,
             'comment' => $request->comment ?? null,
             'rating' => $request->rating,

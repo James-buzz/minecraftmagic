@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Pipes\ProcessGenerationJob;
 
-use App\Contracts\GenerationCreationServiceInterface;
+use App\Contracts\GenerationServiceInterface;
+use App\Models\Generation;
+use App\Models\User;
 use Closure;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Image\Exceptions\CouldNotLoadImage;
@@ -14,7 +16,7 @@ readonly class ThumbnailGeneration
 {
     private const THUMBNAIL_WIDTH = 300;
 
-    public function __construct(protected GenerationCreationServiceInterface $creationService) {}
+    public function __construct(protected GenerationServiceInterface $creationService) {}
 
     /**
      * @throws CouldNotLoadImage
@@ -23,19 +25,15 @@ readonly class ThumbnailGeneration
     {
         $stepStartTime = microtime(true);
 
-        $contextUserId = $data['user'];
-        $contextGenerationId = $data['generation']['id'];
         $contextFilePath = $data['result']['file_path'];
 
-        $thumbnailFilePath = $this->creationService->getGenerationThumbnailFilePath(
-            $contextUserId,
-            $contextGenerationId
-        );
+        $contextGeneration = $data['generation'];
+        $generation = Generation::find($contextGeneration['id']);
 
-        $storagePath = Storage::disk('local')
-            ->path($contextFilePath);
-        $storageThumbnailPath = Storage::disk('local')
-            ->path($thumbnailFilePath);
+        $thumbnailFilePath = $this->creationService->getGenerationThumbnailFilePath($generation);
+
+        $storagePath = Storage::disk('local')->path($contextFilePath);
+        $storageThumbnailPath = Storage::disk('local')->path($thumbnailFilePath);
 
         $data['result']['thumbnail_file_path'] = $thumbnailFilePath;
 

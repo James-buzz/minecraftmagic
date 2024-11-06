@@ -17,6 +17,13 @@ class GetTypesTest extends BaseArtRepository
         $actualTypes = $this->repository->getTypes();
 
         // Assert
-        $this->assertEquals($expectedTypes, $actualTypes);
+        $this->assertCount(count($expectedTypes), $actualTypes);
+        foreach ($expectedTypes as $index => $expectedType) {
+            $this->assertArrayHasKey($index, $actualTypes);
+            $actualType = $actualTypes[$index];
+
+            $this->assertSame($expectedType['id'], $actualType->id);
+            $this->assertSame($expectedType['name'], $actualType->name);
+        }
     }
 }

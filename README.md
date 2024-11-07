@@ -19,12 +19,13 @@ Minecraftmagic is a work in progress, but I hope that you find it useful for you
 
 ## Mantras
 
-- Rapid development - Embrace Larave's eloquent directly and magic methods. Avoid repository abstractions where possible.
-- Pragmatic SOLID - Apply patterns where they add clear value, not for theorectical purity
-- Service-First - Business logic lives in dedicated service classes, working directly with models
-- Smart Testing - Focus on feature tests for critical paths, unit tests for complex logic
+- 🚀 Rapid Development - Embrace Laravel's Eloquent directly and magic methods. Avoid repository abstractions where possible
+- 🎯 Pragmatic SOLID - Apply patterns where they add clear value, not for theoretical purity
+- 🛠️ Service-First - Business logic lives in dedicated service classes, working directly with models
+- 🧪 Smart Testing - Feature tests for user flows, unit tests for complex logic only. No test duplication
+- 🏭 Enterprise Ready - Production-grade with monitoring, S3 storage, metrics, and error tracking
 
-## Features
+## Software Features
 
 - 📊 Observability - Monitor application metrics and performance with [Prometheus](https://prometheus.io/)
 

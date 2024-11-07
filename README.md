@@ -17,6 +17,13 @@ Minecraftmagic is a work in progress, but I hope that you find it useful for you
 - 💻 [Getting Started](.docs/getting-started.md)
 - 📚 [Standards](.docs/standards.md)
 
+## Mantras
+
+- Rapid development - Embrace Larave's eloquent directly and magic methods. Avoid repository abstractions where possible.
+- Pragmatic SOLID - Apply patterns where they add clear value, not for theorectical purity
+- Service-First - Business logic lives in dedicated service classes, working directly with models
+- Smart Testing - Focus on feature tests for critical paths, unit tests for complex logic
+
 ## Features
 
 - 📊 Observability - Monitor application metrics and performance with [Prometheus](https://prometheus.io/)

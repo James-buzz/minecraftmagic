@@ -13,8 +13,6 @@ class Feedback extends Model
 
     /**
      * The attributes that are mass assignable.
-     *
-     * @var string[]
      */
     protected $fillable = [
         'user_id',
@@ -23,11 +21,17 @@ class Feedback extends Model
         'metadata',
     ];
 
+    /**
+     * @return MorphTo<Model, self>
+     */
     public function feedbackable(): MorphTo
     {
         return $this->morphTo();
     }
 
+    /**
+     * @return BelongsTo<User, self>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

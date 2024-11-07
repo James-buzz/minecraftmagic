@@ -21,6 +21,7 @@ use Illuminate\Pipeline\Pipeline;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use OpenAI\Exceptions\ErrorException;
+use Sentry\Laravel\Integration;
 use Throwable;
 
 class ProcessGenerationJob implements ShouldQueue
@@ -156,7 +157,8 @@ class ProcessGenerationJob implements ShouldQueue
             'exception' => $exception,
         ]);
 
-        throw $exception;
+        // Send to Sentry
+        Integration::captureUnhandledException($exception);
     }
 
     /**

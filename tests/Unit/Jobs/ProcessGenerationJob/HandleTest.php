@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\Jobs\ProcessGenerationJob;
 
-use App\Contracts\GenerationRetrievalServiceInterface;
 use App\Contracts\GenerationServiceInterface;
 use App\Jobs\ProcessGenerationJob;
 use App\Models\Generation;
@@ -32,7 +31,7 @@ class HandleTest extends BaseProcessGenerationJob
             'user_id' => $preconditionUser->id,
             'art_type' => $givenGenerationArtType,
             'art_style' => $givenGenerationArtStyle,
-            'metadata'=> []
+            'metadata' => [],
         ]);
 
         $preconditionContext = [
@@ -46,7 +45,7 @@ class HandleTest extends BaseProcessGenerationJob
                 'id' => $preconditionUser->id,
                 'email' => $preconditionUser->email,
                 'name' => $preconditionUser->name,
-            ]
+            ],
         ];
 
         // Mock

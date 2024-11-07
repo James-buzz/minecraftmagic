@@ -3,7 +3,6 @@
 namespace Tests\Unit\Services\GenerationCreationService;
 
 use App\Models\Generation;
-use Illuminate\Support\Str;
 
 class UpdateStatusAsProcessingTest extends BaseGenerationCreationService
 {

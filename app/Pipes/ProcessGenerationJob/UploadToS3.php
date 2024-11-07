@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Pipes\ProcessGenerationJob;
 
-use App\Models\Generation;
 use Closure;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;

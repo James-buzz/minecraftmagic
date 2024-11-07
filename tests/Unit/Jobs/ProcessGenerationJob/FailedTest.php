@@ -5,7 +5,6 @@ namespace Tests\Unit\Jobs\ProcessGenerationJob;
 use App\Jobs\ProcessGenerationJob;
 use App\Models\Generation;
 use App\Models\User;
-use Illuminate\Support\Str;
 use OpenAI\Exceptions\ErrorException;
 
 class FailedTest extends BaseProcessGenerationJob

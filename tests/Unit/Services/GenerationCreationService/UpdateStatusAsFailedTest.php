@@ -4,7 +4,6 @@ namespace Tests\Unit\Services\GenerationCreationService;
 
 use App\Models\Generation;
 use App\Models\User;
-use Illuminate\Support\Str;
 
 class UpdateStatusAsFailedTest extends BaseGenerationCreationService
 {

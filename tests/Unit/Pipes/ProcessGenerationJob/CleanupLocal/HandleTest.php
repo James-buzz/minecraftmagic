@@ -14,7 +14,7 @@ class HandleTest extends BaseCleanupLocal
         $givenData = [
             'generation' => [
                 'id' => 1,
-                'status' => 'pending'
+                'status' => 'pending',
             ],
             'result' => [
                 'file_path' => $givenContextFilePath,

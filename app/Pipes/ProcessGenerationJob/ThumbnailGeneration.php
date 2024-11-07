@@ -6,7 +6,6 @@ namespace App\Pipes\ProcessGenerationJob;
 
 use App\Contracts\GenerationServiceInterface;
 use App\Models\Generation;
-use App\Models\User;
 use Closure;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Image\Exceptions\CouldNotLoadImage;

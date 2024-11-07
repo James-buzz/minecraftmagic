@@ -6,7 +6,6 @@ use App\Models\Generation;
 use App\Models\User;
 use DateTimeInterface;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use Mockery;
 
 class GetGenerationFileUrlTest extends BaseGenerationRetrievalService

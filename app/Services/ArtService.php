@@ -10,9 +10,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 readonly class ArtService implements ArtServiceInterface
 {
-    public function __construct(protected ArtRepositoryInterface $artRepository)
-    {
-    }
+    public function __construct(protected ArtRepositoryInterface $artRepository) {}
 
     public function getArtType(string $artTypeId): ArtType
     {
@@ -39,6 +37,7 @@ readonly class ArtService implements ArtServiceInterface
     public function getAllArtTypesWithStyles(): array
     {
         $types = $this->artRepository->getTypes();
+
         return array_map(
             fn ($type) => [
                 'id' => $type->id,

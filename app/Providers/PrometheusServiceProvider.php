@@ -2,24 +2,19 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
 use Prometheus\CollectorRegistry;
-use Prometheus\Storage\Redis;
+use Prometheus\Storage\PDO;
 
 class PrometheusServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
         $this->app->singleton(CollectorRegistry::class, function () {
-            Redis::setDefaultOptions(
-                Arr::only(
-                    config('database.redis.default'),
-                    ['host', 'port', 'password']
-                )
-            );
+            $pdo = DB::connection()->getPdo();
 
-            return CollectorRegistry::getDefault();
+            return new CollectorRegistry(new PDO($pdo));
         });
     }
 }

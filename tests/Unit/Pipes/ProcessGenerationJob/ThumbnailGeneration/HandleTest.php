@@ -5,8 +5,8 @@ namespace Tests\Unit\Pipes\ProcessGenerationJob\ThumbnailGeneration;
 use App\Models\Generation;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
-use Spatie\Image\Image;
 use Mockery as m;
+use Spatie\Image\Image;
 
 class HandleTest extends BaseThumbnailGeneration
 {
@@ -77,7 +77,7 @@ class HandleTest extends BaseThumbnailGeneration
         ];
         $expectedOutputDataGeneration = [
             'id' => $preconditionGeneration->id,
-            'status'=> $preconditionGeneration->status,
+            'status' => $preconditionGeneration->status,
         ];
         $expectedOutputDataResult = [
             'file_path' => $givenContextFilePath,

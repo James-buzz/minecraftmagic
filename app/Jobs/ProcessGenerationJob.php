@@ -85,7 +85,7 @@ class ProcessGenerationJob implements ShouldQueue
                 'id' => $this->user->id,
                 'email' => $this->user->email,
                 'name' => $this->user->name,
-            ]
+            ],
         ];
 
         $pipeline

@@ -6,7 +6,6 @@ use App\Contracts\ArtServiceInterface;
 use App\Events\Generation\GenerationQueued;
 use App\Http\Requests\GenerateStoreRequest;
 use App\Jobs\ProcessGenerationJob;
-use App\Models\ArtType;
 use App\Models\User;
 use App\Services\GenerationService;
 use Illuminate\Support\Facades\Log;
@@ -29,7 +28,6 @@ class GenerateController extends Controller
 
         // ArtTypes is a key value array
         // loop and then return an array of object with id, name, and styles as the values
-
 
         return Inertia::render('Generate', [
             'art_types' => $artTypes,

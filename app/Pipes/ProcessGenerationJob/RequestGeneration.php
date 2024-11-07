@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Pipes\ProcessGenerationJob;
 
 use App\Contracts\ArtServiceInterface;
-use App\Models\Generation;
 use Closure;
 use Illuminate\Support\Facades\Log;
 use OpenAI\Laravel\Facades\OpenAI;

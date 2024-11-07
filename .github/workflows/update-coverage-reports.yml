@@ -21,16 +21,6 @@ jobs:
     name: Run TestCoverage Report
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    services:
-      redis:
-        image: redis
-        ports:
-          - 6379:6379
-        options: >-
-          --health-cmd "redis-cli ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
 
     steps:
       - name: Checkout code
@@ -55,9 +45,6 @@ jobs:
         run: |
           sed -i 's/DB_CONNECTION=.*/DB_CONNECTION=sqlite/' .env
           sed -i 's/DB_DATABASE=.*/DB_DATABASE=:memory:/' .env
-          sed -i 's/REDIS_HOST=.*/REDIS_HOST=localhost/' .env
-          sed -i 's/REDIS_PORT=.*/REDIS_PORT=6379/' .env
-          sed -i 's/REDIS_CLIENT=.*/REDIS_CLIENT=predis/' .env
 
       - name: Install and Build Frontend Assets
         run: |

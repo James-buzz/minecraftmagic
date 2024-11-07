@@ -45,6 +45,7 @@ Minecraftmagic is a work in progress, but I hope that you find it useful for you
 ## TODO
 
 - [ ] Improve test coverage
+- [ ] Improve test strategy
 - [ ] Add more features
 - [ ] Allow deletion of generated images
 

@@ -125,6 +125,11 @@ class ProcessGenerationJob implements ShouldQueue
             });
     }
 
+    /**
+     * When the job fails.
+     *
+     * @throws Throwable
+     */
     public function failed(?Throwable $exception): void
     {
         $generationCreationService = app(GenerationServiceInterface::class);
@@ -150,6 +155,8 @@ class ProcessGenerationJob implements ShouldQueue
             'duration' => TimeFormatter::formatPeriod(microtime(true), $this->startTime ?? microtime(true)),
             'exception' => $exception,
         ]);
+
+        throw $exception;
     }
 
     /**

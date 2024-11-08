@@ -7,7 +7,6 @@ use App\Events\Generation\GenerationCompleted;
 use App\Events\Generation\GenerationFailed;
 use App\Events\Generation\GenerationStarted;
 use App\Helpers\TimeFormatter;
-use App\Jobs\Middleware\OpenAIRateLimitedMiddleware;
 use App\Models\Generation;
 use App\Models\User;
 use App\Pipes\ProcessGenerationJob\CleanupLocal;
@@ -15,6 +14,7 @@ use App\Pipes\ProcessGenerationJob\DownloadLocal;
 use App\Pipes\ProcessGenerationJob\RequestGeneration;
 use App\Pipes\ProcessGenerationJob\ThumbnailGeneration;
 use App\Pipes\ProcessGenerationJob\UploadToS3;
+use DateTime;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Pipeline\Pipeline;
@@ -22,18 +22,12 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use OpenAI\Exceptions\ErrorException;
 use Sentry\Laravel\Integration;
+use Spatie\RateLimitedMiddleware\RateLimited;
 use Throwable;
 
 class ProcessGenerationJob implements ShouldQueue
 {
     use Queueable, SerializesModels;
-
-    /**
-     * @var int The number of times the job may be attempted.
-     *
-     * This is set to 0 due to the job being rate limited.
-     */
-    public int $tries = 0;
 
     /**
      * @var int The max exceptions that can be thrown before failing the job.
@@ -169,7 +163,16 @@ class ProcessGenerationJob implements ShouldQueue
     public function middleware(): array
     {
         return [
-            new OpenAIRateLimitedMiddleware,
+            new RateLimited(false),
         ];
+    }
+
+    /*
+     * Determine the time at which the job should timeout.
+     *
+     */
+    public function retryUntil(): DateTime
+    {
+        return now()->addDay();
     }
 }

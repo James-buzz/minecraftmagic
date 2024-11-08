@@ -162,9 +162,12 @@ class ProcessGenerationJob implements ShouldQueue
      */
     public function middleware(): array
     {
-        return [
-            new RateLimited(false),
-        ];
+        $rateLimitedMiddleware = (new RateLimited)
+            ->allow(5)
+            ->everySeconds(60)
+            ->releaseAfterSeconds(30);
+
+        return [$rateLimitedMiddleware];
     }
 
     /*

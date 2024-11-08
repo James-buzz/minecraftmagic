@@ -7,7 +7,6 @@ use App\Http\Requests\GenerateStoreRequest;
 use App\Jobs\ProcessGenerationJob;
 use App\Models\ArtType;
 use App\Models\Generation;
-use App\Services\GenerationService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
@@ -17,7 +16,6 @@ use Inertia\Response;
 class GenerateController extends Controller
 {
     public function __construct(
-        protected readonly GenerationService $generationService
     ) {}
 
     /**
@@ -43,7 +41,6 @@ class GenerateController extends Controller
         abort_if(! Gate::allows('create', Generation::class), 403);
 
         $generation = $request->user()->generations()->create([
-            'art_type_id' => $request->art_type,
             'art_style_id' => $request->art_style,
             'metadata' => $request->metadata,
         ]);

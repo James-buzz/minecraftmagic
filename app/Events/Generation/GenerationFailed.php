@@ -2,6 +2,7 @@
 
 namespace App\Events\Generation;
 
+use App\Models\Generation;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Throwable;
@@ -15,8 +16,7 @@ class GenerationFailed
      * Create a new event instance.
      */
     public function __construct(
-        public readonly string $artType,
-        public readonly string $artStyle,
+        public readonly Generation $generation,
         public readonly Throwable $exception,
         public readonly float $totalDuration,
     ) {}

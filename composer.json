@@ -19,6 +19,7 @@
         "resend/resend-laravel": "^0.14.0",
         "sentry/sentry-laravel": "^4.9",
         "spatie/image": "^3.7",
+        "spatie/laravel-query-builder": "^6.2",
         "spatie/laravel-rate-limited-job-middleware": "^2.7",
         "tightenco/ziggy": "^2.0"
     },

@@ -6,7 +6,7 @@ interface ImageStyleProps {
 }
 
 const ImageStyle: React.FC<ImageStyleProps> = ({ style }) => {
-    const imagePath = `/assets/styles/${style}.png`;
+    const imagePath = `/assets/art/server_logo/${style}.png`;
     const creator = style
         .replace(/-/g, ' ')
         .replace(/\b\w/g, (l) => l.toUpperCase());

@@ -9,6 +9,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property string $prompt
+ */
 class ArtStyle extends Model
 {
     /** @use HasFactory<ArtStyleFactory> */
@@ -25,6 +28,15 @@ class ArtStyle extends Model
     protected $fillable = [
         'name',
         'description',
+        'resource_path',
+    ];
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var string[]
+     */
+    protected $hidden = [
         'prompt',
     ];
 
@@ -33,8 +45,8 @@ class ArtStyle extends Model
      *
      * @return BelongsTo<ArtType, self>
      */
-    public function artType(): BelongsTo
+    public function type(): BelongsTo
     {
-        return $this->belongsTo(ArtType::class);
+        return $this->belongsTo(ArtType::class, 'art_type_id');
     }
 }

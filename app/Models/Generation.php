@@ -5,12 +5,14 @@ namespace App\Models;
 use App\Concerns\HasFeedback;
 use Database\Factories\GenerationFactory;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * @mixin Builder
@@ -39,6 +41,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
  * @property \Carbon\Carbon|null $updated_at
  * @property \Carbon\Carbon|null $deleted_at
  * @property User $user
+ * @property ArtStyle $style
  */
 class Generation extends Model
 {
@@ -94,6 +97,18 @@ class Generation extends Model
     }
 
     /**
+     * Get a temporary URL for the thumbnail
+     */
+    protected function thumbnailUrl(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->thumbnail_file_path
+                ? Storage::disk('s3')->temporaryUrl($this->thumbnail_file_path, now()->addMinutes(5))
+                : null
+        );
+    }
+
+    /**
      * Scope to include only completed
      *
      * @param  Builder<self>  $query
@@ -106,12 +121,10 @@ class Generation extends Model
 
     /**
      * Get the art style
-     *
-     * @return BelongsTo
      */
-    public function artStyle(): BelongsTo
+    public function style(): BelongsTo
     {
-        return $this->belongsTo(ArtStyle::class);
+        return $this->belongsTo(ArtStyle::class, 'art_style_id');
     }
 
     /**

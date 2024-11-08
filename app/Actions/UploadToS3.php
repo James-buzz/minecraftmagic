@@ -11,7 +11,7 @@ class UploadToS3
 
     public function handle(string $filePath): void
     {
-        Storage::put(
+        Storage::disk('s3')->put(
             $filePath,
             Storage::disk('local')->get($filePath)
         );

@@ -2,6 +2,7 @@
 
 namespace App\Events\Generation;
 
+use App\Models\Generation;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 
@@ -16,8 +17,7 @@ class GenerationCompleted
      * @param  array<string, float>  $stepTimes
      */
     public function __construct(
-        public readonly string $artType,
-        public readonly string $artStyle,
+        public readonly Generation $generation,
         public readonly float $totalDuration,
         public readonly array $stepTimes,
     ) {}

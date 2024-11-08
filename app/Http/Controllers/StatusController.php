@@ -3,14 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Generation;
-use App\Services\GenerationRetrievalService;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class StatusController extends Controller
 {
-    public function __construct(protected readonly GenerationRetrievalService $retrievalService) {}
+    public function __construct() {}
 
     /**
      * Display the status page.

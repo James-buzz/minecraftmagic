@@ -13,11 +13,15 @@ interface Generation {
     thumbnail_url: string;
 }
 
-interface PaginationMeta {
+interface Pagination {
     current_page: number;
-    per_page: number;
-    total: number;
+    data: Generation[];
+    first_page_url: string;
+    from: number;
     last_page: number;
+    last_page_url: string;
+    links: Array<{ url: string; label: string; active: boolean }>;
+    next_page_url: string;
 }
 
 interface DashboardProps {
@@ -26,10 +30,7 @@ interface DashboardProps {
             name: string;
         };
     };
-    paginatedGenerations: {
-        data: Generation[];
-        meta: PaginationMeta;
-    };
+    pagination: Pagination;
     flash: {
         success?: string;
         error?: string;
@@ -44,25 +45,23 @@ const emojis = [
     { emoji: '😢', rating: 1 }
 ];
 
-const Pagination = ({ meta }: { meta: PaginationMeta }) => {
-    const { current_page, last_page } = meta;
-
+const Pagination = ({ pagination }: { pagination: Pagination }) => {
     return (
         <div className="mt-8 flex justify-center space-x-4">
-            {current_page > 1 && (
+            {pagination.current_page > 1 && (
                 <Link
-                    href={`?page=${current_page - 1}`}
+                    href={`?page=${pagination.current_page - 1}`}
                     className="rounded-md bg-gray-700 px-4 py-2 hover:bg-gray-600"
                 >
                     Previous
                 </Link>
             )}
             <span className="rounded-md bg-gray-800 px-4 py-2">
-                Page {current_page} of {last_page}
+                Page {pagination.current_page} of {pagination.last_page}
             </span>
-            {current_page < last_page && (
+            {pagination.current_page < pagination.last_page && (
                 <Link
-                    href={`?page=${current_page + 1}`}
+                    href={`?page=${pagination.current_page + 1}`}
                     className="rounded-md bg-gray-700 px-4 py-2 hover:bg-gray-600"
                 >
                     Next
@@ -148,10 +147,10 @@ const ProfileMenu = ({ name }: { name: string }) => {
 
 export default function Dashboard({
     auth,
-    paginatedGenerations,
+    pagination,
     flash,
 }: DashboardProps) {
-    const generations = paginatedGenerations.data;
+    const generations = pagination.data;
     const isNewUser = generations.length === 0;
 
     const handleDownload = (id: string) => {
@@ -290,7 +289,7 @@ export default function Dashboard({
                     )}
 
                     {generations.length > 0 && (
-                        <Pagination meta={paginatedGenerations.meta}/>
+                        <Pagination pagination={pagination}/>
                     )}
                 </main>
             </div>

@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Actions\DeleteLocal;
 use App\Actions\DownloadUrl;
 use App\Actions\GenerateImage;
 use App\Actions\Thumbnail;
@@ -9,20 +10,24 @@ use App\Actions\UploadToS3;
 use App\Concerns\CalculatesFilePaths;
 use App\Events\Generation\GenerationFailed;
 use App\Events\Generation\GenerationStarted;
+use App\Helpers\TimeFormatter;
 use App\Models\Generation;
 use ErrorException;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
+use Sentry\Laravel\Integration;
 use Spatie\RateLimitedMiddleware\RateLimited;
 use Throwable;
 
 class ProcessGenerationJob implements ShouldQueue
 {
+    use CalculatesFilePaths;
+    use Dispatchable;
     use Queueable;
     use SerializesModels;
-    use CalculatesFilePaths;
 
     /**
      * @var int The max exceptions that can be thrown before failing the job.
@@ -50,7 +55,7 @@ class ProcessGenerationJob implements ShouldQueue
         Log::info('Queue requesting OpenAI image generation');
 
         $imageUrl = GenerateImage::run(
-            $this->generation->artStyle()->id,
+            $this->buildPrompt(),
             $this->generation->metadata['image_size'],
             $this->generation->metadata['image_quality']
         );
@@ -60,7 +65,7 @@ class ProcessGenerationJob implements ShouldQueue
         $generationFilePath = $this->calculatePath(
             $this->generation->user,
             $this->generation,
-            basename($imageUrl)
+            'original.png'
         );
 
         DownloadUrl::run($imageUrl, $generationFilePath);
@@ -68,14 +73,19 @@ class ProcessGenerationJob implements ShouldQueue
         $generationThumbnailPath = $this->calculatePath(
             $this->generation->user,
             $this->generation,
-            'thumbnail_'.basename($imageUrl)
+            'thumbnail.png'
         );
 
-        Thumbnail::run($generationFilePath, $generationThumbnailPath, 300);
+        Log::info('Queue generating thumbnail', ['path' => $generationThumbnailPath]);
+        Thumbnail::run($generationFilePath, $generationThumbnailPath);
 
+        Log::info('Queue uploading to S3', ['path' => $generationFilePath]);
         UploadToS3::run($generationFilePath);
+
+        Log::info('Queue uploading thumbnail to S3', ['path' => $generationThumbnailPath]);
         UploadToS3::run($generationThumbnailPath);
 
+        Log::info('Deleting local files');
         DeleteLocal::run($generationFilePath);
         DeleteLocal::run($generationThumbnailPath);
 
@@ -102,8 +112,7 @@ class ProcessGenerationJob implements ShouldQueue
         $totalDuration = microtime(true) - ($this->startTime ?? microtime(true));
 
         event(new GenerationFailed(
-            $this->artType ?? 'unknown',
-            $this->artStyle ?? 'unknown',
+            $this->generation,
             $exception,
             $totalDuration
         ));
@@ -116,6 +125,34 @@ class ProcessGenerationJob implements ShouldQueue
 
         // Send to Sentry
         Integration::captureUnhandledException($exception);
+    }
+
+    /**
+     * Builds a prompt by replacing placeholders with field values from metadata
+     * Example metadata format:
+     * {
+     *     "fields": {
+     *         "server_name": "spooky"
+     *     },
+     *     "image_size": "1024x1024",
+     *     "image_quality": "standard"
+     * }
+     *
+     * @return string The processed prompt with replaced placeholders
+     */
+    private function buildPrompt(): string
+    {
+        $metadata = $this->generation->metadata;
+        $prompt = $this->generation->style->prompt;
+
+        $fields = $metadata['fields'] ?? [];
+
+        foreach ($fields as $key => $value) {
+            $placeholder = "<{$key}>";
+            $prompt = str_replace($placeholder, $value, $prompt);
+        }
+
+        return $prompt;
     }
 
     /**
@@ -137,7 +174,7 @@ class ProcessGenerationJob implements ShouldQueue
      * Determine the time at which the job should timeout.
      *
      */
-    public function retryUntil(): DateTime
+    public function retryUntil(): \Illuminate\Support\Carbon
     {
         return now()->addDay();
     }

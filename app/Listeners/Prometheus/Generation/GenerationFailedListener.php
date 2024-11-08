@@ -12,9 +12,11 @@ class GenerationFailedListener
      */
     public function handle(GenerationFailed $event): void
     {
-        $artType = $event->artType;
-        $artStyle = $event->artStyle;
+        $generation = $event->generation;
         $totalDuration = $event->totalDuration;
+
+        $artStyle = $generation->style->name;
+        $artType = $generation->style->type->name;
 
         // Total
         $failedCounter = Prometheus::getOrRegisterCounter(

@@ -4,14 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Actions\SignS3URL;
 use App\Models\Generation;
-use App\Services\GenerationRetrievalService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 
 class DownloadController extends Controller
 {
-    public function __construct(protected readonly GenerationRetrievalService $retrievalService) {}
+    public function __construct() {}
 
     /**
      * Retrieve the download URL for a generation.

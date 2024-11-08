@@ -12,9 +12,11 @@ class GenerationCompletedListener
      */
     public function handle(GenerationCompleted $event): void
     {
-        $artType = $event->artType;
-        $artStyle = $event->artStyle;
+        $generation = $event->generation;
         $totalDuration = $event->totalDuration;
+
+        $artStyle = $generation->style->name;
+        $artType = $generation->style->type->name;
 
         // Total
         $totalCounter = Prometheus::getOrRegisterCounter(

@@ -1,4 +1,4 @@
-<img src="public/assets/art/server_logo/end-explorer.png"/>
+<img src="public/assets/art/server_logo/end_explorer.png"/>
 
 [![Test Coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/James-buzz/63f837f639ec90f1b789af69aab0ddd0/raw/minecraftmagic-pre-alpha-cobertura-coverage.json&style=plastic)](https://james-buzz.github.io/minecraftmagic-pre-alpha/coverage)
 [![Laravel Forge Site Deployment Status](https://img.shields.io/endpoint?url=https%3A%2F%2Fforge.laravel.com%2Fsite-badges%2Fc39e3f98-393c-4239-98e9-06542871514d&style=plastic)](https://forge.laravel.com/servers/858254/sites/2524132)

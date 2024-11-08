@@ -15,6 +15,7 @@ return new class extends Migration
             $table->ulid('id')->primary();
             $table->string('name', 32);
             $table->string('description')->nullable();
+            $table->string('resource_path')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

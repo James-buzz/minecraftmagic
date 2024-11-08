@@ -13,16 +13,7 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Register any application services.
      */
-    public function register(): void
-    {
-        // Repositories
-        $this->app->singleton(\App\Contracts\ArtRepositoryInterface::class, \App\Repositories\ArtRepository::class);
-
-        // Services
-        $this->app->singleton(\App\Contracts\ArtServiceInterface::class, \App\Services\ArtService::class);
-        $this->app->singleton(\App\Contracts\GenerationRetrievalServiceInterface::class, \App\Services\GenerationRetrievalService::class);
-        $this->app->singleton(\App\Contracts\GenerationServiceInterface::class, \App\Services\GenerationService::class);
-    }
+    public function register(): void {}
 
     /**
      * Bootstrap any application services.

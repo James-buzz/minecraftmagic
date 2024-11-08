@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('art_styles', function (Blueprint $table) {
             $table->ulid('id')->primary();
-            $table->foreignId('art_type_id')->constrained()->cascadeOnDelete();
+            $table->foreignUlid('art_type_id')->constrained()->cascadeOnDelete();
             $table->string('name', 32);
             $table->string('description')->nullable();
             $table->string('prompt', 1000)->nullable();
+            $table->string('resource_path')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

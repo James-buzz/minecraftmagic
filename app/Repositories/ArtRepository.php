@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Repositories;
 
 use App\Contracts\ArtRepositoryInterface;
-use App\Models\ArtStyle;
-use App\Models\ArtType;
+use App\Models\Archive\ArtStyle;
+use App\Models\Archive\ArtType;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 

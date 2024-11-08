@@ -2,10 +2,27 @@
 
 namespace App\Models;
 
-class ArtType
+use Database\Factories\ArtTypeFactory;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class ArtType extends Model
 {
-    public function __construct(
-        public readonly string $id,
-        public readonly string $name,
-    ) {}
+    /** @use HasFactory<ArtTypeFactory> */
+    use HasFactory;
+
+    use HasUlids;
+    use SoftDeletes;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var string[]
+     */
+    protected $fillable = [
+        'name',
+        'description',
+    ];
 }

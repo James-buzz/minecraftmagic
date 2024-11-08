@@ -3,9 +3,9 @@
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\Legal\PrivacyController;
 use App\Http\Controllers\Legal\TermsController;
-use App\Http\Controllers\MetricsController;
+use App\Http\Controllers\Prometheus\MetricsController;
 use App\Http\Controllers\WelcomeController;
-use App\Http\Middleware\PrometheusBasicAuth;
+use App\Http\Middleware\Prometheus\PrometheusBasicAuth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [WelcomeController::class, 'index'])->name('welcome');

@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 /**
  * @mixin Builder
@@ -23,13 +24,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static Builder|self firstOrCreate(array $attributes = [], array $values = [])
  * @method static Builder|self updateOrCreate(array $attributes, array $values = [])
  * @method static Builder|self firstOrNew(array $attributes = [], array $values = [])
- * @method static \Illuminate\Pagination\LengthAwarePaginator paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
+ * @method static LengthAwarePaginator paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
  *
  * @property string $id
  * @property int $user_id
  * @property string $status
- * @property string $art_type
- * @property string $art_style
+ * @property string $art_type_id
+ * @property string $art_style_id
  * @property array $metadata
  * @property string|null $file_path
  * @property string|null $thumbnail_file_path
@@ -37,6 +38,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
  * @property \Carbon\Carbon|null $deleted_at
+ * @property User $user
  */
 class Generation extends Model
 {
@@ -50,8 +52,8 @@ class Generation extends Model
     protected $fillable = [
         'user_id',
         'status',
-        'art_type',
-        'art_style',
+        'art_type_id',
+        'art_style_id',
         'metadata',
         'file_path',
         'thumbnail_file_path',
@@ -66,14 +68,55 @@ class Generation extends Model
         'user_id',
     ];
 
-    /**
-     * The Log events to be recorded.
-     *
-     * @var string[]
-     */
-    protected static array $recordEvents = ['updated', 'deleted'];
+    public function markAsFailed(?string $failedMessage): void
+    {
+        $modelData = ['status' => 'failed'];
+
+        if ($failedMessage !== null) {
+            $modelData['failed_reason'] = $failedMessage;
+        }
+
+        $this->update($modelData);
+    }
+
+    public function markAsCompleted(string $filePath, string $thumbnailFilePath): void
+    {
+        $this->update([
+            'status' => 'completed',
+            'file_path' => $filePath,
+            'thumbnail_file_path' => $thumbnailFilePath,
+        ]);
+    }
+
+    public function markAsProcessing(): void
+    {
+        $this->update(['status' => 'processing']);
+    }
 
     /**
+     * Scope to include only completed
+     *
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    public function scopeCompleted(Builder $query): Builder
+    {
+        return $query->where('status', 'completed');
+    }
+
+    /**
+     * Get the art style
+     *
+     * @return BelongsTo
+     */
+    public function artStyle(): BelongsTo
+    {
+        return $this->belongsTo(ArtStyle::class);
+    }
+
+    /**
+     * Belongs to User
+     *
      * @return BelongsTo<User, self>
      */
     public function user(): BelongsTo

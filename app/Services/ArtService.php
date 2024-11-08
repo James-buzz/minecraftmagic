@@ -4,8 +4,8 @@ namespace App\Services;
 
 use App\Contracts\ArtRepositoryInterface;
 use App\Contracts\ArtServiceInterface;
-use App\Models\ArtStyle;
-use App\Models\ArtType;
+use App\Models\Archive\ArtStyle;
+use App\Models\Archive\ArtType;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 readonly class ArtService implements ArtServiceInterface

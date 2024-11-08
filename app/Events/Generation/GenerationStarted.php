@@ -2,6 +2,7 @@
 
 namespace App\Events\Generation;
 
+use App\Models\Generation;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 
@@ -13,8 +14,5 @@ class GenerationStarted
     /**
      * Create a new event instance.
      */
-    public function __construct(
-        public readonly string $artType,
-        public readonly string $artStyle
-    ) {}
+    public function __construct(public readonly Generation $generation) {}
 }

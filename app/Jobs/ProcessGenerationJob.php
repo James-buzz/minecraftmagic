@@ -2,32 +2,27 @@
 
 namespace App\Jobs;
 
-use App\Contracts\GenerationServiceInterface;
-use App\Events\Generation\GenerationCompleted;
+use App\Actions\DownloadUrl;
+use App\Actions\GenerateImage;
+use App\Actions\Thumbnail;
+use App\Actions\UploadToS3;
+use App\Concerns\CalculatesFilePaths;
 use App\Events\Generation\GenerationFailed;
 use App\Events\Generation\GenerationStarted;
-use App\Helpers\TimeFormatter;
 use App\Models\Generation;
-use App\Models\User;
-use App\Pipes\ProcessGenerationJob\CleanupLocal;
-use App\Pipes\ProcessGenerationJob\DownloadLocal;
-use App\Pipes\ProcessGenerationJob\RequestGeneration;
-use App\Pipes\ProcessGenerationJob\ThumbnailGeneration;
-use App\Pipes\ProcessGenerationJob\UploadToS3;
-use DateTime;
+use ErrorException;
+use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Queue\Queueable;
-use Illuminate\Pipeline\Pipeline;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
-use OpenAI\Exceptions\ErrorException;
-use Sentry\Laravel\Integration;
 use Spatie\RateLimitedMiddleware\RateLimited;
 use Throwable;
 
 class ProcessGenerationJob implements ShouldQueue
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
+    use CalculatesFilePaths;
 
     /**
      * @var int The max exceptions that can be thrown before failing the job.
@@ -36,88 +31,58 @@ class ProcessGenerationJob implements ShouldQueue
 
     private float $startTime;
 
-    private string $artType;
-
-    private string $artStyle;
-
     /**
      * Create a new job instance.
      */
-    public function __construct(
-        protected readonly User $user,
-        protected readonly Generation $generation,
-    ) {}
+    public function __construct(protected readonly Generation $generation) {}
 
     /**
      * Execute the job.
      */
-    public function handle(
-        GenerationServiceInterface $generationCreationService,
-        Pipeline $pipeline,
-    ): void {
+    public function handle(): void
+    {
         $this->startTime = microtime(true);
 
-        $generationCreationService->updateStatusAsProcessing($this->generation);
+        $this->generation->markAsProcessing();
 
-        Log::info('Queue started art generation', ['generation_id' => $this->generation->id]);
+        event(new GenerationStarted($this->generation));
 
-        $this->artType = $this->generation->art_type;
-        $this->artStyle = $this->generation->art_style;
+        Log::info('Queue requesting OpenAI image generation');
 
-        event(new GenerationStarted(
-            $this->artType,
-            $this->artStyle,
-        ));
+        $imageUrl = GenerateImage::run(
+            $this->generation->artStyle()->id,
+            $this->generation->metadata['image_size'],
+            $this->generation->metadata['image_quality']
+        );
 
-        $context = [
-            'generation' => [
-                'id' => $this->generation->id,
-                'art_type' => $this->generation->art_type,
-                'art_style' => $this->generation->art_style,
-                'metadata' => $this->generation->metadata,
-            ],
-            'user' => [
-                'id' => $this->user->id,
-                'email' => $this->user->email,
-                'name' => $this->user->name,
-            ],
-        ];
+        Log::info('Queue downloading image to local', ['url' => $imageUrl]);
 
-        $pipeline
-            ->send($context)
-            ->through([
-                RequestGeneration::class,
-                DownloadLocal::class,
-                ThumbnailGeneration::class,
-                UploadToS3::class,
-                CleanupLocal::class,
-            ])
-            ->then(function ($context) use ($generationCreationService) {
-                $contextGenerationId = $context['generation']['id'];
-                $contextFilePath = $context['result']['file_path'];
-                $contextThumbnailPath = $context['result']['thumbnail_file_path'];
+        $generationFilePath = $this->calculatePath(
+            $this->generation->user,
+            $this->generation,
+            basename($imageUrl)
+        );
 
-                $generationCreationService->updateStatusAsCompleted(
-                    $this->generation,
-                    $contextFilePath,
-                    $contextThumbnailPath
-                );
+        DownloadUrl::run($imageUrl, $generationFilePath);
 
-                $stepTimes = $context['steps'];
-                $duration = microtime(true) - $this->startTime;
+        $generationThumbnailPath = $this->calculatePath(
+            $this->generation->user,
+            $this->generation,
+            'thumbnail_'.basename($imageUrl)
+        );
 
-                event(new GenerationCompleted(
-                    $this->artType,
-                    $this->artStyle,
-                    $duration,
-                    $stepTimes
-                ));
+        Thumbnail::run($generationFilePath, $generationThumbnailPath, 300);
 
-                Log::info('Queue completed art generation', [
-                    'generation_id' => $contextGenerationId,
-                    'duration' => TimeFormatter::formatPeriod(microtime(true), $this->startTime),
-                ]);
-            });
+        UploadToS3::run($generationFilePath);
+        UploadToS3::run($generationThumbnailPath);
+
+        DeleteLocal::run($generationFilePath);
+        DeleteLocal::run($generationThumbnailPath);
+
+        $this->generation->markAsCompleted(
+            $generationFilePath,
+            $generationThumbnailPath
+        );
     }
 
     /**
@@ -127,14 +92,12 @@ class ProcessGenerationJob implements ShouldQueue
      */
     public function failed(?Throwable $exception): void
     {
-        $generationCreationService = app(GenerationServiceInterface::class);
-
         $failedMessage = null;
         if ($exception instanceof ErrorException) {
             $failedMessage = substr($exception->getMessage(), 0, 255);
         }
 
-        $generationCreationService->updateStatusAsFailed($this->generation, $failedMessage);
+        $this->generation->markAsFailed($failedMessage);
 
         $totalDuration = microtime(true) - ($this->startTime ?? microtime(true));
 

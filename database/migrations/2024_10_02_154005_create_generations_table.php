@@ -14,9 +14,8 @@ return new class extends Migration
         Schema::create('generations', function (Blueprint $table) {
             $table->ulid('id')->primary();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('art_style_id')->constrained()->cascadeOnDelete();
             $table->enum('status', ['pending', 'processing', 'completed', 'failed'])->default('pending');
-            $table->string('art_type', 32);
-            $table->string('art_style', 32);
             $table->json('metadata')->nullable();
             $table->string('file_path')->nullable();
             $table->string('thumbnail_file_path')->nullable();

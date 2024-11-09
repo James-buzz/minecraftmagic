@@ -1,0 +1,48 @@
+name: "Update Codecov"
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  test:
+    name: Run TestCoverage Report
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.2
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick, fileinfo
+          coverage: pcov
+
+      - name: Install Composer Dependencies
+        run: composer install -n --prefer-dist --no-progress
+
+      - name: Prepare Laravel Application
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
+      - name: Prepare Testing Env
+        run: |
+          sed -i 's/DB_CONNECTION=.*/DB_CONNECTION=sqlite/' .env
+          sed -i 's/DB_DATABASE=.*/DB_DATABASE=:memory:/' .env
+
+      - name: Install and Build Frontend Assets
+        run: |
+          npm ci
+          npm run build
+
+      - name: Run Tests
+        run: vendor/bin/phpunit --coverage-clover=coverage.xml storage/coverage/coverage.xml
+
+      - uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./storage/coverage/coverage.xml

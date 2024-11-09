@@ -22,8 +22,6 @@ class ArtStyle extends Model
 
     /**
      * The attributes that are mass assignable.
-     *
-     * @var string[]
      */
     protected $fillable = [
         'name',
@@ -33,8 +31,6 @@ class ArtStyle extends Model
 
     /**
      * The attributes that should be hidden for arrays.
-     *
-     * @var string[]
      */
     protected $hidden = [
         'prompt',
@@ -43,7 +39,7 @@ class ArtStyle extends Model
     /**
      * Belongs to Art Type
      *
-     * @return BelongsTo<ArtType, self>
+     * @return BelongsTo<ArtType, $this>
      */
     public function type(): BelongsTo
     {

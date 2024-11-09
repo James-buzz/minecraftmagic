@@ -54,6 +54,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return (bool) $this->is_admin;
     }
 
+    /**
+     * Get the generations for the user.
+     *
+     * @return HasMany<Generation, $this>
+     */
     public function generations(): HasMany
     {
         return $this->hasMany(Generation::class);

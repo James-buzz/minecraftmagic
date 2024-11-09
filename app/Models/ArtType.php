@@ -19,8 +19,6 @@ class ArtType extends Model
 
     /**
      * The attributes that are mass assignable.
-     *
-     * @var string[]
      */
     protected $fillable = [
         'name',
@@ -30,6 +28,8 @@ class ArtType extends Model
 
     /**
      * Get the styles for the art type.
+     *
+     * @return HasMany<ArtStyle, $this>
      */
     public function styles(): HasMany
     {

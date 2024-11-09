@@ -48,7 +48,9 @@ class Generation extends Model
     /** @use HasFactory<GenerationFactory> */
     use HasFactory;
 
+    /** @use HasFeedback<Generation> */
     use HasFeedback;
+
     use HasUlids;
     use SoftDeletes;
 
@@ -98,6 +100,8 @@ class Generation extends Model
 
     /**
      * Get a temporary URL for the thumbnail
+     *
+     * @return Attribute<string|null, never>
      */
     protected function thumbnailUrl(): Attribute
     {
@@ -121,6 +125,8 @@ class Generation extends Model
 
     /**
      * Get the art style
+     *
+     * @return BelongsTo<ArtStyle, $this>
      */
     public function style(): BelongsTo
     {
@@ -130,11 +136,10 @@ class Generation extends Model
     /**
      * Belongs to User
      *
-     * @return BelongsTo<User, self>
+     * @return BelongsTo<User, $this>
      */
     public function user(): BelongsTo
     {
-        /** @phpstan-ignore-next-line todo */
         return $this->belongsTo(User::class);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers\DownloadController;
 
+use App\Models\ArtStyle;
 use App\Models\Generation;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;

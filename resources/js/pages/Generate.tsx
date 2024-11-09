@@ -56,7 +56,7 @@ export default function Generate({ art_types, flash }: PageProps) {
             <Head title="Generate new" />
 
             <div className="min-h-screen bg-gray-900 p-8 text-white">
-                <h1 className="mb-8 text-center text-4xl font-bold">
+                <h1 className="mb-8 text-center text-3xl sm:text-4xl font-bold">
                     Generate Minecraft Art with AI
                 </h1>
 

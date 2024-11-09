@@ -64,6 +64,7 @@ const Pagination = ({ pagination }: { pagination: Pagination }) => {
                     href={`?page=${pagination.current_page + 1}`}
                     className="rounded-md bg-gray-700 px-4 py-2 hover:bg-gray-600"
                 >
+
                     Next
                 </Link>
             )}
@@ -215,8 +216,8 @@ export default function Dashboard({
                             </Link>
                         </div>
                     ) : (
-                        <div className="mb-8 flex items-center justify-between">
-                            <h2 className="text-4xl font-bold">
+                        <div className="mb-8 flex sm:flex-row gap-0 flex-col items-center justify-between">
+                            <h2 className="text-3xl sm:text-3xl mb-4 sm:mb-0 font-bold">
                                 Your Dashboard
                             </h2>
                             <Link href={route('generate.index')}>

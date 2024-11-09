@@ -14,10 +14,12 @@ class HandleTest extends BaseDeleteLocal
 
         // Mock
         Storage::shouldReceive('disk')
+            ->once()
             ->with('local')
             ->andReturnSelf();
 
         Storage::shouldReceive('delete')
+            ->once()
             ->with($givenFilePath)
             ->andReturnTrue();
 

@@ -13,11 +13,13 @@
         "laravel/socialite": "^5.16",
         "laravel/tinker": "^2.9",
         "league/flysystem-aws-s3-v3": "^3.0",
+        "lorisleiva/laravel-actions": "^2.8",
         "openai-php/laravel": "^0.10.1",
         "promphp/prometheus_client_php": "^2.12",
         "resend/resend-laravel": "^0.14.0",
         "sentry/sentry-laravel": "^4.9",
         "spatie/image": "^3.7",
+        "spatie/laravel-query-builder": "^6.2",
         "spatie/laravel-rate-limited-job-middleware": "^2.7",
         "tightenco/ziggy": "^2.0"
     },

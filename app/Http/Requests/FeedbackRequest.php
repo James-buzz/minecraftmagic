@@ -4,12 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-/**
- * @property string $art_type
- * @property string $art_style
- * @property array<mixed> $metadata
- */
-class GenerateStoreRequest extends FormRequest
+class FeedbackRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,9 +22,8 @@ class GenerateStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'art_type' => 'required|string',
-            'art_style' => 'required|string',
-            'metadata' => 'sometimes|array',
+            'comment' => 'nullable|string|max:255',
+            'rating' => 'required|integer|between:1,5',
         ];
     }
 }

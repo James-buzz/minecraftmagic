@@ -1,4 +1,4 @@
-<img src="public/assets/art/server_logo/end-explorer.png"/>
+<img src="public/assets/art/server_logo/end_explorer.png"/>
 
 [![Test Coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/James-buzz/63f837f639ec90f1b789af69aab0ddd0/raw/minecraftmagic-pre-alpha-cobertura-coverage.json&style=plastic)](https://james-buzz.github.io/minecraftmagic-pre-alpha/coverage)
 [![Laravel Forge Site Deployment Status](https://img.shields.io/endpoint?url=https%3A%2F%2Fforge.laravel.com%2Fsite-badges%2Fc39e3f98-393c-4239-98e9-06542871514d&style=plastic)](https://forge.laravel.com/servers/858254/sites/2524132)
@@ -16,12 +16,10 @@ Minecraftmagic is a work in progress, but I hope that you find it useful for you
 
 ## Table of Contents
 - 💻 [Getting Started](.docs/getting-started.md)
-- 📚 [Standards](.docs/standards.md)
 
 ## Mantras
 
-- Rapid Development - Embrace Laravel's Eloquent directly and magic methods. Avoid repository abstractions where possible
-- Pragmatic SOLID - Apply patterns where they add clear value, not for theoretical purity
+- Rapid Development - Embrace Laravel's Eloquent directly and magic methods. Avoid unnecessary abstractions
 - Smart Testing - Feature tests for user flows, unit tests for complex logic only. No test duplication
 - Enterprise Ready - Production-grade with monitoring, S3 storage, metrics, and error tracking
 

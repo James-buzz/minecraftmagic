@@ -2,32 +2,32 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\SignS3URL;
 use App\Models\Generation;
-use App\Services\GenerationRetrievalService;
-use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 
 class DownloadController extends Controller
 {
-    use HandlesAuthorization;
-
-    public function __construct(protected readonly GenerationRetrievalService $retrievalService) {}
+    public function __construct() {}
 
     /**
      * Retrieve the download URL for a generation.
      */
     public function show(Generation $generation): JsonResponse
     {
-        if (! Gate::allows('view', $generation)) {
-            abort(403);
-        }
+        abort_if(! Gate::allows('view', $generation), 403);
 
         Log::info('User requested download', ['user_id' => auth()->id(), 'generation_id' => $generation->id]);
 
-        $fileUrl = $this->retrievalService->getGenerationFileUrl($generation);
+        $temporarySignedURL = SignS3URL::run(
+            $generation->file_path,
+            now()->addMinutes(5)
+        );
 
-        return response()->json(['url' => $fileUrl]);
+        return response()->json([
+            'url' => $temporarySignedURL,
+        ]);
     }
 }

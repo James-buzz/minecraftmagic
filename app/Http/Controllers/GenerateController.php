@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Contracts\ArtServiceInterface;
 use App\Events\Generation\GenerationQueued;
 use App\Http\Requests\GenerateStoreRequest;
 use App\Jobs\ProcessGenerationJob;
-use App\Models\User;
-use App\Services\GenerationService;
+use App\Models\ArtType;
+use App\Models\Generation;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -15,8 +16,6 @@ use Inertia\Response;
 class GenerateController extends Controller
 {
     public function __construct(
-        protected readonly ArtServiceInterface $artService,
-        protected readonly GenerationService $generationService
     ) {}
 
     /**
@@ -24,50 +23,34 @@ class GenerateController extends Controller
      */
     public function index(): Response
     {
-        $artTypes = $this->artService->getAllArtTypesWithStyles();
+        $allArtTypes = ArtType::all()->each->load('styles');
 
         // ArtTypes is a key value array
         // loop and then return an array of object with id, name, and styles as the values
 
         return Inertia::render('Generate', [
-            'art_types' => $artTypes,
+            'art_types' => $allArtTypes,
         ]);
     }
 
     /**
      * Store a new generation.
      */
-    public function store(GenerateStoreRequest $request): \Illuminate\Http\RedirectResponse
+    public function store(GenerateStoreRequest $request): RedirectResponse
     {
-        $validated = $request->validated();
+        abort_if(! Gate::allows('create', Generation::class), 403);
 
-        /** @var User $user */
-        $user = auth()->user();
+        $generation = $request->user()->generations()->create([
+            'art_style_id' => $request->art_style,
+            'metadata' => $request->metadata,
+        ]);
 
-        /** @var string $artTypeId */
-        $artTypeId = $validated['art_type'];
-        /** @var string $artStyleId */
-        $artStyleId = $validated['art_style'];
-        /** @var array<string, string> $metadata */
-        $metadata = $validated['metadata'];
+        ProcessGenerationJob::dispatch($generation);
 
-        $artType = $this->artService->getArtType($artTypeId);
+        event(new GenerationQueued($generation));
 
-        $artStyle = $this->artService->getArtStyle($artTypeId, $artStyleId);
+        Log::info('User generated art', ['user_id' => $generation->user_id, 'generation_id' => $generation->id]);
 
-        $record = $this->generationService->createGeneration(
-            $user,
-            $artType,
-            $artStyle,
-            $metadata
-        );
-
-        ProcessGenerationJob::dispatch($user, $record);
-
-        event(new GenerationQueued($artType->id, $artStyle->id));
-
-        Log::info('User generated art', ['user_id' => $user->id, 'generation_id' => $record->id]);
-
-        return redirect()->route('status', ['generation' => $record->id]);
+        return redirect()->route('status', ['generation' => $generation->id]);
     }
 }

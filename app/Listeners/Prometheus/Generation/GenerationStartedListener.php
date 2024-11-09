@@ -12,8 +12,9 @@ class GenerationStartedListener
      */
     public function handle(GenerationStarted $event): void
     {
-        $artType = $event->artType;
-        $artStyle = $event->artStyle;
+        $generation = $event->generation;
+        $artStyle = $generation->style->name;
+        $artType = $generation->style->type->name;
 
         // Total
         $totalCounter = Prometheus::getOrRegisterCounter(

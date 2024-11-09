@@ -3,16 +3,19 @@
 namespace Tests\Feature\Http\Controllers\GenerateController;
 
 use App\Jobs\ProcessGenerationJob;
+use App\Models\ArtStyle;
+use App\Models\ArtType;
 use App\Models\User;
 use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Str;
 
 class StoreTest extends BaseGenerateController
 {
     public function testWhenIndexThenResolve(): void
     {
         // Given
-        $givenArtType = 'server_logo';
-        $givenArtStyle = 'dragons-lair';
+        $givenArtStyleId = Str::ulid();
+        $givenArtTypeId = Str::ulid();
         $givenMetadata = [
             'image_size' => '512x512',
             'image_quality' => 'hd',
@@ -23,24 +26,30 @@ class StoreTest extends BaseGenerateController
 
         $preconditionUser = User::factory()->create();
 
+        ArtType::factory()->create([
+            'id' => $givenArtTypeId,
+        ]);
+
+        ArtStyle::factory()->create([
+            'id' => $givenArtStyleId,
+            'art_type_id' => $givenArtTypeId,
+        ]);
+
         // Expected
         $expectedUserId = $preconditionUser->id;
-        $expectedArtType = $givenArtType;
-        $expectedArtStyle = $givenArtStyle;
 
         // Action
         $actualResponse = $this->actingAs($preconditionUser)
             ->post(route($this->storeRoute), [
-                'art_type' => $givenArtType,
-                'art_style' => $givenArtStyle,
+                'art_style' => (string) $givenArtStyleId,
+                'art_type' => (string) $givenArtTypeId,
                 'metadata' => $givenMetadata,
             ]);
 
         // Assert
         $this->assertDatabaseHas('generations', [
             'user_id' => $expectedUserId,
-            'art_type' => $expectedArtType,
-            'art_style' => $expectedArtStyle,
+            'art_style_id' => $givenArtStyleId,
         ]);
         Bus::assertDispatched(ProcessGenerationJob::class);
     }

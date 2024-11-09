@@ -7,6 +7,7 @@ interface ArtStyle {
     id: string;
     name: string;
     description: string;
+    resource_path: string;
 }
 
 interface ArtType {
@@ -132,7 +133,7 @@ export default function Generate({ art_types, flash }: PageProps) {
                                             }
                                         >
                                             <img
-                                                src={`/assets/art/${selectedType}/${style.id}.png`}
+                                                src={style.resource_path}
                                                 alt={style.name}
                                                 className="h-40 w-full rounded-lg object-cover"
                                             />

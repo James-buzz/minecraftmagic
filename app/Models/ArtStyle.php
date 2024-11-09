@@ -2,12 +2,47 @@
 
 namespace App\Models;
 
-class ArtStyle
+use Database\Factories\ArtStyleFactory;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+/**
+ * @property string $prompt
+ */
+class ArtStyle extends Model
 {
-    public function __construct(
-        public readonly string $id,
-        public readonly string $name,
-        public readonly string $description,
-        public readonly string $prompt,
-    ) {}
+    /** @use HasFactory<ArtStyleFactory> */
+    use HasFactory;
+
+    use HasUlids;
+    use SoftDeletes;
+
+    /**
+     * The attributes that are mass assignable.
+     */
+    protected $fillable = [
+        'name',
+        'description',
+        'resource_path',
+    ];
+
+    /**
+     * The attributes that should be hidden for arrays.
+     */
+    protected $hidden = [
+        'prompt',
+    ];
+
+    /**
+     * Belongs to Art Type
+     *
+     * @return BelongsTo<ArtType, $this>
+     */
+    public function type(): BelongsTo
+    {
+        return $this->belongsTo(ArtType::class, 'art_type_id');
+    }
 }

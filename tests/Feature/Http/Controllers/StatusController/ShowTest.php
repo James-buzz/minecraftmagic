@@ -10,9 +10,6 @@ class ShowTest extends BaseStatusController
     public function testWhenStatusIsFoundThenReturn(): void
     {
         // Given
-        $givenArtType = 'server_logo';
-        $givenArtStyle = 'dragons-lair';
-
         $givenGenerationStatus = 'completed';
         $givenGenerationFilePath = 'some_random_file_path';
         $givenGenerationThumbnailPath = 'some_random_thumbnail_path';
@@ -23,8 +20,6 @@ class ShowTest extends BaseStatusController
         $preconditionGeneration = Generation::factory()->create([
             'user_id' => $preconditionUser->id,
             'status' => $givenGenerationStatus,
-            'art_type' => $givenArtType,
-            'art_style' => $givenArtStyle,
             'file_path' => $givenGenerationFilePath,
             'thumbnail_file_path' => $givenGenerationThumbnailPath,
         ]);
@@ -33,8 +28,6 @@ class ShowTest extends BaseStatusController
         $expectedStatus = [
             'id' => $preconditionGeneration->id,
             'status' => $givenGenerationStatus,
-            'art_type' => $givenArtType,
-            'art_style' => $givenArtStyle,
             'file_path' => $givenGenerationFilePath,
             'thumbnail_file_path' => $givenGenerationThumbnailPath,
         ];

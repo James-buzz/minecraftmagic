@@ -22,7 +22,7 @@ class Feedback extends Model
     ];
 
     /**
-     * @return MorphTo<Model, self>
+     * @return MorphTo<Model, $this>
      */
     public function feedbackable(): MorphTo
     {
@@ -30,7 +30,7 @@ class Feedback extends Model
     }
 
     /**
-     * @return BelongsTo<User, self>
+     * @return BelongsTo<User, $this>
      */
     public function user(): BelongsTo
     {

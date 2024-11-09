@@ -2,35 +2,43 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use App\Services\GenerationRetrievalService;
+use App\Models\Generation;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class DashboardController extends Controller
 {
     public function __construct(
-        protected readonly GenerationRetrievalService $generationService
     ) {}
 
     /**
      * Display the dashboard.
      */
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        /** @var int $currentPage */
-        $currentPage = request()->query('page', '1');
-
-        /** @var User $user */
-        $user = auth()->user();
-
-        $paginatedGenerations = $this->generationService->getPaginatedGenerations(
-            $user,
-            $currentPage
-        );
+        $pagination = QueryBuilder::for(Generation::class)
+            ->defaultSort('-created_at')
+            ->where('user_id', $request->user()->id)
+            ->where('status', 'completed')
+            ->whereNotNull('file_path')
+            ->with(['style', 'style.type'])
+            ->select([
+                'id',
+                'thumbnail_file_path',
+                'art_style_id',
+            ])
+            ->paginate(9)
+            ->through(fn ($generation) => [
+                'id' => $generation->id,
+                'thumbnail_url' => $generation->thumbnail_url,
+                'art_style' => $generation->style->name,
+                'art_type' => $generation->style->type->name,
+            ]);
 
         return Inertia::render('Dashboard', [
-            'paginatedGenerations' => $paginatedGenerations,
+            'pagination' => $pagination,
         ]);
     }
 }

@@ -2,8 +2,6 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\Generation;
-use App\Models\User;
 use Carbon\Carbon;
 use Closure;
 use Illuminate\Http\Request;
@@ -18,26 +16,22 @@ class LimitOneGenerationConcurrently
      */
     public function handle(Request $request, Closure $next): Response
     {
-        /** @var User|null $user */
-        $user = $request->user();
-
-        if (! $user) {
+        if (! $request->user()) {
             return response('Unauthorized', 401);
         }
 
-        if ($user->isAdmin()) {
+        if ($request->user()->isAdmin()) {
             return $next($request);
         }
 
-        $existingModel = Generation::where('user_id', $user->id)
+        $hasProcessing = $request->user()->generations()
             ->where(function ($query) {
                 $query->whereDate('created_at', Carbon::today())
                     ->orWhere('created_at', '>=', Carbon::now()->subHours(48));
             })
-            ->whereNotIn('status', ['completed', 'failed'])
-            ->first();
+            ->whereNotIn('status', ['completed', 'failed'])->exists();
 
-        if ($existingModel) {
+        if ($hasProcessing) {
             return back()->with('error', 'You are limited to one generation at a time. Please wait until the current generation is completed.');
         }
 

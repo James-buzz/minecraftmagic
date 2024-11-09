@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\ArtStyle;
 use App\Models\Generation;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -20,8 +21,7 @@ class GenerationFactory extends Factory
             'id' => Str::ulid(),
             'user_id' => User::factory(),
             'status' => $this->faker->randomElement(['pending', 'processing', 'completed', 'failed']),
-            'art_type' => $this->faker->word(),
-            'art_style' => $this->faker->word(),
+            'art_style_id' => ArtStyle::factory(),
             'metadata' => [],
             'file_path' => $this->faker->optional()->filePath(),
             'thumbnail_file_path' => $this->faker->optional()->filePath(),

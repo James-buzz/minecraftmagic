@@ -40,9 +40,9 @@ jobs:
           npm run build
 
       - name: Run Tests
-        run: vendor/bin/phpunit --coverage-clover=coverage.xml storage/coverage/coverage.xml
+        run: vendor/bin/phpunit --coverage-clover=coverage.xml
 
       - uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./storage/coverage/coverage.xml
+          files: ./coverage.xml

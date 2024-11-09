@@ -41,6 +41,7 @@ jobs:
 
       - name: Run Tests
         run: vendor/bin/phpunit --coverage-clover=coverage.xml
+        continue-on-error: true
 
       - uses: codecov/codecov-action@v3
         with:

@@ -31,7 +31,7 @@ Minecraftmagic is a work in progress, but I hope that you find it useful for you
 
 - 🐛 Debug Tools - Enhance application logging locally with [Laravel Pail](https://github.com/laravel/pail)
 
-- 📈 Code Coverage - Display test coverage status using [Custom Github Action](.github/workflows/update-coverage-reports.yml)
+- 📈 Code Coverage - Display test coverage status using [Custom Github Action](.github/workflows/update-codecov.yml)
 
 - 🤖 Automated Testing - Validate pull requests with comprehensive checks via [Custom Github Action](.github/workflows/php-run-tests.yml)
 
